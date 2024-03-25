@@ -84,7 +84,7 @@ module.exports = {
    * Returns correct sum of a and b.
    */
   safeSum(a, b) {
-  return parseFloat(a) + parseFloat(b);
+  return Number(a) + Number(b);
 },
 
   /**
