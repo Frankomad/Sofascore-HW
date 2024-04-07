@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz App</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Welcome!  <span id="info-icon">ℹ️</span></h1>
+    </header>
+
+    <div class="menu">
+      <div class="mode-menu" id="mode-menu">
+        <div class="select-container">
+          <div class="wrapper">
+            <label for="difficulty">Difficulty:</label>
+            <div class="select-style">
+              <select id="difficulty">
+                <option value="random">Random</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </div>
+          </div>
+          <div class="wrapper">
+            <label for="type-of-questions">Question Type:</label>
+            <div class="select-style">
+              <select id="type-of-questions">
+                <option value="random">Random</option>
+                <option value="boolean">True/False</option>
+                <option value="multiple">Multiple</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="wrapper select-container">
+          <label for="time-limit">Time Per Question:</label>
+          <div class="range-container">
+            <input type="range" id="time-limit" name="time-limit" min="10" max="25" value="20">
+            <output for="time-limit" id="time-value">20</output>
+          </div>
+        </div>
+      </div>
+      <button type="button" id="start-btn" data-state="start">Start Quiz</button>
+      <button type="button" id="restart-btn" style="display: none;">Restart Quiz</button>
+    </div>
+    <div id="quiz-container"></div>
+  </div>
+
+  <dialog id="modal-dialog" class="modal">
+    <div class="modal-content">
+    </div>
+  </dialog>   
+
+  <div class="leaderboard-container">
+    <div class="leaderboard">
+      <h2>Leaderboard</h2>
+      <ol id="leaderboard-list"></ol>
+    </div>
+  </div>
+</body>
+</html>
+<script type="module" src="quizFetchAll.js"></script>
+<script src="modal.js"></script> 
