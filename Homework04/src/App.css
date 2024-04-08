@@ -1,0 +1,21 @@
+:root {
+    --background-color-col-1-light: #EEEEEE;
+    --text-color-col-1-light: #333333;
+    --background-color-col-2-light: #FFFFFF;
+    --text-color-col-2-light: #333333;
+    --background-color-col-1-dark: #1F2735;
+    --text-color-col-1-dark: #FFFFFF;
+    --background-color-col-2-dark: #354159;
+    --text-color-col-2-dark: #FFFFFF;
+
+    --background-color-header-light: #E3350D;
+    --text-color-header: #fff;
+    --background-color-header-dark: #4D638C;
+    --background-color-header-dark-hover: #34486d;
+    --background-color-header-light-hover: #c4614b;
+  }
+
+  #root .pokemon-card-wrapper:first-of-type {
+    margin-top: 80px;
+  }
+  
