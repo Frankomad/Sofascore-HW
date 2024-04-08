@@ -34,7 +34,6 @@ function SearchPokemonModal({ open, closeModal, theme, addFavouritePokemon, remo
     try {
       setLoading(true); 
       const formattedQuery = query.toString(); 
-      console.log("formattedQuery: " + formattedQuery)
       const data = await fetchPokemonDetails(`https://pokeapi.co/api/v2/pokemon/${formattedQuery.toLowerCase()}`);
       setSearchResult(data);
     } catch (error) {
