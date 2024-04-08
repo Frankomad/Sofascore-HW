@@ -48,9 +48,9 @@ function PokemonCard({ name, number, type, healthPoints, height, weight, image, 
         <div className="col-1-1">
           <div className="col-1-1-1">
             <h1>#{number.toString().padStart(4, '0')} {name}</h1>
-            <p><span className="bolded-label">Health Points:</span> {healthPoints}</p>
-            <p><span className="bolded-label">Height:</span> {height}</p>
-            <p><span className="bolded-label">Weight:</span> {weight}</p>
+            <p><span className="bolded-label">Health Points:</span> {healthPoints} HP</p>
+            <p><span className="bolded-label">Height:</span> {height} kg</p>
+            <p><span className="bolded-label">Weight:</span> {weight} cm</p>
             <p><span className="bolded-label">Type:</span> {type.split(", ").map((t, index) => (<Badge key={index} type={t} />))}</p>
           </div>
           <div className="col-1-2-1">
@@ -168,7 +168,7 @@ function PokemonCard({ name, number, type, healthPoints, height, weight, image, 
               key="shiny"
               src={shinyImage}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1, x: 0, transition: { duration: 3 }  }}
+              animate={{ opacity: 1, x: 0, transition: { duration: 2 }  }}
               exit={{ opacity: 0, transition: { duration: 2 } }}
               transition={{ duration: 4 }}
             />
@@ -178,7 +178,7 @@ function PokemonCard({ name, number, type, healthPoints, height, weight, image, 
               key="normal"
               src={image}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1, x: 0, transition: { duration: 3 }  }}
+              animate={{ opacity: 1, x: 0, transition: { duration: 2 }  }}
               exit={{ opacity: 0, transition: { duration: 2 } }}
               transition={{ duration: 4 }}
             />

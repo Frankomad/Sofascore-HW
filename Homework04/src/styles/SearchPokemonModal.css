@@ -1,0 +1,71 @@
+.search-input {
+    height: 35px;
+    padding: 5px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+.search-button {
+    margin-left: 5px;
+    height: 35px;
+    border: 1px solid var(--background-color-header-dark-hover);
+    box-sizing: border-box;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.search-button:hover {
+    transform: scale(1.05);
+}
+
+.light-theme .search-button {
+    background-color: var(--background-color-header-light);
+    border: 1px solid var(--background-color-header-light);
+}
+
+.dark-theme .search-button {
+    background-color: var(--background-color-col-2-dark);
+    border: 1px solid var(--background-color-col-2-dark);
+}
+
+.search-pokemon-modal-header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search-modal-image-container {
+    display: flex;
+}
+
+.search-modal-image {
+    width: 70%;
+}
+
+.search-modal-image-small-container {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-modal-image-small {
+    height: 50%;
+}
+.search-button-margin-right {
+    margin-right: 10px;
+}
+
+@media (max-width: 1000px) {
+    .search-pokemon-modal-input {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .search-input, .search-button {
+        margin-top: 10px;
+    }
+}

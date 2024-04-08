@@ -5,17 +5,19 @@ import { useFavouritePokemon } from '../context/FavouritePokemonsContext';
 
 import Dropdown from './DropdownOptions';
 import FavouritePokemonModal from './FavouritePokemonsModal'; 
+import SearchPokemonModal from './SearchPokemonModal';
 
 import '../styles/Header.css';
 
 
 function Header() {
   const {theme} = useSettings()
-  const { removeFavouritePokemon } = useFavouritePokemon(); 
+  const { removeFavouritePokemon, addFavouritePokemon, isFavouritePokemon } = useFavouritePokemon(); 
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,11 +36,15 @@ function Header() {
     };
   }, [prevScrollPos, dropdownOpen]);
 
+  function toggleSearchModal() {
+    setSearchModalOpen((prevState) => !prevState);
+  }
+
   function toggleDropdown() {
     setDropdownOpen((prevState) => !prevState);
   }
 
-  function toggleModal() {
+  function toggleFavouritePokemonModal() {
     setModalOpen((prevState) => !prevState); 
   }
 
@@ -58,10 +64,18 @@ function Header() {
         <div className="content">
           <div>
             <img
+              className="header-icon search-icon"
+              src="search_icon.png"
+              alt=""
+              onClick={toggleSearchModal} 
+            />
+          </div>
+          <div>
+            <img
               className="header-icon"
               src="https://s3-alpha-sig.figma.com/img/ec5b/a1e6/2c298ac7bf9533cb7ae87f58512f6ccc?Expires=1713139200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=LOWGvBmaNfGFADL8gOd1rH4SB2wcyDFKfyrfUhWixv-67JwuuHXX11~~vYfhKsNdYNohvkfW9pvf1GaMXk96UX7jh63XMk17OP-EUFFxKlFNmL2F-tA2meEPSreBZmcGUiKcJ6XmGPmTtgvs9xXa4gyIOHXb5ve46MyIarfwhrvU~QMk7SF6326Q7tXpcXJqZRqkO3WKfqRqD-UHZtQaXNsj4ftdFLgGq~OuVbG6mln5trfdRZd48XAdkEh5HuWX5UZQRrAaKn-K5ZzgUTQBn7q6OvhKB3O4A99hcYKAd9olo~NG8xs4uTnzQLgE1FEyxrlxBDe-GIkGozNvH2Iisw__"
               alt=""
-              onClick={toggleModal} 
+              onClick={toggleFavouritePokemonModal} 
             />
           </div>
           <div onClick={toggleDropdown} className="header-settings">
@@ -74,7 +88,8 @@ function Header() {
           </div>
         </div>
       </div>
-      <FavouritePokemonModal open={modalOpen} closeModal={toggleModal} theme={theme} removePokemon={removeFavouritePokemon}/>
+      <FavouritePokemonModal open={modalOpen} closeModal={toggleFavouritePokemonModal} theme={theme} removePokemon={removeFavouritePokemon}/>
+      <SearchPokemonModal open={searchModalOpen} closeModal={toggleSearchModal} theme={theme} removeFavouritePokemon={removeFavouritePokemon} addFavouritePokemon={addFavouritePokemon} isFavouritePokemon={isFavouritePokemon}/>
     </header>
   );
 }

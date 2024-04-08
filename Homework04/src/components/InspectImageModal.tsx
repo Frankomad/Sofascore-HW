@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import '../styles/FavouritePokemonsModal.css';
 
 interface Theme {
@@ -23,9 +24,11 @@ function InspectImageModal({ open, closeModal, theme, image }: InspectImageModal
           <h2>Take a Closer Look!</h2>
           <button onClick={closeModal} className="close-modal">X</button>
         </div>
-        {image.map((imageUrl, index) => (
-            <img className="image-inspect" key={index} src={imageUrl} alt="pokemon" />
-        ))}
+          <div className="inspect-image-modal-image-container">
+          {image.map((imageUrl, index) => (
+              <img className="image-inspect" key={index} src={imageUrl} alt="pokemon" />
+          ))}
+          </div>
         </div>
     </dialog>,
     document.getElementById('modal-root') as HTMLElement

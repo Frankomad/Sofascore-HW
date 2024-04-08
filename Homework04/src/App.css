@@ -18,4 +18,7 @@
   #root .pokemon-card-wrapper:first-of-type {
     margin-top: 80px;
   }
-  
+
+  body {
+    font-family: 'Nunito', sans-serif;
+  }
