@@ -153,7 +153,7 @@ function PokemonCard({ name, number, type, healthPoints, height, weight, image, 
         <img
           className={`heart-image ${isFavouritePokemon(name) ? 'hidden' : ''}`}
           onClick={handleHeartClick}
-          src="https://s3-alpha-sig.figma.com/img/6d99/1f3d/8e9ba6b94bea987f72ee3c32481ab1dd?Expires=1713139200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=EOsqZ-QMkxCw7esbvjS205IAbexUTY4g01Bnzuy0SA4vTx6axeI6SP0NmqSb876BYeXT6bBjHPUoh~xrCh~KrDv7eF7PnqSqWtBwGaPX~VLCOuDnQLouiBM1S5GVdGuFHAKd2JpuzAF2dDC8bQkT3pxuG3qyjp2jMplc9JKggC-ttKs9v0RXJrSTE1-QtMTXlwIRHAq0DIUsBDfmNevLIZAP26JKsP31YXl6eihTGGO7w0vr-0Q0NSr9ReXQsouSUPvELxdnjKlrYFVkq0y1rWS3MH4Ravk2TVPVoItsiBLnvohcxxcaUAvOyltKUfZxdgnGB7domT3RTXEYpP5k1A__"
+          src="HeartCard.png"
           alt=""
         />
         <FontAwesomeIcon
