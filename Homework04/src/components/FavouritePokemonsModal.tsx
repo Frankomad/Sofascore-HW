@@ -27,22 +27,17 @@ function FavouritePokemonModal({ open, closeModal, theme, removePokemon }: Favou
 
   useEffect(() => {
     if (!open) {
-      // Remove all pokemonsToRemove from the context
       pokemonsToRemove.forEach((pokemon) => {
         removePokemon(pokemon);
       });
-      // Clear pokemonsToRemove list
       setPokemonsToRemove([]);
     }
-    console.log('Pokemons to remove:', pokemonsToRemove)
   }, [open]);
 
   const toggleRemoveList = (pokemon: Pokemon) => {
     if (pokemonsToRemove.includes(pokemon)) {
-      // If the pokemon is already in the remove list, remove it
       setPokemonsToRemove(pokemonsToRemove.filter((p) => p !== pokemon));
     } else {
-      // If the pokemon is not in the remove list, add it
       setPokemonsToRemove([...pokemonsToRemove, pokemon]);
     }
   };
