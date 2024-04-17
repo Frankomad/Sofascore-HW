@@ -58,10 +58,11 @@ function PokemonCard({ name, number, type, healthPoints, height, weight, image, 
             <span>Click to Inspect</span>
             <div className="col-1-2-1-1">
                 {isFavouritePokemon(name) ? (
+                  <>
                   <AnimatePresence mode="wait">
                     <motion.img
                       className="full-view-pokemon-img"
-                      key="shinyFront"
+                      key={shinyFullView.front}
                       src={shinyFullView.front}
                       alt={name}
                       initial={{ opacity: 0 }}
@@ -70,9 +71,12 @@ function PokemonCard({ name, number, type, healthPoints, height, weight, image, 
                       transition={{ duration: 4 }}
                       onClick={() => toggleModal()}
                     /> 
+                  </AnimatePresence>
+                  
+                  <AnimatePresence mode="wait">
                     <motion.img
                       className="full-view-pokemon-img"
-                      key="shinyBack"
+                      key={shinyFullView.back}
                       src={shinyFullView.back}
                       alt={name}
                       initial={{ opacity: 0 }}
@@ -82,11 +86,13 @@ function PokemonCard({ name, number, type, healthPoints, height, weight, image, 
                       onClick={() => toggleModal()}
                     /> 
                   </AnimatePresence>
+                  </>
                 ) : (
+                  <>
                   <AnimatePresence mode="wait">
                     <motion.img
                       className="full-view-pokemon-img"
-                      key="normalFront"
+                      key={fullView.front}
                       src={fullView.front}
                       alt={name}
                       initial={{ opacity: 0}}
@@ -95,9 +101,12 @@ function PokemonCard({ name, number, type, healthPoints, height, weight, image, 
                       transition={{ duration: 4 }}
                       onClick={() => toggleModal()}
                     />
+                  </AnimatePresence>
+
+                  <AnimatePresence mode="wait">
                     <motion.img
                       className="full-view-pokemon-img"
-                      key="normalBack"
+                      key={fullView.back}
                       src={fullView.back}
                       alt={name}
                       initial={{ opacity: 0}}
@@ -107,6 +116,7 @@ function PokemonCard({ name, number, type, healthPoints, height, weight, image, 
                       onClick={() => toggleModal()}
                     /> 
                   </AnimatePresence>
+                  </>
                 )}
             </div>
           </div>
@@ -161,29 +171,33 @@ function PokemonCard({ name, number, type, healthPoints, height, weight, image, 
           className={`heart-icon clicked pulse ${!isFavouritePokemon(name) ? 'hidden' : ''} ${animationInProgress ? 'disabled' : ''}`} 
           onClick={handleHeartClick}
         />
-        <AnimatePresence mode="wait">
+        
           {isFavouritePokemon(name) ? (
-            <motion.img
-              className="pokemon-card-image"
-              key="shiny"
-              src={shinyImage}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, x: 0, transition: { duration: 2 }  }}
-              exit={{ opacity: 0, transition: { duration: 2 } }}
-              transition={{ duration: 4 }}
-            />
+            <AnimatePresence mode="wait">
+              <motion.img
+                className="pokemon-card-image"
+                key={shinyImage}
+                src={shinyImage}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, x: 0, transition: { duration: 2 }  }}
+                exit={{ opacity: 0, transition: { duration: 2 } }}
+                transition={{ duration: 4 }}
+              />
+            </AnimatePresence>
           ) : (
-            <motion.img
-              className="pokemon-card-image"
-              key="normal"
-              src={image}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, x: 0, transition: { duration: 2 }  }}
-              exit={{ opacity: 0, transition: { duration: 2 } }}
-              transition={{ duration: 4 }}
-            />
+            <AnimatePresence mode="wait">
+              <motion.img
+                className="pokemon-card-image"
+                key={image}
+                src={image}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, x: 0, transition: { duration: 2 }  }}
+                exit={{ opacity: 0, transition: { duration: 2 } }}
+                transition={{ duration: 4 }}
+              />
+            </AnimatePresence>
           )}
-        </AnimatePresence>
+    
       </div>
       <InspectImageModal open={modalOpen} closeModal={toggleModal} theme={theme} image={images}/>
     </motion.div>

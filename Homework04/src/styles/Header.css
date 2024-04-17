@@ -31,20 +31,17 @@ header {
 }
 
 .header-icon {
-  margin-left: 20px;
   width: 35px;
   height: 35px;
   cursor: pointer;
-}
-
-.header-icon:hover {
-  padding: 8px;
-  border-radius: 999px;
+  padding: 10px;
+  border-radius: 16px;
 }
 
 .header-icon.search-icon {
   width: 25px;
   height: 25px;
+  padding: 15px;
   cursor: pointer;
 }
 

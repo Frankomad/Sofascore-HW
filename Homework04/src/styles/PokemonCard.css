@@ -39,7 +39,7 @@
   
 .pokemon-card-wrapper {
 
-  height: 50vh;
+  height: 60vh;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -151,11 +151,11 @@
 
 @media (max-width: 1200px) {
   .pokemon-card-wrapper {
-    height: 70vh;
+    height: 80vh;
   }
 
   .pokemon-card-wrapper.short {
-    height: 50vh;
+    height: 55vh;
   }
 }
 
@@ -181,12 +181,12 @@
   }
 
   .pokemon-card-wrapper {
-      height: 140vh;
+      height: 150vh;
       flex-direction: column;
   }
 
   .pokemon-card-wrapper.short {
-    height: 100vh;
+    height: 110vh;
   }
 
   .pokemon-card-wrapper:nth-child(odd) {

@@ -21,7 +21,7 @@ function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollPos = window.pageYOffset;
+      const currentScrollPos = window.scrollY;
       const scrolledPastThreshold = currentScrollPos > 20;
       setVisible(
         prevScrollPos > currentScrollPos || !scrolledPastThreshold || dropdownOpen 
@@ -37,6 +37,7 @@ function Header() {
   }, [prevScrollPos, dropdownOpen]);
 
   function toggleSearchModal() {
+    setModalOpen(false)
     setSearchModalOpen((prevState) => !prevState);
   }
 
@@ -45,6 +46,7 @@ function Header() {
   }
 
   function toggleFavouritePokemonModal() {
+    setSearchModalOpen(false)
     setModalOpen((prevState) => !prevState); 
   }
 
