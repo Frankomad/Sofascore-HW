@@ -1,0 +1,114 @@
+.dropdown-menu {
+    position: absolute;
+    background-color: var(--background-color-header-light);
+    top: 70px;
+    right: -30px;
+    width: 300px;
+    border-radius: 10px;
+}
+
+.dropdown-menu li {
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-menu ul {
+    margin-left: 0px;
+}
+
+.theme-light .dropdown-menu {
+    background-color: var(--background-color-header-light);
+    color: var(--text-color-header);
+}
+
+.theme-dark .dropdown-menu {
+    background-color: var(--background-color-header-dark);
+    color: var(--text-color-header);
+}
+
+.input-container {
+    display: flex;
+}
+
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+
+   }
+   
+   .container {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    font-size: 20px;
+    user-select: none;
+    margin-top: 15px;
+   }
+   
+   .checkmark {
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 1.3em;
+    width: 1.3em;
+    border-radius: 50px;
+    transition: all 0.7s;
+    --spread: 20px;
+   }
+
+   .theme-dark .checkmark {
+    background: white;
+   }
+
+   .theme-light .checkmark {
+    background: white;
+   }
+   
+   /* Ovo je bio pokusaj da oko krugica budu boje palete, ali da nije nesto prespektakularno ispalo... */
+   .theme-dark .container input:checked ~ .checkmark {
+    background: white;
+    box-shadow: -10px -10px var(--spread) 0px #FFF, 0 -10px var(--spread) 0px var(--background-color-col-1-dark), 10px -10px var(--spread) 0px var(--background-color-header-dark), 10px 0 var(--spread) 0px var(--background-color-col-2-dark), 10px 10px var(--spread) 0px var(--background-color-col-1-dark), 0 10px var(--spread) 0px var(--background-color-col-2-dark), -10px 10px var(--spread) 0px var(--text-color-col-1-light);
+   }
+
+   .theme-light .container input:checked ~ .checkmark {
+    background: white;
+    box-shadow: -10px -10px var(--spread) 0px var(--background-color-header-light), 0 -10px var(--spread) 0px var(--text-color-header), 10px -10px var(--spread) 0px var(--text-color-col-2-light), 10px 0 var(--spread) 0px #FD1D1D, 10px 10px var(--spread) 0px #FFF, 0 10px var(--spread) 0px var(--text-color-col-1-light), -10px 10px var(--spread) 0px #FFF;
+   }
+   
+   .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+   }
+   
+   .container input:checked ~ .checkmark:after {
+    display: block;
+   }
+   
+   .theme-light .container .checkmark:after {
+    left: 0.45em;
+    top: 0.25em;
+    width: 0.25em;
+    height: 0.5em;
+    border: solid var(--background-color-header-light);
+    border-width: 0 0.15em 0.15em 0;
+    transform: rotate(45deg);
+   }
+
+   .theme-dark .container .checkmark:after {
+    left: 0.45em;
+    top: 0.25em;
+    width: 0.25em;
+    height: 0.5em;
+    border: solid var(--background-color-header-dark);
+    border-width: 0 0.15em 0.15em 0;
+    transform: rotate(45deg);
+   }
+
+   .theme-text {
+    margin-left: 15px;
+   }
