@@ -1,34 +1,59 @@
 /* styles/globals.css */
 
 :root {
-    --color-primary-variant: #1327ba;
-    --color-secondary-variant: #dddbc9;
-    --color-primary-default: teal;
-    --color-secondary-default: #f0eedf;
-    --color-primary-highlight: #e1edfe;
-    --color-secondary-highlight: #f7f6ef;
-    --on-color-on-color-primary: #fff;
-    --surface-surface-1: #fff;
-    --surface-s1: #f0eedf;
-    --surface-surface-0: #eff3f8;
-    --surface-surface-2: rgba(192, 207, 228, 0.2);
-    --on-surface-on-surface-lv-1: #121212;
-    --on-surface-nLv1: #121212;
-    --on-surface-nLv2: rgba(18, 18, 18, 0.85);
-    --on-color-on-color-secondary: rgba(255, 255, 255, 0.6);
-    --on-surface-on-surface-lv-2: rgba(18, 18, 18, 0.4);
-    --on-surface-on-surface-lv-3: rgba(18, 18, 18, 0.2);
-    --on-surface-on-surface-lv-4: rgba(18, 18, 18, 0.1);
-    --status-error: #ea4545;
-    --status-alert: #d8b127;
-    --status-success: #1da86d;
-    --specific-live: #e93030;
-    --max-width: 1100px;
-    --border-radius: 12px;
-    --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
-      "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
-      "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
-  }
+  --color-primary-variant: #1327ba;
+  --color-secondary-variant: #dddbc9;
+  --color-primary-default: #374df5;
+  --color-secondary-default: #f0eedf;
+  --color-primary-highlight: #e1edfe;
+  --color-secondary-highlight: #f7f6ef;
+  --on-color-on-color-primary: #fff;
+  --surface-surface-1: #fff;
+  --surface-surface-0: #eff3f8;
+  --surface-surface-2: rgba(192, 207, 228, 0.2);
+  --on-surface-on-surface-lv-1: #121212;
+  --on-color-on-color-secondary: rgba(255, 255, 255, 0.6);
+  --on-surface-on-surface-lv-2: rgba(18, 18, 18, 0.4);
+  --on-surface-on-surface-lv-3: rgba(18, 18, 18, 0.2);
+  --on-surface-on-surface-lv-4: rgba(18, 18, 18, 0.1);
+  --status-error: #ea4545;
+  --status-alert: #d8b127;
+  --status-success: #1da86d;
+  --specific-live: #e93030;
+  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
+    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+}
+
+/* styles/globals.css */
+
+@font-face {
+  font-family: 'Roboto';
+  src: local('Roboto-CondensedRegular'),
+    url('/fonts/Roboto-CondensedRegular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: condensed;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: local('Roboto-Regular'),
+    url('/fonts/Roboto-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: local('Roboto-Bold'),
+    url('/fonts/Roboto-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+}
+
   
   .dark {
     --surface-s1: #494643;
@@ -37,39 +62,6 @@
     --primary-variant: #007fc4;
     --on-surface-nLv1: #e0e0e0;
     --on-surface-nLv2: rgba(224, 224, 224, 0.85);
-  }
-  
-  @font-face {
-    font-family: Roboto;
-    src: local(Roboto-CondensedRegular),
-      url(/path/to/Roboto-CondensedRegular.woff2) format("woff2"),
-      url(/path/to/Roboto-CondensedRegular.woff) format("woff"),
-      url(/path/to/Roboto-CondensedRegular.ttf) format("truetype");
-    font-weight: normal;
-    font-style: normal;
-    font-stretch: condensed;
-  }
-  
-  @font-face {
-    font-family: Roboto;
-    src: local(Roboto-Regular),
-      url(/path/to/Roboto-Regular.woff2) format("woff2"),
-      url(/path/to/Roboto-Regular.woff) format("woff"),
-      url(/path/to/Roboto-Regular.ttf) format("truetype");
-    font-weight: normal;
-    font-style: normal;
-    font-stretch: normal;
-  }
-  
-  @font-face {
-    font-family: Roboto;
-    src: local(Roboto-Bold),
-      url(/path/to/Roboto-Bold.woff2) format("woff2"),
-      url(/path/to/Roboto-Bold.woff) format("woff"),
-      url(/path/to/Roboto-Bold.ttf) format("truetype");
-    font-weight: bold;
-    font-style: normal;
-    font-stretch: normal;
   }
   
   * {
@@ -196,4 +188,24 @@
     line-height: 1.33;
     letter-spacing: normal;
   }
+
+  /* global.css */
+.hidden-scrollbar {
+  overflow-y: auto;
+  /* Hide scrollbar for Webkit browsers */
+  -webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.sticky-navigator {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
   
