@@ -4,21 +4,13 @@ import { useRouter } from 'next/router';
 import ArrowRight from './basecomponents/ArrowRight';
 import CloseIcon from './basecomponents/CloseIcon';
 import Incident from './Incident';
-import Arrow from './basecomponents/ArrowRight';
-
-interface Team {
-  id: number;
-  name: string;
-}
-
-interface Score {
-  total: number;
-  [key: string]: number;
-}
+import CustomButton from './CustomButton';
+import { Incident as IncidentType } from '@/types/incident';
+import { Team } from '@/types/team';
+import { Score } from '@/types/score';
 
 interface MatchDetailsProps {
   eventId: number;
-  startTime: string;
   homeTeam: Team;
   awayTeam: Team;
   homeScore: Score;
@@ -29,32 +21,8 @@ interface MatchDetailsProps {
   path: string;
 }
 
-interface Incident {
-  player?: {
-    id: number;
-    name: string;
-    slug: string;
-    country: {
-      id: number;
-      name: string;
-    };
-    position: string;
-  };
-  teamSide?: string;
-  color?: string;
-  id: number;
-  time: number;
-  type: string;
-  text?: string;
-  scoringTeam?: string;
-  homeScore?: number;
-  awayScore?: number;
-  goalType?: string;
-}
-
 const MatchDetails: React.FC<MatchDetailsProps> = ({
   eventId,
-  startTime,
   homeTeam,
   awayTeam,
   homeScore,
@@ -65,10 +33,10 @@ const MatchDetails: React.FC<MatchDetailsProps> = ({
   path
 }) => {
   const router = useRouter();
-  const { sport } = router.query;
+  const { sport, tournamentId } = router.query;
 
   const [matchDetails, setMatchDetails] = useState<any>(null);
-  const [incidents, setIncidents] = useState<Incident[]>([]);
+  const [incidents, setIncidents] = useState<IncidentType[]>([]);
 
   useEffect(() => {
     if (selected) {
@@ -80,7 +48,7 @@ const MatchDetails: React.FC<MatchDetailsProps> = ({
         const incidentsRes = await fetch(`/api/event/${eventId}/incidents`);
         const incidentsData = await incidentsRes.json();
         if (Array.isArray(incidentsData)) {
-          setIncidents(incidentsData.sort((a: Incident, b: Incident) => a.time - b.time));
+          setIncidents(incidentsData.sort((a: IncidentType, b: IncidentType) => a.time - b.time));
         } else {
           setIncidents([]);
         }
@@ -96,6 +64,11 @@ const MatchDetails: React.FC<MatchDetailsProps> = ({
 
   const handleTeamClick = (teamId: number) => () => {
     const absoluteRoute = `/${sport}/teams/${teamId}`;
+    router.push(absoluteRoute);
+  }
+
+  const handleTournamentClick = (tournamentId: number) => {
+    const absoluteRoute = `/${sport}/tournament/${tournamentId}`;
     router.push(absoluteRoute);
   }
 
@@ -141,11 +114,19 @@ const MatchDetails: React.FC<MatchDetailsProps> = ({
       {selected && matchDetails && (
         <>
         <Box mt="16px">
-          <Flex justify="center"><Text fontWeight="bold">Start</Text></Flex>
           <Box mt="16px">
-            {incidents.map(incident => (
+            {incidents.length !== 0 ? (incidents.map(incident => (
               <Incident key={incident.id} incident={incident} sport={matchDetails.tournament.sport.slug}/>
-            ))}
+            ))) : 
+            <Flex m="24px 0 24px 0" justify="center" flexDir="column" alignItems="center">
+              <Box m="8px" bg="lightblue" p="12px" borderRadius="5px">
+                <Text>No results yet.</Text>
+              </Box>
+              {!tournamentId ? (<CustomButton w="fit-content" h="fit-content" variant="stroked" p="12px" onClick={() => handleTournamentClick(matchDetails.tournament.id)}>
+                <Text>View Tournament Details</Text>
+              </CustomButton>) : null}
+            </Flex>
+            }
           </Box>
         </Box>
         </>

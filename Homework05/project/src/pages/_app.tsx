@@ -1,6 +1,5 @@
 import { SettingsContextProvider } from '@/context/SettingsContext'
 import '@/styles/globals.css'
-import '@/styles/MainContent.css'
 import type { AppProps } from 'next/app'
 import { SWRConfig } from 'swr'
 

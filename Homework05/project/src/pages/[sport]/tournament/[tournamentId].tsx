@@ -7,62 +7,25 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Container from '@/components/Container';
 import Breadcrumb from '@/components/Breadcrumb';
-import { getCode } from 'country-list';
 import TournamentMatches from '@/components/TournamentMatches';
 import TournamentStandings from '@/components/TournamentStandings';
-
-interface Team {
-  id: number;
-  name: string;
-}
-
-interface Country {
-  id: number;
-  name: string;
-}
-
-interface Tournament {
-  id: number;
-  name: string;
-  country: Country;
-}
-
-interface Score {
-  total: number;
-  period1: number;
-  period2: number;
-  period3: number;
-  period4: number;
-  overtime: number;
-}
-
-interface Event {
-  id: number;
-  slug: string;
-  tournament: Tournament;
-  homeTeam: Team;
-  awayTeam: Team;
-  status: string;
-  startDate: string;
-  homeScore: any;
-  awayScore: any;
-  winnerCode: string;
-  round: number;
-}
+import useWindowSize from '@/hooks/useWindowSize';
+import HeaderButton from '@/components/HeaderButton';
+import { handleLeagueClick, getCountryCode } from '@/utils';
+import { Event } from '@/types/event';
+import { Tournament } from '@/types/tournament';
+import { BreadcrumbItem } from '@/types/breadcrumb';
+import { StandingsRow } from '@/types/standingsRow';
 
 interface SportPageProps {
   tournaments: Tournament[];
-  matches: any;
-  standings: any;
-}
-
-interface BreadcrumbItem {
-  name: string;
-  route: string;
+  matches: Event[];
+  standings: StandingsRow[];
 }
 
 const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }) => {
   const router = useRouter();
+  const { isMobile } = useWindowSize();
   const { sport, tournamentId } = router.query;
   const sportName = typeof sport === 'string' ? sport.charAt(0).toUpperCase() + sport.slice(1) : '';
   const [view, setView] = useState<'matches' | 'standings'>('matches');
@@ -76,27 +39,9 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }
     }
   };
 
-  const handleLeagueClick = (tournamentId: number) => {
-    const route = `/${sport}/tournament/${tournamentId}`;
-    router.push(route);
-  };
-
-  const getCountryCode = (countryName: string): string | undefined => {
-    if (countryName === 'England') {
-      return 'gb';
-    } else if (countryName === 'USA') {
-      return 'us';
-    } else if (countryName === 'Croatia') {
-      return 'hr';
-    } else if (countryName === 'Spain') {
-      return 'es';
-    }
-    return getCode(countryName)?.toLowerCase();
-  };
-
   const handleMatchSelect = (match: Event | null) => {
     setSelectedMatch(match);
-  }
+  };
 
   useEffect(() => {
     const fetchNextEvents = async () => {
@@ -123,7 +68,6 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }
     { name: updatedMatches[0]?.tournament.name || '', route: `/${sport}/tournament/${tournamentId}` },
     selectedMatch ? { name: selectedMatch.slug, route: `/${sport}/${selectedMatch.id}` } : null
   ].filter(Boolean) as BreadcrumbItem[];
-  
 
   return (
     <>
@@ -135,20 +79,20 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }
       <Box as="main" p="16px" className="Micro" h="fit-content" minH="79vh">
         <Breadcrumb items={breadcrumbItems}/>
         <Flex gap="16px" mt="12px" h="90%">
-          <Container w={"calc(33% - 8px)"} height="65vh" className="hidden-scrollbar">
+          <Container w={"calc(33% - 8px)"} height="65vh" className="hidden-scrollbar" display={isMobile ? "none" : "default"}>
             <Text mb="16px" fontWeight="bold">Leagues</Text>
             <Flex flexDir="column" gap="16px">
               {tournaments.map((tournament: any) => (
-                <Flex key={tournament.id} alignItems="center" p="8px" onClick={() => handleLeagueClick(tournament.id)} style={{ cursor: 'pointer' }}>
+                <Flex key={tournament.id} alignItems="center" p="8px" onClick={() => handleLeagueClick(tournament.id, sport as string, router)} style={{ cursor: 'pointer' }}>
                   <Image src={`https://academy-backend.sofascore.dev/tournament/${tournament.id}/image`} width="24px" height="24px" borderRadius="50%" mr="8px" />
                   <Text>{tournament.name}</Text>
                 </Flex>
               ))}
             </Flex>
           </Container>
-          <Box w={"calc(66% - 16px)"}>
-            <Container h={"35%"} mb="2%" maxHeight="110px" position="relative">
-              <Flex flexDir="column">
+          <Box w={isMobile ? "100%" : "calc(66% - 16px)"}>
+            <Container mb="2%" maxHeight="110px" pb="0px">
+              <Flex flexDir="column" h="100%">
                 <Flex h="50%">
                   <Image src={`https://academy-backend.sofascore.dev/tournament/${updatedMatches[0]?.tournament.id}/image`} width="48px" height="48px" borderRadius="50%" mr="8px" />
                   <Flex flexDir="column">
@@ -159,19 +103,9 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }
                     </Flex>
                   </Flex>
                 </Flex>
-                <Flex alignItems="flex-start" position="absolute" bottom="5px">
-                  <Box position="relative" mr="spacings.md" onClick={() => setView('matches')}>
-                    <Text position="relative" textAlign="center" cursor="pointer" color={view === 'matches' ? 'blue' : 'black'}>Matches</Text>
-                    {view === 'matches' && (
-                      <Box h="4px" position={"absolute"} bg={"blue"} w="80%" bottom={'-5px'} left={'10%'} borderTopRightRadius={'8px'} borderTopLeftRadius={'8px'}></Box>
-                    )}
-                  </Box>
-                  <Box position="relative" onClick={() => setView('standings')}>
-                    <Text position="relative" textAlign="center" cursor="pointer" color={view === 'standings' ? 'blue' : 'black'}>Standings</Text>
-                    {view === 'standings' && (
-                      <Box h="4px" position={"absolute"} bg={"blue"} w="80%" bottom={'-5px'} left={'10%'} borderTopRightRadius={'8px'} borderTopLeftRadius={'8px'}></Box>
-                    )}
-                  </Box>
+                <Flex alignItems="flex-end" h="50%">
+                  <HeaderButton lineColor="blue" label="Details" onClick={() => setView('matches')} active={view === "matches"}/>
+                  <HeaderButton lineColor="blue" label="Standings" onClick={() => setView('standings')} active={view === "standings"}/>
                 </Flex>
               </Flex>
             </Container>
@@ -183,7 +117,7 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }
               />
             ) : (
               <>
-              <TournamentStandings standings={standings} />
+                <TournamentStandings standings={standings} />
               </>
             )}
           </Box>
@@ -205,7 +139,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     const matchesNext = await matchesNextRes.json();
     const standingsRes = await fetch(`https://academy-backend.sofascore.dev/tournament/${tournamentId}/standings`);
     const standings = await standingsRes.json();
-    
+
     const matches = [...matchesNext.slice(0, 3), ...matchesLast.slice(0, 7)];
     return {
       props: {

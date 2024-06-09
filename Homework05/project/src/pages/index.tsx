@@ -1,16 +1,13 @@
 // pages/index.tsx
-import { useThemeContext } from '@/context/SettingsContext';
 import { Box, Text } from '@kuma-ui/core';
 import { AnimatePresence, motion } from 'framer-motion';
 import Head from 'next/head';
 import useSWR from 'swr';
 import CustomButton from '@/components/CustomButton'; // Adjust the import path as necessary
-import InputSelector from '@/components/InputSelector'; // Adjust the import path as necessary
 
 const MotionBox = motion(Box);
 
 export default function Home() {
-  const { setIsDark } = useThemeContext();
   const { data, error } = useSWR('/api/sports');
 
   return (
@@ -23,7 +20,6 @@ export default function Home() {
         <Text as="h1" color="colors.primary">
           This is your homepage
         </Text>
-        <Box onClick={() => setIsDark(v => !v)}>Toggle theme</Box>
         <Box mt={4}>
           <Text as="h2">Primary - with icon</Text>
           <Box>
@@ -59,9 +55,7 @@ export default function Home() {
         </Box>
         <Box marginBottom="16px">
           <Text as="h2">Grouped selectors</Text>
-          <Selector label="Barcelona" withIcon />
-          <Selector label="Barcelona" withIcon />
-          <Selector label="Barcelona" withIcon />
+
         </Box>
         <Box marginBottom="16px">
           <Text as="h2">Input Fields / Input Selectors</Text>

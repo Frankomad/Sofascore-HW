@@ -2,32 +2,13 @@ import React, { useState } from 'react';
 import { Flex, Text, Image } from '@kuma-ui/core';
 import { getCode } from 'country-list';
 import { useRouter } from 'next/router';
+import { Player } from '@/types/player';
+import { getCountryCode } from '@/utils';
 
-interface PlayerCardProps {
-  id: number;
-  name: string;
-  country: {
-    id: number;
-    name: string;
-  };
-  position: string;
-}
-
-const PlayerCard: React.FC<PlayerCardProps> = ({ id, name, country, position }) => {
+const PlayerCard: React.FC<Player> = ({ id, name, country, position }) => {
   const router = useRouter();
   const { sport } = router.query;
   const [imgSrc, setImgSrc] = useState(`https://academy-backend.sofascore.dev/player/${id}/image`);
-
-  const getCountryCode = (countryName: string): string | undefined => {
-    if (countryName === 'England') {
-      return 'gb';
-    } else if (countryName === 'USA') {
-      return 'us';
-    } else if (countryName === 'Croatia') {
-      return 'hr';
-    }
-    return getCode(countryName)?.toLowerCase();
-  };
 
   const handleImageError = () => {
     setImgSrc('/Anonymous.png');

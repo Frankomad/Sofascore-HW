@@ -31,11 +31,11 @@ const Header: React.FC<HeaderProps> = ({ onClick }) => {
           <SofaIcon />
         </Box>
         <Flex justify="flex-end" gridColumn="3" p="10px" gap="spacings.md">
-          <TrophyIcon />
+          <TrophyIcon cursor="pointer" display={isMobile ? "default" : "none"}/>
           <SettingsIcon cursor="pointer" onClick={handleSettingsClick}/>
         </Flex>
       </Box>
-      <Flex justify="center" h="50%" alignItems="center" gap="spacings.md" color="white">
+      <Flex justify="center" h="50%" alignItems="flex-end" gap="spacings.md" color="white">
         <HeaderButton onClick={onClick} icon={<HeaderFootball />} label="Football" route="/football" active={sport === 'football'} />
         <HeaderButton onClick={onClick} icon={<HeaderBasketball />} label="Basketball" route="/basketball" active={sport === 'basketball'} />
         <HeaderButton onClick={onClick} icon={<HeaderAmericanFootball />} label="Am. Football" route="/american-football" active={sport === 'american-football'} />

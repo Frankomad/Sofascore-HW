@@ -8,64 +8,16 @@ import Footer from '@/components/Footer';
 import Container from '@/components/Container';
 import Breadcrumb from '@/components/Breadcrumb';
 import TournamentMatches from '@/components/TournamentMatches';
-import { getCode } from 'country-list';
-
-interface Country {
-  id: number;
-  name: string;
-}
-
-interface Player {
-  id: number;
-  name: string;
-  slug: string;
-  country: Country;
-  position: string;
-}
-
-interface Tournament {
-  id: number;
-  name: string;
-  country: Country;
-}
-
-interface Team {
-  id: number;
-  name: string;
-}
-
-interface Score {
-  total: number;
-  period1: number;
-  period2: number;
-  period3: number;
-  period4: number;
-  overtime: number;
-}
-
-interface Event {
-  id: number;
-  slug: string;
-  tournament: Tournament;
-  homeTeam: Team;
-  awayTeam: Team;
-  status: string;
-  startDate: string;
-  homeScore: any;
-  awayScore: any;
-  winnerCode: string;
-  round: number;
-}
+import { handleLeagueClick, getCountryCode } from '@/utils';
+import { Player } from '@/types/player';
+import { Tournament } from '@/types/tournament';
+import { Event } from '@/types/event';
+import { BreadcrumbItem } from '@/types/breadcrumb';
 
 interface PlayerPageProps {
   tournaments: Tournament[];
   player: Player;
   events: Event[];
-}
-
-interface BreadcrumbItem {
-  name: string;
-  route: string;
 }
 
 const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) => {
@@ -81,8 +33,7 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
     { name: sport as string, route: `/${sport}` },
     { name: player.name, route: `/${sport}/player/${player.id}` },
     selectedMatch ? { name: selectedMatch.slug, route: `/${sport}/${selectedMatch.id}` } : null,
-  ].filter(Boolean) as BreadcrumbItem[]
-
+  ].filter(Boolean) as BreadcrumbItem[];
 
   const handleImageError = () => {
     setImgSrc('/Anonymous.png');
@@ -94,7 +45,7 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
         const responseLast = await fetch(`/api/player/${playerId}/events/last/${page}`);
         const matchesLast = await responseLast.json();
 
-        const responseNext = await fetch(`/api/tournament/${playerId}/events/next/${page}`);
+        const responseNext = await fetch(`/api/player/${playerId}/events/next/${page}`);
         const matchesNext = await responseNext.json();
 
         setUpdatedMatches([...matchesNext.slice(0, 5), ...matchesLast.slice(0, 5)]);
@@ -108,11 +59,6 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
     }
   }, [page, playerId]);
 
-  const handleLeagueClick = (tournamentId: number) => {
-    const route = `/${sport}/tournament/${tournamentId}`;
-    router.push(route);
-  };
-
   const handlePageChange = (increment: number) => {
     if (page + increment > 0) {
       setPage((prevPage) => prevPage + increment);
@@ -121,17 +67,6 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
 
   const handleMatchSelect = (match: Event | null) => {
     setSelectedMatch(match);
-  }
-
-  const getCountryCode = (countryName: string): string | undefined => {
-    if (countryName === 'England') {
-      return 'gb';
-    } else if (countryName === 'USA') {
-      return 'us';
-    } else if (countryName === 'Croatia') {
-      return 'hr';
-    }
-    return getCode(countryName)?.toLowerCase();
   };
 
   return (
@@ -148,7 +83,7 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
             <Text mb="16px" fontWeight="bold">Leagues</Text>
             <Flex flexDir="column" gap="16px">
               {tournaments.map((tournament: any) => (
-                <Flex key={tournament.id} alignItems="center" p="8px" onClick={() => handleLeagueClick(tournament.id)} style={{ cursor: 'pointer' }}>
+                <Flex key={tournament.id} alignItems="center" p="8px" onClick={() => handleLeagueClick(tournament.id, sport as string, router)} style={{ cursor: 'pointer' }}>
                   <Image src={`https://academy-backend.sofascore.dev/tournament/${tournament.id}/image`} width="24px" height="24px" borderRadius="50%" mr="8px" />
                   <Text>{tournament.name}</Text>
                 </Flex>
@@ -175,8 +110,8 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
                   <Flex bg="colors.highlight.primary" p="8px 4px" w="20%" justify="center" alignItems="center" flexDir="column" borderRadius="5px">
                     <Text color="rgba(18, 18, 18, 0.4)" fontSize="8px">Nationality</Text>
                     <Flex alignItems="center">
-                    <Image src={`https://www.sofascore.com/static/images/flags/${getCountryCode(player.country.name)}.png`} width="12px" height="12px" borderRadius="50%" mr="4px" />
-                    <Text>{player.country.name}</Text>
+                      <Image src={`https://www.sofascore.com/static/images/flags/${getCountryCode(player.country.name)}.png`} width="12px" height="12px" borderRadius="50%" mr="4px" />
+                      <Text>{player.country.name}</Text>
                     </Flex>
                   </Flex>
                   <Flex bg="colors.highlight.primary" p="8px 4px" w="20%" justify="center" alignItems="center" flexDir="column" borderRadius="5px">
@@ -186,11 +121,11 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
                 </Flex>
               </Flex>
             </Container>
-              <TournamentMatches
-                matches={updatedMatches}
-                handlePageChange={handlePageChange}
-                handleMatchSelect={handleMatchSelect}
-              />
+            <TournamentMatches
+              matches={updatedMatches}
+              handlePageChange={handlePageChange}
+              handleMatchSelect={handleMatchSelect}
+            />
           </Box>
         </Flex>
       </Box>

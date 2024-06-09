@@ -7,7 +7,6 @@ import FootballBall from './basecomponents/FootballBall';
 import ExtraPoint from './basecomponents/ExtraPoint';
 import FieldGoal from './basecomponents/FieldGoal';
 import Touchdown from './basecomponents/Touchdown';
-import TwoPointConversion from './basecomponents/TwoPointConversion';
 import BasketballIncident1 from './basecomponents/BasketballIncident1';
 import BasketballIncident2 from './basecomponents/BasketballIncident2';
 import BasketballIncident3 from './basecomponents/BasketballIncident3';
@@ -17,39 +16,30 @@ import RugbyPoint3 from './basecomponents/RugbyPoint3';
 import FootballPenaltyMissed from './basecomponents/FootballPenaltyMissed';
 import FootballPenaltyScore from './basecomponents/FootballPenaltyScore';
 import Rogue from './basecomponents/Rogue';
-
-interface IncidentProps {
-  sport?: string;
-  incident: {
-    player?: {
-      id: number;
-      name: string;
-      slug: string;
-      country: {
-        id: number;
-        name: string;
-      };
-      position: string;
-    };
-    teamSide?: string;
-    color?: string;
-    id: number;
-    time: number;
-    type: string;
-    text?: string;
-    scoringTeam?: string;
-    homeScore?: number;
-    awayScore?: number;
-    goalType?: string;
-  };
-}
+import CustomButton from './CustomButton';
+import { useRouter } from 'next/router';
+import { IncidentProps } from '@/types/incident';
 
 const Incident: React.FC<IncidentProps> = ({ incident, sport }) => {
+  const router = useRouter();
 
-  const isHomeTeam = sport === 'football' ? incident.teamSide === 'home' : incident.scoringTeam === 'home';
+  const handlePlayerClick = (playerId: number | undefined) => {
+    if (!playerId) return;
+    const route = `/${sport}/player/${playerId}`;
+    router.push(route);
+  }
+
+  const isHomeTeam = () => {
+    if (sport === 'football') {
+      return incident.teamSide === 'home';
+    } else if (sport === 'american-football' || sport === 'basketball') {
+      return incident.scoringTeam === 'home';
+    }
+    return false;
+  };
 
   const renderGoal = () => (
-    <Flex alignItems="center" mb="8px" flexDir={isHomeTeam ? 'row' : 'row-reverse'} w="100%">
+    <Flex alignItems="center" mb="8px" flexDir={isHomeTeam() ? 'row' : 'row-reverse'} w="100%" onClick={() => handlePlayerClick(incident.player?.id)} cursor="pointer">
       <Flex flexDir="column" alignItems="center">
         {incident.goalType === 'penalty' && <FootballPenaltyScore width="16px" height="16px" />}
         {incident.goalType === 'fieldgoal' && <FieldGoal width="16px" height="16px" />}
@@ -85,7 +75,7 @@ const Incident: React.FC<IncidentProps> = ({ incident, sport }) => {
   );
 
   const renderCard = () => (
-    <Flex alignItems="center" mb="8px" flexDir={isHomeTeam ? 'row' : 'row-reverse'} w="100%">
+    <Flex alignItems="center" mb="8px" flexDir={isHomeTeam() ? 'row' : 'row-reverse'} w="100%"  onClick={() => handlePlayerClick(incident.player?.id)} cursor="pointer">
       <Flex flexDir="column" alignItems="center">
         {incident.color === 'red' && <RedCard width="16px" height="16px" />}
         {incident.color === 'yellow' && <YellowCard width="16px" height="16px" />}
@@ -117,7 +107,12 @@ const Incident: React.FC<IncidentProps> = ({ incident, sport }) => {
 
   return (
     <Flex key={incident.id} mb="8px" alignItems="center" className="Micro">
-      {content}
+      {incident ? 
+      (content) :
+      <CustomButton varient="unshielded">
+        <Text>View Details</Text>
+      </CustomButton>
+      }
     </Flex>
   );
 };

@@ -7,7 +7,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Container from '@/components/Container';
 import Breadcrumb from '@/components/Breadcrumb';
-import { getCode } from 'country-list';
 import Match from '@/components/Match';
 import TeamIcon from '@/components/basecomponents/TeamIcon';
 import CircularProgress from '@/components/basecomponents/CircularProgress';
@@ -15,84 +14,28 @@ import TournamentMatches from '@/components/TournamentMatches';
 import TournamentStandings from '@/components/TournamentStandings';
 import PlayerList from '@/components/PlayerList';
 import ArrowRight from '@/components/basecomponents/ArrowRight';
-
-interface Team {
-  id: number;
-  name: string;
-}
-
-interface Country {
-  id: number;
-  name: string;
-}
-
-interface Tournament {
-  id: number;
-  name: string;
-  country: Country;
-}
-
-interface Score {
-  total: number;
-  period1: number;
-  period2: number;
-  period3: number;
-  period4: number;
-  overtime: number;
-}
-
-interface Event {
-  id: number;
-  slug: string;
-  tournament: Tournament;
-  homeTeam: Team;
-  awayTeam: Team;
-  status: string;
-  startDate: string;
-  homeScore: any;
-  awayScore: any;
-  winnerCode: string;
-  round: number;
-}
-
-interface SportPageProps {
-  tournaments: Tournament[];
-  teamDetails: any;
-  teamTournaments: any;
-  teamEvent: any;
-  teamSquad: any;
-}
-
-interface BreadcrumbItem {
-  name: string;
-  route: string;
-}
-
-interface Player {
-  id: number;
-  name: string;
-  country: {
-    id: number;
-    name: string;
-  };
-  managerName: "string";
-  venue: "string";
-}
-
-interface TeamDetails {
-  id: number;
-  name: string;
-  country: {
-    id: number;
-    name: string;
-  };
-  position: string;
-}
+import useWindowSize from '@/hooks/useWindowSize';
+import HeaderButton from '@/components/HeaderButton';
+import { handleLeagueClick, getCountryCode } from '@/utils';
+import { Tournament } from '@/types/tournament';
+import { Event } from '@/types/event';
+import { Player } from '@/types/player';
+import { Team } from '@/types/team';
+import { BreadcrumbItem } from '@/types/breadcrumb';
 
 type ViewType = 'details' | 'squad' | 'matches' | 'standings';
 
+interface SportPageProps {
+  tournaments: Tournament[];
+  teamDetails: Team;
+  teamTournaments: Tournament[];
+  teamEvent: Event;
+  teamSquad: Player[];
+}
+
 const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTournaments, teamEvent, teamSquad }) => {
   const router = useRouter();
+  const { isMobile } = useWindowSize();
   const { sport, matchId } = router.query;
   const sportName = typeof sport === 'string' ? sport.charAt(0).toUpperCase() + sport.slice(1) : '';
 
@@ -103,12 +46,12 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
   const [teamMatches, setTeamMatches] = useState<Event[]>([]);
   const [selectedMatch, setSelectedMatch] = useState<Event | null>(null);
 
-  const getNumberOfForeignPlayers = (teamDetails: TeamDetails, teamSquad: Player[]): number => {
+  const getNumberOfForeignPlayers = (teamDetails: Team, teamSquad: Player[]): number => {
     const foreignPlayers = teamSquad.filter(player => player.country.name !== teamDetails.country.name);
     return foreignPlayers.length;
   };
 
-  const handleMatchClick = (matchId: string) => {
+  const handleMatchClick = (matchId: number) => {
     const route = `/${sport}/${matchId}`;
     router.push(route);
   };
@@ -121,22 +64,6 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
     if (page + increment > 0) {
       setPage((prevPage) => prevPage + increment);
     }
-  };
-
-  const handleLeagueClick = (tournamentId: number) => {
-    const route = `/${sport}/tournament/${tournamentId}`;
-    router.push(route);
-  };
-
-  const getCountryCode = (countryName: string): string | undefined => {
-    if (countryName === 'England') {
-      return 'gb';
-    } else if (countryName === 'USA') {
-      return 'us';
-    } else if (countryName === 'Croatia') {
-      return 'hr';
-    }
-    return getCode(countryName)?.toLowerCase();
   };
 
   useEffect(() => {
@@ -176,7 +103,6 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
     selectedMatch ? { name: selectedMatch.slug, route: `/${sport}/${selectedMatch.id}` } : null
   ].filter(Boolean) as BreadcrumbItem[];
   
-  
   return (
     <>
       <Head>
@@ -187,20 +113,20 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
       <Box as="main" p="16px" className="Micro" height="fit-content" minH="79vh">
         <Breadcrumb items={breadcrumbItems} />
         <Flex gap="16px" height="calc(100% - 50px)" mt="12px">
-          <Container w={"calc(33% - 8px)"} height="100%" className="hidden-scrollbar">
+          <Container w={"calc(33% - 8px)"} height="100%" className="hidden-scrollbar" display={isMobile ? "none" : "default"}>
             <Text mb="16px" fontWeight="bold">Leagues</Text>
             <Flex flexDir="column" gap="16px">
               {tournaments.map((tournament: any) => (
-                <Flex key={tournament.id} alignItems="center" p="8px" onClick={() => handleLeagueClick(tournament.id)} style={{ cursor: 'pointer' }}>
+                <Flex key={tournament.id} alignItems="center" p="8px" onClick={() => handleLeagueClick(tournament.id, sport as string, router)} style={{ cursor: 'pointer' }}>
                   <Image src={`https://academy-backend.sofascore.dev/tournament/${tournament.id}/image`} width="24px" height="24px" borderRadius="50%" mr="8px" />
                   <Text>{tournament.name}</Text>
                 </Flex>
               ))}
             </Flex>
           </Container>
-          <Box w={"calc(66% - 16px)"} gap="2%">
-            <Container mb="2%" maxHeight="110px" position="relative" height="110px">
-              <Flex flexDir="column">
+          <Box w={isMobile ? "100%" : "calc(66% - 16px)"} gap="2%">
+            <Container mb="2%" maxHeight="110px" position="relative" height="110px" pb="0px">
+              <Flex flexDir="column" h="100%">
                 <Flex h="50%">
                   <Image src={`https://academy-backend.sofascore.dev/team/${teamDetails.id}/image`} width="48px" height="48px" mr="8px" />
                   <Flex flexDir="column">
@@ -211,37 +137,17 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
                     </Flex>
                   </Flex>
                 </Flex>
-                <Flex alignItems="flex-start" position="absolute" bottom="5px">
-                  <Box position="relative" onClick={() => setView('details')} mr="16px">
-                    <Text position="relative" textAlign="center" cursor="pointer" color={view === 'details' ? 'blue' : 'black'}>Details</Text>
-                    {view === 'details' && (
-                      <Box h="4px" position={"absolute"} bg={"blue"} w="80%" bottom={'-5px'} left={'10%'} borderTopRightRadius={'8px'} borderTopLeftRadius={'8px'}></Box>
-                    )}
-                  </Box>
-                  <Box position="relative" onClick={() => setView('matches')} mr="16px">
-                    <Text position="relative" textAlign="center" cursor="pointer" color={view === 'matches' ? 'blue' : 'black'}>Matches</Text>
-                    {view === 'matches' && (
-                      <Box h="4px" position={"absolute"} bg={"blue"} w="80%" bottom={'-5px'} left={'10%'} borderTopRightRadius={'8px'} borderTopLeftRadius={'8px'}></Box>
-                    )}
-                  </Box>
-                  <Box position="relative" onClick={() => setView('standings')} mr="16px">
-                    <Text position="relative" textAlign="center" cursor="pointer" color={view === 'standings' ? 'blue' : 'black'}>Standings</Text>
-                    {view === 'standings' && (
-                      <Box h="4px" position={"absolute"} bg={"blue"} w="80%" bottom={'-5px'} left={'10%'} borderTopRightRadius={'8px'} borderTopLeftRadius={'8px'}></Box>
-                    )}
-                  </Box>
-                  <Box position="relative" onClick={() => setView('squad')}>
-                    <Text position="relative" textAlign="center" cursor="pointer" color={view === 'squad' ? 'blue' : 'black'}>Squad</Text>
-                    {view === 'squad' && (
-                      <Box h="4px" position={"absolute"} bg={"blue"} w="80%" bottom={'-5px'} left={'10%'} borderTopRightRadius={'8px'} borderTopLeftRadius={'8px'}></Box>
-                    )}
-                  </Box>
+                <Flex alignItems="flex-end" h="50%">
+                    <HeaderButton lineColor="blue" label="Details" onClick={() => setView('details')} active={view == "details"}/>
+                    <HeaderButton lineColor="blue" label="Matches" onClick={() => setView('matches')} active={view == "matches"}/>
+                    <HeaderButton lineColor="blue" label="Standings" onClick={() => setView('standings')} active={view == "standings"}/>
+                    <HeaderButton lineColor="blue" label="Squad" onClick={() => setView('squad')} active={view == "squad"}/>
                 </Flex>
               </Flex>
             </Container>
             {view === 'details' && (
-              <Flex w="100%" gap="2%">
-                <Flex flexDir="column" w="49%" gap="8px">
+              <Flex w="100%" gap={isMobile ? "8px" : "2%"} flexDir={isMobile ? "column" : "row"}>
+                <Flex flexDir="column" w={isMobile ? "100%" : "49%"} gap="8px">
                   <Container w="100%" p="0px">
                     <Flex justify="center" mb="4px" p="16px">
                       <Text fontWeight="bold">Team Info</Text>
@@ -251,12 +157,12 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
                       <Text ml="8px">Coach: {teamDetails.managerName}</Text>
                     </Flex>
                     <Flex m="12px 0 16px 0">
-                      <Flex flexDir="column" w="50%" alignItems="center" gap="8px">
+                      <Flex flexDir="column" w={isMobile ? "100%" : "50%"} alignItems="center" gap="8px">
                         <TeamIcon/>
                         <Text>{teamSquad.length}</Text>
                         <Text color="rgba(18, 18, 18, 0.4)">Total Players</Text>
                       </Flex>
-                      <Flex flexDir="column" w="50%" alignItems="center" gap="8px">
+                      <Flex flexDir="column" w={isMobile ? "100%" : "50%"} alignItems="center" gap="8px">
                         <CircularProgress value={getNumberOfForeignPlayers(teamDetails, teamSquad)} max={teamSquad.length}/>
                         <Text>{getNumberOfForeignPlayers(teamDetails, teamSquad)}</Text>
                         <Text color="rgba(18, 18, 18, 0.4)">Foreign Players</Text>
@@ -273,7 +179,7 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
                     </Flex>
                   </Container>
                 </Flex>
-                <Flex flexDir="column" w="49%" gap="8px">
+                <Flex flexDir="column" w={isMobile ? "100%" : "49%"} gap="8px">
                 <Container w="100%">
                   <Flex justify="center" mb="12px" fontWeight="bold">
                     <Text>Leagues</Text>
@@ -284,7 +190,7 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
                     gap="16px"
                   >
                     {teamTournaments.map((tournament: any) => (
-                      <Flex key={tournament.id} flexDir="column" alignItems="center" onClick={() => handleLeagueClick(tournament.id)} cursor="pointer">
+                      <Flex key={tournament.id} flexDir="column" alignItems="center" onClick={() => handleLeagueClick(tournament.id, sport as string, router)} cursor="pointer">
                         <Image
                           src={`https://academy-backend.sofascore.dev/tournament/${tournament.id}/image`}
                           width="36px"
@@ -343,7 +249,7 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
               isLoading ? (
                 <Text>Loading...</Text>
               ) : (
-                <TournamentStandings standings={standings} />
+                <TournamentStandings resetPage={() => setView('details')} standings={standings} />
               )
             )}
           </Box>

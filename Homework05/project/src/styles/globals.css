@@ -192,11 +192,9 @@
   /* global.css */
 .hidden-scrollbar {
   overflow-y: auto;
-  /* Hide scrollbar for Webkit browsers */
   -webkit-scrollbar {
     display: none;
   }
-  /* Hide scrollbar for IE, Edge and Firefox */
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
@@ -204,7 +202,7 @@
 .sticky-navigator {
   position: -webkit-sticky; /* Safari */
   position: sticky;
-  top: 0;
+  top: -1px;
   z-index: 10;
 }
 

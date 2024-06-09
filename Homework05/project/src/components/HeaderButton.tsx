@@ -3,19 +3,20 @@ import { Flex, Text, Box } from '@kuma-ui/core';
 import { useRouter } from 'next/router';
 
 interface HeaderButtonProps {
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   label: string;
-  route: string; // Add a route prop
+  lineColor?: string;
+  route?: string;
   active?: boolean;
   onClick?: () => void;
 }
 
-const HeaderButton: React.FC<HeaderButtonProps> = ({ icon, label, route, active, onClick }) => {
+const HeaderButton: React.FC<HeaderButtonProps> = ({ icon, label, route, active, lineColor = "white", onClick }) => {
   const router = useRouter();
 
   const handleClick = () => {
     if (onClick) onClick();
-    router.push(route);
+    if (route) router.push(route);
   };
 
   return (
@@ -30,7 +31,7 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({ icon, label, route, active,
     >
       {icon}
       <Text>{label}</Text>
-      { active && <Box h="4px" position={"absolute"} bg={"white"} w="60%" bottom={'2px'} left={'20%'} borderTopRightRadius={'8px'} borderTopLeftRadius={'8px'}></Box>}
+      { active && <Box h="4px" position={"absolute"} bg={lineColor} w="60%" bottom={'0px'} left={'20%'} borderTopRightRadius={'8px'} borderTopLeftRadius={'8px'}></Box>}
     </Flex>
   );
 };

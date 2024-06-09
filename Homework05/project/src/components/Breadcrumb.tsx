@@ -2,11 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Flex, Text } from '@kuma-ui/core';
 import ArrowRight from './basecomponents/ArrowRight';
-
-interface BreadcrumbItem {
-  name: string;
-  route: string;
-}
+import { BreadcrumbItem } from '@/types/breadcrumb';
 
 interface BreadcrumbProps {
   items: BreadcrumbItem[];

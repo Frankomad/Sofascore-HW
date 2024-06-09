@@ -5,45 +5,9 @@ import { useRouter } from 'next/router';
 import Container from '@/components/Container';
 import MatchDetails from '@/components/MatchDetails';
 import CustomButton from '@/components/CustomButton';
-
-interface Team {
-  id: number;
-  name: string;
-}
-
-interface Country {
-  id: number;
-  name: string;
-}
-
-interface Tournament {
-  id: number;
-  name: string;
-  country: Country;
-}
-
-interface Score {
-  total: number;
-  period1: number;
-  period2: number;
-  period3: number;
-  period4: number;
-  overtime: number;
-}
-
-interface Event {
-  id: number;
-  slug: string;
-  tournament: Tournament;
-  homeTeam: Team;
-  awayTeam: Team;
-  status: string;
-  startDate: string;
-  homeScore: any;
-  awayScore: any;
-  winnerCode: string;
-  round: number;
-}
+import useWindowSize from '@/hooks/useWindowSize';
+import { Event } from '@/types/event';
+import { groupEventsByRound } from '@/utils';
 
 interface TournamentMatchesProps {
   matches: Event[];
@@ -57,6 +21,7 @@ const TournamentMatches: React.FC<TournamentMatchesProps> = ({
   handleMatchSelect,
 }) => {
   const router = useRouter();
+  const { isMobile } = useWindowSize();
   const { sport, matchId } = router.query;
 
   const [selectedMatchId, setSelectedMatchId] = useState<number | null>(null);
@@ -81,20 +46,13 @@ const TournamentMatches: React.FC<TournamentMatchesProps> = ({
     handleMatchSelect(match);
   };
 
-  const groupedMatches = matches.reduce((acc: any, match: Event) => {
-    const { round } = match;
-    if (!acc[round]) {
-      acc[round] = [];
-    }
-    acc[round].push(match);
-    return acc;
-  }, {});
+  const groupedMatches = groupEventsByRound(matches);
 
   const selectedMatch = matches.find((match: Event) => match.id === selectedMatchId);
 
   return (
     <Flex mb="spacings.xl">
-      <Container w="49%" mr="2%" className="hidden-scrollbar" maxHeight="500px" p="0px">
+      <Container w={isMobile ? "100%" : "49%"} mr={isMobile ? "0px" : "2%"} className="hidden-scrollbar" maxHeight="500px" p="0px" display={(selectedMatch && isMobile) ? "none" : "default"}>
         <Flex justify="space-between" p="12px" h="48px" mb="12px" alignItems="center" className="sticky-navigator" bg="white" w="100%">
           <CustomButton
             variant="icon"
@@ -141,10 +99,9 @@ const TournamentMatches: React.FC<TournamentMatchesProps> = ({
         ))}
       </Container>
       {selectedMatch && (
-        <Container height="fit-content" w="49%" className="hidden-scrollbar" p="0px">
+        <Container height="fit-content" w={isMobile ? "100%" : "49%"} className="hidden-scrollbar" p="0px">
           <MatchDetails
             eventId={selectedMatch.id}
-            startTime={new Date(selectedMatch.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             homeTeam={selectedMatch.homeTeam}
             awayTeam={selectedMatch.awayTeam}
             homeScore={selectedMatch.homeScore}

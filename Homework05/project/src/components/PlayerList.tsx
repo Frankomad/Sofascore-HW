@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Flex, Text } from '@kuma-ui/core';
 import PlayerCard from './PlayerCard';
-
-interface Player {
-  id: number;
-  name: string;
-  country: {
-    id: number;
-    name: string;
-  };
-  position: string;
-}
+import { Player } from '@/types/player';
 
 interface PlayerListProps {
   teamId: number;
@@ -41,7 +32,7 @@ const PlayerList: React.FC<PlayerListProps> = ({ teamId }) => {
   }
 
   return (
-    <Flex flexDir="column" w="100%" className="hidden-scrollbar" maxH="300px">
+    <Flex flexDir="column" w="100%" className="hidden-scrollbar" maxH="400px">
       <Text fontWeight="bold" mb="8px">Players</Text>
       {players.map((player) => (
         <PlayerCard key={player.id} {...player} />

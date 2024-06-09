@@ -1,36 +1,28 @@
 import React from 'react';
 import { Box, Flex, Text } from '@kuma-ui/core';
 import Container from './Container';
-
-interface Team {
-  id: number;
-  name: string;
-  country: {
-    id: number;
-    name: string;
-  };
-}
-
-interface StandingsRow {
-  id: number;
-  team: Team;
-  points: number | null;
-  scoresFor: number;
-  scoresAgainst: number;
-  played: number;
-  wins: number;
-  draws: number;
-  losses: number;
-  percentage: number;
-}
+import useWindowSize from '@/hooks/useWindowSize';
+import { useRouter } from 'next/router';
+import { StandingsRow } from '@/types/standingsRow';
 
 interface TournamentStandingsProps {
   standings: StandingsRow[];
+  resetPage?: () => void;
 }
 
-const TournamentStandings: React.FC<TournamentStandingsProps> = ({ standings }) => {
+const TournamentStandings: React.FC<TournamentStandingsProps> = ({ standings, resetPage }) => {
+  const { isMobile } = useWindowSize();
+  const router = useRouter();
+  const { sport } = router.query;
+
+  const handleTeamClick = (teamId: number, sport: string, router: ReturnType<typeof useRouter>, resetPage?: () => void) => {
+    if (resetPage) resetPage();
+    const route = `/${sport}/teams/${teamId}`;
+    router.push(route);
+  };
+
   return (
-    <Container className="hidden-scrollbar" maxHeight="350px" mb="32px" p="0px">
+    <Container className="hidden-scrollbar" maxHeight={isMobile ? "500px" : "350px"} mb="32px" p="0px">
       <Flex color="grey" p="8px">
         <Text as="div" width="50px" fontWeight="bold">#</Text>
         <Text as="div" width="200px" fontWeight="bold">Team</Text>
@@ -47,6 +39,8 @@ const TournamentStandings: React.FC<TournamentStandingsProps> = ({ standings }) 
           borderBottom="1px solid #ddd" 
           p="8px" 
           bg={index % 2 === 1 ? 'colors.highlight.secondary' : 'transparent'}
+          onClick={() => handleTeamClick(row.team.id, sport as string, router, resetPage)}
+          cursor="pointer"
         >
           <Text as="div" width="50px">{index + 1}</Text>
           <Text as="div" width="200px">{row.team.name}</Text>
