@@ -19,7 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <SWRConfig value={{ fetcher }}>
       <SettingsContextProvider>
         <WatchlistProvider>
-          <Component {...pageProps} />
+            <Component {...pageProps} />
         </WatchlistProvider>
       </SettingsContextProvider>
     </SWRConfig>

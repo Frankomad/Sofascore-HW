@@ -44,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({ onClick }) => {
 
   return (
     <>
-      <Flex flexDir="column" bg={'colors.primary'} height="11vh" position="relative">
+      <Flex flexDir="column" bg={'colors.primary.default'} height="12vh" position="relative" color={'colors.surface.s1'}>
         <Box
           display={isMobile ? 'flex' : 'grid'}
           gridTemplateColumns="1fr auto 1fr"
@@ -58,11 +58,11 @@ const Header: React.FC<HeaderProps> = ({ onClick }) => {
           <Flex justify="flex-end" gridColumn="3" p="10px" gap="spacings.md" mt="4px">
             <SearchIcon cursor="pointer" onClick={handleSearchClick} />
             <TrophyIcon cursor="pointer" display={isMobile ? 'default' : 'none'} onClick={handleLeagueClick} />
-            <BellIcon onClick={() => handleBellClick()} watched={false} color="white" />
+            <BellIcon onClick={() => handleBellClick()} watched={false}/>
             <SettingsIcon cursor="pointer" onClick={handleSettingsClick} />
           </Flex>
         </Box>
-        <Flex justify="center" h="45%" alignItems="flex-end" gap="spacings.md" color="white">
+        <Flex justify="center" h="45%" alignItems="flex-end" gap="spacings.md">
           <HeaderButton
             onClick={onClick}
             icon={<HeaderFootball />}

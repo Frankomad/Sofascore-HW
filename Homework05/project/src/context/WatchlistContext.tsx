@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { Score } from '@/types/score';
 import { Team } from '@/types/team';
 
@@ -25,7 +25,19 @@ export const WatchlistContext = createContext<WatchlistContextType>({
 });
 
 export const WatchlistProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [watchlist, setWatchlist] = useState<ShrinkedEvent[]>([]);
+  const [watchlist, setWatchlist] = useState<ShrinkedEvent[]>(() => {
+    if (typeof window !== 'undefined') {
+      const storedWatchlist = localStorage.getItem('watchlist');
+      return storedWatchlist ? JSON.parse(storedWatchlist) : [];
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('watchlist', JSON.stringify(watchlist));
+    }
+  }, [watchlist]);
 
   const toggleWatch = (match: ShrinkedEvent) => {
     setWatchlist(prevWatchlist => {

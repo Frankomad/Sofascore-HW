@@ -1,7 +1,7 @@
 /* styles/globals.css */
 
 :root {
-  --color-primary-variant: #1327ba;
+  --color-primary-variant: #1327ba;    
   --color-secondary-variant: #dddbc9;
   --color-primary-default: #374df5;
   --color-secondary-default: #f0eedf;
@@ -20,12 +20,29 @@
   --status-alert: #d8b127;
   --status-success: #1da86d;
   --specific-live: #e93030;
-  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
-    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
-    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
 }
 
-/* styles/globals.css */
+.dark {
+  --color-primary-variant: #afbeff;
+  --color-secondary-variant: #404039;
+  --color-primary-default: #849afd;
+  --color-secondary-default: #3a3a39;
+  --color-primary-highlight: #2d385c;
+  --color-secondary-highlight: #171616;
+  --on-color-on-color-primary: #ffffff;
+  --surface-surface-1: #21242d;
+  --surface-surface-0: #2c303b;
+  --surface-surface-2: rgba(0, 0, 0, 0.4);
+  --on-surface-on-surface-lv-1: #ffffff;
+  --on-color-on-color-secondary: rgba(255, 255, 255, 0.6);
+  --on-surface-on-surface-lv-2: rgba(255, 255, 255, 0.4);
+  --on-surface-on-surface-lv-3: rgba(255, 255, 255, 0.2);
+  --on-surface-on-surface-lv-4: rgba(255, 255, 255, 0.1);
+  --status-error: #f26666;
+  --status-alert: #ecca51;
+  --status-success: #30b87f;
+  --specific-live: #f14b4b;
+}
 
 @font-face {
   font-family: 'Roboto';
@@ -205,5 +222,7 @@
   top: -1px;
   z-index: 10;
 }
+
+
 
   

@@ -84,10 +84,10 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
         <meta name="description" content={`Details and events for ${player.name}`} />
       </Head>
       <Header />
-      <Box as="main" p="16px" className="Micro" height="fit-content" minH="79vh">
+      <Box as="main" p="16px" className="Micro" height="fit-content" minH="77vh" bg="colors.surface.s0">
         <Breadcrumb items={breadcrumbItems} />
         <Flex gap="16px" height="calc(100% - 50px)" mt="12px">
-          <Container w={"calc(33% - 8px)"} height="100%" className="hidden-scrollbar" display={isMobile ? "none" : "default"}>
+          <Container w={"calc(33% - 8px)"} height="65vh" className="hidden-scrollbar" display={isMobile ? "none" : "default"}>
             <Text mb="16px" fontWeight="bold">Leagues</Text>
             <Flex flexDir="column" gap="16px">
               {tournaments.map((tournament: any) => (
@@ -116,14 +116,14 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
                 </Flex>
                 <Flex mt="8px 0 12px 0" justify="space-around">
                   <Flex bg="colors.highlight.primary" p="8px 4px" w="20%" justify="center" alignItems="center" flexDir="column" borderRadius="5px">
-                    <Text color="rgba(18, 18, 18, 0.4)" fontSize="8px">Nationality</Text>
+                    <Text color="colors.onSurface.lv2" fontSize="8px">Nationality</Text>
                     <Flex alignItems="center">
                       <Image src={`https://www.sofascore.com/static/images/flags/${getCountryCode(player.country.name)}.png`} width="12px" height="12px" borderRadius="50%" mr="4px" />
                       <Text>{player.country.name}</Text>
                     </Flex>
                   </Flex>
                   <Flex bg="colors.highlight.primary" p="8px 4px" w="20%" justify="center" alignItems="center" flexDir="column" borderRadius="5px">
-                    <Text color="rgba(18, 18, 18, 0.4)" fontSize="8px">Position</Text>
+                    <Text color="colors.onSurface.lv2" fontSize="8px">Position</Text>
                     <Text>{player.position}</Text>
                   </Flex>
                 </Flex>

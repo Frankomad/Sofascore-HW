@@ -3,17 +3,16 @@ import React from 'react';
 interface BellIconProps {
   onClick: (e: React.MouseEvent) => void;
   watched: boolean;
-  color?: string;
 }
 
 
-const BellIcon: React.FC<BellIconProps> = ({ onClick, watched, color }) => (
+const BellIcon: React.FC<BellIconProps> = ({ onClick, watched }) => (
   <svg
     onClick={onClick}
     width="24px"
     height="26px"
     viewBox="0 0 24 24"
-    fill={color ? color : (watched ? "gold" : "currentcolor")}
+    fill={(watched ? "gold" : "currentcolor")}
     xmlns="http://www.w3.org/2000/svg"
     style={{ cursor: 'pointer' }}
   >

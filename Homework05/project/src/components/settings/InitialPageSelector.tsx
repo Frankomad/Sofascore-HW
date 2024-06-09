@@ -28,20 +28,20 @@ const InitialPageSelector: React.FC = () => {
         borderRadius="4px"
         padding="8px"
         cursor="pointer"
-        background={isOpen ? '#f0f0f0' : '#fff'}
+        bg='colors.surface.s1'
         onClick={toggleDropdown}
       >
         <span style={{ flexGrow: 1 }}>{initialPage}</span>
         <ArrowIcon isOpen={isOpen} />
       </Box>
       {isOpen && (
-        <Box mt="8px" border="1px solid #ccc" borderRadius="4px" background="#fff">
+        <Box mt="8px" border="1px solid #ccc" borderRadius="4px" background="colors.surface.s1">
           {['Football', 'Basketball', 'Am. Football'].map(page => (
             <Box
               key={page}
               padding="8px"
               cursor="pointer"
-              _hover={{ background: '#f0f0f0' }}
+              _hover={{ opacity: '0.5' }}
               onClick={() => handleSelectPage(page)}
             >
               {page}

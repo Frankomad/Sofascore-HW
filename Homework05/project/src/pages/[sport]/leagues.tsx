@@ -43,7 +43,7 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments }) => {
         <meta name="description" content={`List of ${sportName.toLowerCase()} tournaments and events`} />
       </Head>
       <Header />
-      <Box h="78vh">
+      <Box h="78vh" bg="colors.surface.s0">
         <Box m="12px">
           <Breadcrumb items={breadcrumbItems} />
         </Box>

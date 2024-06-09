@@ -81,21 +81,21 @@ const MatchDetails: React.FC<MatchDetailsProps> = ({
 
   const getScoreColor = (teamId: number) => {
     if (status === 'inprogress') {
-      return 'red';
+      return 'colors.live';
     }
     if (status === 'finished') {
       if (winnerCode === 'home' && teamId === homeTeam.id) {
-        return 'black';
+        return 'colors.onSurface.lv1';
       }
       if (winnerCode === 'away' && teamId === awayTeam.id) {
-        return 'black';
+        return 'colors.onSurface.lv1';
       }
-      return 'grey';
+      return 'colors.onSurface.lv2';
     }
-    return 'black';
+    return 'colors.onSurface.lv1';
   };
 
-  console.log("isMobile", isMobile)
+  console.log("incidents", incidents)
 
   return (
     <Box p="12px">
@@ -105,9 +105,9 @@ const MatchDetails: React.FC<MatchDetailsProps> = ({
             <CloseIcon width="16px" height="16px" />
           </Box>
           <Box display={isMobile ? "none" : "default"}>
-            <Flex alignItems="center" onClick={handleRoute} cursor="pointer" color="blue">
-              <Text color="blue">View Full Page </Text>
-              <ArrowRight />
+            <Flex alignItems="center" onClick={handleRoute} cursor="pointer" color="colors.primary.default">
+              <Text>View Full Page </Text>
+              <ArrowRight height="16px" width="16px"/>
             </Flex>
           </Box>
         </Flex>
@@ -128,11 +128,11 @@ const MatchDetails: React.FC<MatchDetailsProps> = ({
               {homeScore.total}
             </Text>
             <Text m="0px 8px 0px 8px">-</Text>
-            <Text className="Headline-2" color={getScoreColor(awayScore.id)}>
+            <Text className="Headline-2" color={getScoreColor(awayTeam.id)}>
               {awayScore.total}
             </Text>
           </Flex>
-          <Text>{status === 'notstarted' ? 'Not started' : 'FT'}</Text>
+          <Text textAlign="center">{status === 'notstarted' ? 'Not started' : 'FT'}</Text>
         </Flex>
         <Flex flexDir="column" alignItems="center" w="35%" onClick={handleTeamClick(awayTeam.id)} cursor="pointer">
           <Image
@@ -150,19 +150,20 @@ const MatchDetails: React.FC<MatchDetailsProps> = ({
             <Box mt="16px">
               {incidents.length !== 0 ? (
                 incidents.map((incident) => (
-                  <Incident key={incident.id} incident={incident} sport={matchDetails.tournament.sport.slug} />
+                  <Incident key={incident.id} incident={incident} sport={matchDetails.tournament.sport.slug} status={status}/>
                 ))
               ) : (
                 <Flex m="24px 0 24px 0" justify="center" flexDir="column" alignItems="center">
-                  <Box m="8px" bg="lightblue" p="12px" borderRadius="5px">
-                    <Text>No results yet.</Text>
-                  </Box>
+                  <Flex m="8px" p="12px" borderRadius="5px" w="80%" h="60px" bg="colors.surface.s2" justify="center" alignItems="center">
+                    <Text color="colors.onSurface.lv2" textAlign="center">No results yet.</Text>
+                  </Flex>
                   {!tournamentId ? (
                     <CustomButton
                       w="fit-content"
                       h="fit-content"
                       variant="stroked"
                       p="12px"
+                      fontSize="12px"
                       onClick={() => handleTournamentClick(matchDetails.tournament.id)}
                     >
                       <Text>View Tournament Details</Text>

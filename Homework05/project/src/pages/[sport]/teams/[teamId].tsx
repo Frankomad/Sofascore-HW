@@ -116,12 +116,12 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
         <meta name="description" content={`List of ${sportName.toLowerCase()} tournaments and events`} />
       </Head>
       <Header />
-      <Box as="main" p="16px" className="Micro" height="fit-content" minH="79vh">
+      <Box as="main" p="16px" className="Micro" height="fit-content" minH="77vh" bg="colors.surface.s0">
         <Breadcrumb items={breadcrumbItems} />
         <Flex gap="16px" height="calc(100% - 50px)" mt="12px">
           <Container
             w={'calc(33% - 8px)'}
-            height="100%"
+            height="64vh"
             className="hidden-scrollbar"
             display={isMobile ? 'none' : 'default'}
           >
@@ -179,25 +179,25 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
                 </Flex>
                 <Flex alignItems="flex-end" h="50%">
                   <HeaderButton
-                    lineColor="blue"
+                    color="colors.primary.default"
                     label="Details"
                     onClick={() => setView('details')}
                     active={view == 'details'}
                   />
                   <HeaderButton
-                    lineColor="blue"
+                    color="colors.primary.default"
                     label="Matches"
                     onClick={() => setView('matches')}
                     active={view == 'matches'}
                   />
                   <HeaderButton
-                    lineColor="blue"
+                    color="colors.primary.default"
                     label="Standings"
                     onClick={() => setView('standings')}
                     active={view == 'standings'}
                   />
                   <HeaderButton
-                    lineColor="blue"
+                    color="colors.primary.default"
                     label="Squad"
                     onClick={() => setView('squad')}
                     active={view == 'squad'}
@@ -208,7 +208,7 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
             {view === 'details' && (
               <Flex w="100%" gap={isMobile ? '8px' : '2%'} flexDir={isMobile ? 'column' : 'row'}>
                 <Flex flexDir="column" w={isMobile ? '100%' : '49%'} gap="8px">
-                  <Container w="100%" p="0px">
+                  <Container w="100%" p="0px" color="colors.onSurface.lv1">
                     <Flex justify="center" mb="4px" p="16px">
                       <Text fontWeight="bold">Team Info</Text>
                     </Flex>
@@ -220,7 +220,7 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
                       <Flex flexDir="column" w={isMobile ? '100%' : '50%'} alignItems="center" gap="8px">
                         <TeamIcon />
                         <Text>{teamSquad.length}</Text>
-                        <Text color="rgba(18, 18, 18, 0.4)">Total Players</Text>
+                        <Text textAlign="center">Total Players</Text>
                       </Flex>
                       <Flex flexDir="column" w={isMobile ? '100%' : '50%'} alignItems="center" gap="8px">
                         <CircularProgress
@@ -228,7 +228,15 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
                           max={teamSquad.length}
                         />
                         <Text>{getNumberOfForeignPlayers(teamDetails, teamSquad)}</Text>
-                        <Text color="rgba(18, 18, 18, 0.4)">Foreign Players</Text>
+                        <Text textAlign="center">Foreign Players</Text>
+                      </Flex>
+                      <Flex flexDir="column" w={isMobile ? '100%' : '50%'} alignItems="center" gap="8px">
+                        <CircularProgress
+                          value={teamSquad.length - getNumberOfForeignPlayers(teamDetails, teamSquad)}
+                          max={teamSquad.length}
+                        />
+                        <Text>{teamSquad.length - getNumberOfForeignPlayers(teamDetails, teamSquad)}</Text>
+                        <Text textAlign="center">National Players</Text>
                       </Flex>
                     </Flex>
                   </Container>
@@ -280,10 +288,13 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
                         borderRadius="50%"
                         mr="8px"
                       />
-                      <Text fontWeight="bold">
-                        {teamEvent.tournament.country.name} <ArrowRight width="12px" height="12px" />{' '}
-                        {teamEvent.tournament.name}
-                      </Text>
+                      <Flex fontWeight="bold" alignItems="center">
+                        {teamEvent.tournament.country.name} 
+                        <Text color="colors.onSurface.lv2">
+                          <ArrowRight width="12px" height="12px"/>
+                          {teamEvent.tournament.name}
+                        </Text>
+                      </Flex>
                     </Flex>
                     <Match
                       key={teamEvent.id}
@@ -307,9 +318,12 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
                 <Flex justify="center" mb="12px" p="8px">
                   <Text fontWeight="bold">Team Info</Text>
                 </Flex>
-                <Flex alignItems="center" justify="center" p="8px" borderBottom="1px solid #ddd">
-                  <Image src="/Anonymous.png" w="24px" h="24px" borderRadius="50%" />
+                <Flex alignItems="center" justify="center" p="8px">
+                  <Image src="/Anonymous.png" w="36px" h="36px" borderRadius="50%" />
                   <Text ml="8px">Coach: {teamDetails.managerName}</Text>
+                </Flex>
+                <Flex borderBottom="1px solid #ddd" >
+                  <Text m="0px 16px 12px 16px">Players:</Text>
                 </Flex>
                 <PlayerList teamId={teamDetails.id} />
               </Container>

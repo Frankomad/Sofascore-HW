@@ -35,7 +35,7 @@ const Favourites: React.FC = () => {
   return (
     <>
       <Header />
-      <Box as="main" p="16px" className="Micro" minH="79vh">
+      <Box as="main" p="16px" className="Micro" minH="77vh">
         <Box m="8px 0px 12px 0px">
           <Breadcrumb items={breadcrumbItems} />
         </Box>

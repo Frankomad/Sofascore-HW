@@ -5,6 +5,7 @@ import { SearchTeam } from '@/types/team';
 import { SearchPlayer } from '@/types/player';
 import PlayerItem from './player/PlayerItem';
 import TeamItem from './team/TeamItem';
+import SearchIcon from './icons/SearchIcon';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -19,9 +20,10 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
   const handleSearch = async () => {
     if (!query) return;
     try {
-      const teamsResponse = await fetch(`api/search/team/${query}`);
+      const basePath = process.env.NEXT_PUBLIC_API_BASE_PATH || '';
+      const teamsResponse = await fetch(`${basePath}/api/search/team/${query}`);
       const teams: SearchTeam[] = await teamsResponse.json();
-      const playersResponse = await fetch(`api/search/player/${query}`);
+      const playersResponse = await fetch(`${basePath}/api/search/player/${query}`);
       const players: SearchPlayer[] = await playersResponse.json();
       setResults([...teams, ...players]);
     } catch (error) {
@@ -29,7 +31,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleRedirect = (sport : string, id: number, type: 'teams' | 'player') => {
+  const handleRedirect = (sport: string, id: number, type: 'teams' | 'player') => {
     const route = `/${sport.toLowerCase()}/${type}/${id}`;
     router.push(route);
     onClose();
@@ -54,7 +56,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
       <Box
         width="80%"
         height="80%"
-        bg="white"
+        bg="colors.surface.s0"
         p="24px"
         borderRadius="12px"
         boxShadow="0 2px 10px rgba(0, 0, 0, 0.2)"
@@ -63,22 +65,27 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
         <Text fontSize="24px" fontWeight="bold" mb="16px" textAlign="center">
           Search Players or Teams
         </Text>
-        <Input
-          placeholder="Type to search..."
-          value={query}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
-          onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === 'Enter') {
-              handleSearch();
-            }
-          }}
-          mb="16px"
-          width="100%"
-          p="12px"
-          fontSize="16px"
-          border="1px solid #ddd"
-          borderRadius="8px"
-        />
+        <Box position="relative">
+          <Input
+            placeholder="Type to search..."
+            value={query}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
+            onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === 'Enter') {
+                handleSearch();
+              }
+            }}
+            mb="16px"
+            width="100%"
+            p="12px"
+            fontSize="16px"
+            border="1px solid #ddd"
+            borderRadius="8px"
+          />
+          <Box position="absolute" top="10px" right="15px" onClick={handleSearch} cursor="pointer" color="black">
+            <SearchIcon />
+          </Box>
+        </Box>
         <Flex flexDir="column" className="hidden-scrollbar" height="75%">
           {results.map((result) => (
             'position' in result ? (

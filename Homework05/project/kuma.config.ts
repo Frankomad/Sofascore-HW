@@ -3,13 +3,18 @@ import { createTheme } from "@kuma-ui/core";
 
 const theme = createTheme({
   colors: {
-    primary: 'var(--color-primary-default)',
-    secondary: 'var(--color-secondary-default)',
-    highlight: {
-      primary: 'var(--color-primary-highlight)',
-      secondary: 'var(--color-secondary-highlight)',
+    primary: {
+      default: 'var(--color-primary-default)', 
+      variant: 'var(--color-primary-variant)',
+      highlight: 'var(--color-primary-highlight)',
+    },
+    secondary: {
+      default: 'var(--color-secondary-default)',
+      variant: 'var(--color-secondary-variant)',
+      highlight: 'var(--color-secondary-highlight)',
     },
     onPrimary: 'var(--on-color-on-color-primary)',
+    onSecondary: 'var(--on-color-on-color-secondary)',
     surface: {
       s0: 'var(--surface-surface-0)',
       s1: 'var(--surface-surface-1)',
@@ -28,7 +33,7 @@ const theme = createTheme({
     },
     live: 'var(--specific-live)',
   },
-  spacings: {
+  spacings: { 
     xs: '4px',
     sm: '8px',
     md: '12px',
@@ -59,19 +64,10 @@ const theme = createTheme({
     relaxed: '1.5',
   },
   components: {
-    Image: {
-      
-    },
     Button: {
       defaultProps: {
         padding: '8px',
-        borderRadius: '2px',
         fontWeight: 600,
-        border: '2px solid var(--color-primary-default)',
-        _hover: {
-          opacity: 0.9,
-          border: '2px solid var(--color-primary-variant)',
-        },
         _disabled: { 
           opacity: 0.4,
         },
@@ -87,18 +83,16 @@ const theme = createTheme({
         stroked: {
           bg: 'transparent',
           color: 'var(--color-primary-default)',
-          _hover: {
-            bg: 'var(--color-primary-highlight)',
-          },
+          borderColor: 'var(--color-primary-default)'
         },
         unshielded: {
           bg: 'transparent',
           color: 'var(--color-primary-default)',
-          _hover: {
-            color: 'var(--color-primary-variant)',
-          },
+          borderColor: 'var(--color-primary-default)'
         },
         icon: {
+          border: '0px',
+          borderRadius: '2px',
           bg: 'var(--color-primary-default)',
           color: 'var(--on-color-on-color-primary)',
           width: '40px',
@@ -106,10 +100,6 @@ const theme = createTheme({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          borderRadius: '2px',
-          _hover: {
-            bg: 'var(--color-primary-variant)',
-          },
         },
       },
     },

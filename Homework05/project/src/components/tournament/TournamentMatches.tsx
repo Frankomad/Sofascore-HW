@@ -53,7 +53,7 @@ const TournamentMatches: React.FC<TournamentMatchesProps> = ({
   return (
     <Flex mb="spacings.xl">
       <Container w={isMobile ? "100%" : "49%"} mr={isMobile ? "0px" : "2%"} className="hidden-scrollbar" maxHeight="500px" p="0px" display={(selectedMatch && isMobile) ? "none" : "default"}>
-        <Flex justify="space-between" p="12px" h="48px" mb="12px" alignItems="center" className="sticky-navigator" bg="white" w="100%">
+        <Flex justify="space-between" p="12px" h="48px" mb="12px" alignItems="center" className="sticky-navigator" w="100%" bg="colors.surface.s1">
           <CustomButton
             variant="icon"
             icon
@@ -61,9 +61,12 @@ const TournamentMatches: React.FC<TournamentMatchesProps> = ({
             h="24px"
             w="24px"
             mr="8px"
-            borderRadius="50%"
             disabled={false}
             onClick={() => handlePageChange(-1)}
+            color="colors.primary.variant" 
+            bg="colors.surface.s1"
+            border="2px solid"
+            borderColor="colors.primary.variant"
           />
           <Text>Matches</Text>
           <CustomButton
@@ -72,9 +75,12 @@ const TournamentMatches: React.FC<TournamentMatchesProps> = ({
             h="24px"
             w="24px"
             mr="8px"
-            borderRadius="50%"
             disabled={false}
             onClick={() => handlePageChange(1)}
+            color="colors.primary.variant" 
+            bg="colors.surface.s1"
+            border="2px solid"
+            borderColor="colors.primary.variant"
           />
         </Flex>
         {Object.keys(groupedMatches).map((round, roundIndex) => (

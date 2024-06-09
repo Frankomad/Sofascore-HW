@@ -20,7 +20,7 @@ import CustomButton from '../CustomButton'
 import { useRouter } from 'next/router'
 import { IncidentProps } from '@/types/incident'
 
-const Incident: React.FC<IncidentProps> = ({ incident, sport }) => {
+const Incident: React.FC<IncidentProps> = ({ incident, sport, status }) => {
   const router = useRouter()
 
   const handlePlayerClick = (playerId: number | undefined) => {
@@ -38,11 +38,20 @@ const Incident: React.FC<IncidentProps> = ({ incident, sport }) => {
     return false
   }
 
+  const isHomeTeamGoal = () => {
+    if (sport === 'football') {
+      return incident.scoringTeam === 'home'
+    } else if (sport === 'american-football' || sport === 'basketball') {
+      return incident.scoringTeam === 'home'
+    }
+    return false
+  }
+
   const renderGoal = () => (
     <Flex
       alignItems="center"
       mb="8px"
-      flexDir={isHomeTeam() ? 'row' : 'row-reverse'}
+      flexDir={isHomeTeamGoal() ? 'row' : 'row-reverse'}
       w="100%"
       onClick={() => handlePlayerClick(incident.player?.id)}
       cursor="pointer"
@@ -79,9 +88,12 @@ const Incident: React.FC<IncidentProps> = ({ incident, sport }) => {
         </Text>
       </Flex>
       <Box w="1px" h="24px" ml="8px" mr="8px" border="1px solid rgba(18, 18, 18, 0.1)" borderRadius="999px"></Box>
-      <Text>
-        {incident.player?.name} ({incident.homeScore} - {incident.awayScore})
-      </Text>
+      <Flex flexDir="column">
+        <Text>{incident.player?.name} ({incident.homeScore} - {incident.awayScore})</Text>
+        {incident.goalType === 'owngoal' ? <Text textAlign={incident.scoringTeam === "away" ? "start" : "end"} color="colors.onSurface.lv2">{incident.type}</Text> 
+        : (<Text textAlign={incident.scoringTeam === "away" ? "end" : "start"} color="colors.onSurface.lv2">{incident.type}</Text>)}
+        
+      </Flex>
     </Flex>
   )
 
@@ -103,12 +115,15 @@ const Incident: React.FC<IncidentProps> = ({ incident, sport }) => {
             <RedCard width="16px" height="16px" customStyle={{ position: 'absolute', left: '3px', bottom: '3px' }} />
           </Box>
         )}
-        <Text fontSize="8px" color="rgba(18, 18, 18, 0.4)">
+        <Text fontSize="8px" color="colors.onSurface.lv2">
           {incident.time}'
         </Text>
       </Flex>
       <Box w="1px" h="24px" ml="8px" mr="8px" border="1px solid rgba(18, 18, 18, 0.1)" borderRadius="999px"></Box>
-      <Text>{incident.player?.name}</Text>
+      <Flex flexDir="column">
+        <Text>{incident.player?.name}</Text>
+        <Text textAlign={incident.teamSide === "away" ? "end" : "start"} color="colors.onSurface.lv2">{incident.type}</Text>
+      </Flex>
     </Flex>
   )
 
@@ -120,11 +135,11 @@ const Incident: React.FC<IncidentProps> = ({ incident, sport }) => {
         mb="8px"
         w="100%"
         height="16px"
-        bg="#f7f6ef"
+        bg="colors.secondary.highlight"
         alignItems="center"
         borderRadius="15px"
       >
-        <Text>
+        <Text color={status === "inprogress" ? "colors.live" : "colors.onSurface.lv1"}>
           {incident.time}' - {periodText}
         </Text>
       </Flex>

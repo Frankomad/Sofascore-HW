@@ -58,7 +58,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ tournaments }) => {
         <meta name="description" content="Settings page" />
       </Head>
       <Header />
-      <Box as="main" p="16px" className="Micro" h={isMobile ? "fit-content" : "79vh"}>
+      <Box as="main" p="16px" className="Micro" h={isMobile ? "fit-content" : "77vh"} bg="colors.surface.s0">
         <Box onClick={() => router.back()}>
           <Breadcrumb items={breadcrumbItems} />
         </Box>

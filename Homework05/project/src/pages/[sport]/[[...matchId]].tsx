@@ -1,71 +1,77 @@
-import React, { useState, useEffect } from 'react'
-import { GetServerSidePropsContext, GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
-import { Box, Flex, Text, Image } from '@kuma-ui/core'
-import Head from 'next/head'
-import Header from '@/components/Header'
-import Navigator from '@/components/Navigator'
-import MatchDetails from '@/components/match/MatchDetails'
-import Footer from '@/components/Footer'
-import Container from '@/components/Container'
-import Match from '@/components/match/Match'
-import ArrowRight from '@/components/icons/ArrowRight'
-import useWindowSize from '@/hooks/useWindowSize'
-import { format, isToday } from 'date-fns'
-import { groupEventsByCountryAndTournament, handleLeagueClick } from '@/utils'
-import { Team } from '@/types/team'
-import { Country } from '@/types/country'
-import { Tournament } from '@/types/tournament'
-import { Score } from '@/types/score'
-import { Event } from '@/types/event'
-import { BreadcrumbItem } from '@/types/breadcrumb'
-import Breadcrumb from '@/components/Breadcrumb'
-import useSWR from 'swr'
+import React, { useState, useEffect } from 'react';
+import { GetServerSidePropsContext, GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { Box, Flex, Text, Image } from '@kuma-ui/core';
+import Head from 'next/head';
+import Header from '@/components/Header';
+import Navigator from '@/components/Navigator';
+import MatchDetails from '@/components/match/MatchDetails';
+import Footer from '@/components/Footer';
+import Container from '@/components/Container';
+import Match from '@/components/match/Match';
+import ArrowRight from '@/components/icons/ArrowRight';
+import useWindowSize from '@/hooks/useWindowSize';
+import { format, isToday } from 'date-fns';
+import { groupEventsByCountryAndTournament, handleLeagueClick } from '@/utils';
+import { Team } from '@/types/team';
+import { Country } from '@/types/country';
+import { Tournament } from '@/types/tournament';
+import { Score } from '@/types/score';
+import { Event } from '@/types/event';
+import { BreadcrumbItem } from '@/types/breadcrumb';
+import Breadcrumb from '@/components/Breadcrumb';
+import useSWR from 'swr';
 
 interface SportPageProps {
-  tournaments: Tournament[]
-  initialEvents: Event[]
+  tournaments: Tournament[];
+  initialEvents: Event[];
 }
 
 const SportPage: React.FC<SportPageProps> = ({ tournaments, initialEvents }) => {
-  const router = useRouter()
-  const { isMobile } = useWindowSize()
-  const { sport, matchId } = router.query
-  const sportName = typeof sport === 'string' ? sport.charAt(0).toUpperCase() + sport.slice(1) : ''
+  const router = useRouter();
+  const { isMobile } = useWindowSize();
+  const { sport, matchId } = router.query;
+  const sportName = typeof sport === 'string' ? sport.charAt(0).toUpperCase() + sport.slice(1) : '';
 
-  const [events, setEvents] = useState<Event[]>(initialEvents)
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
-  const [selectedMatch, setSelectedMatch] = useState<Event | undefined>(undefined)
+  const [events, setEvents] = useState<Event[]>(initialEvents);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedMatch, setSelectedMatch] = useState<Event | undefined>(undefined);
 
-  const { data: matchDetails } = useSWR(matchId ? `/api/event/${matchId}` : null)
+  const { data: matchDetails } = useSWR(matchId ? `/api/event/${matchId}` : null);
 
   useEffect(() => {
     if (matchDetails) {
-      setSelectedMatch(matchDetails)
+      setSelectedMatch(matchDetails);
     }
-  }, [matchDetails])
+  }, [matchDetails]);
+
+  useEffect(() => {
+    if (sport) {
+      handleDateClick(new Date()); // Fetch events for the new sport
+    }
+  }, [sport]);
 
   const handleDateClick = async (date: Date) => {
-    setSelectedDate(date)
-    const res = await fetch(`/api/sport/${sport}/events/${format(date, 'yyyy-MM-dd')}`)
-    const data = await res.json()
-    setEvents(data)
-  }
+    setSelectedDate(date);
+    const res = await fetch(`/api/sport/${sport}/events/${format(date, 'yyyy-MM-dd')}`);
+    const data = await res.json();
+    setEvents(data);
+  };
 
   const handleCloseMatchDetails = () => {
-    setSelectedMatch(undefined)
-  }
+    setSelectedMatch(undefined);
+  };
 
   const handleRouteBack = () => {
-    handleCloseMatchDetails()
-    setEvents(initialEvents)
-  }
+    handleCloseMatchDetails();
+    setEvents(initialEvents);
+  };
 
-  const groupedEvents = groupEventsByCountryAndTournament(events)
+  const groupedEvents = groupEventsByCountryAndTournament(events);
 
-  const selectedTournament = selectedMatch ? selectedMatch.tournament.name : null
+  const selectedTournament = selectedMatch ? selectedMatch.tournament.name : null;
 
-  const displayDate = isToday(selectedDate) ? 'Today' : format(selectedDate, 'EEEE, dd.MM.')
+  const displayDate = isToday(selectedDate) ? 'Today' : format(selectedDate, 'EEEE, dd.MM.');
 
   const breadcrumbItems = [
     { name: sportName, route: `/${sport}` },
@@ -73,13 +79,13 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, initialEvents }) => 
       ? { name: selectedTournament, route: `/${sport}/tournament/${selectedMatch?.tournament.id}` }
       : null,
     selectedMatch ? { name: selectedMatch.slug, route: `/${sport}/${selectedMatch.id}` } : null,
-  ].filter(Boolean) as BreadcrumbItem[]
+  ].filter(Boolean) as BreadcrumbItem[];
 
   const handleSportChange = () => {
-    setEvents(initialEvents)
-    setSelectedMatch(undefined)
-    setSelectedDate(new Date())
-  }
+    setEvents(initialEvents);
+    setSelectedMatch(undefined);
+    setSelectedDate(new Date());
+  };
 
   return (
     <>
@@ -88,7 +94,7 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, initialEvents }) => 
         <meta name="description" content={`List of ${sportName.toLowerCase()} tournaments and events`} />
       </Head>
       <Header onClick={handleSportChange} />
-      <Box as="main" p="16px" className="Micro" h="79vh">
+      <Box as="main" p="16px" className="Micro" h="77vh" bg="colors.surface.s0">
         <Box onClick={handleRouteBack}>
           <Breadcrumb items={breadcrumbItems} />
         </Box>
@@ -135,12 +141,12 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, initialEvents }) => 
               </Box>
               <Flex justifyContent="space-between" alignItems="center" mb="16px" mt="spacings.md" ml="spacings.sm">
                 <Text fontWeight="bold">{displayDate}</Text>
-                <Text color="grey" fontSize="10px" mr="15px">
+                <Text color="colors.onSurface.lv2" fontSize="10px" mr="15px">
                   {events.length} Events
                 </Text>
               </Flex>
               {Object.keys(groupedEvents).map(countryName => (
-                <Box key={countryName} mb="spacings.xl">
+                <Box key={countryName} mb="spacings.xl" borderBottom="1px solid #ddd">
                   {Object.keys(groupedEvents[countryName]).map(tournamentName => (
                     <Box key={tournamentName}>
                       <Flex alignItems="center" ml="spacings.sm">
@@ -154,8 +160,10 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, initialEvents }) => 
                         <Text fontWeight="bold" mr="spacings.xs">
                           {countryName}
                         </Text>
-                        <ArrowRight width="16px" height="16px" />
-                        <Text fontWeight="bold" ml="spacings.xs">
+                        <Flex color="colors.onSurface.lv2" textAlign="center">
+                          <ArrowRight width="16px" height="16px" />
+                        </Flex>
+                        <Text fontWeight="bold" ml="spacings.xs" color="colors.onSurface.lv2">
                           {tournamentName}
                         </Text>
                       </Flex>
@@ -210,13 +218,13 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, initialEvents }) => 
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ params }: GetServerSidePropsContext) => {
-  const today = new Date()
-  const formattedDate = format(today, 'yyyy-MM-dd')
-  const { sport } = params!
-  const tournamentsRes = await fetch(`https://academy-backend.sofascore.dev/sport/${sport}/tournaments`)
-  const eventsRes = await fetch(`https://academy-backend.sofascore.dev/sport/${sport}/events/${formattedDate}`)
-  const tournaments = await tournamentsRes.json()
-  const events = await eventsRes.json()
+  const today = new Date();
+  const formattedDate = format(today, 'yyyy-MM-dd');
+  const { sport } = params!;
+  const tournamentsRes = await fetch(`https://academy-backend.sofascore.dev/sport/${sport}/tournaments`);
+  const eventsRes = await fetch(`https://academy-backend.sofascore.dev/sport/${sport}/events/${formattedDate}`);
+  const tournaments = await tournamentsRes.json();
+  const events = await eventsRes.json();
 
   return {
     props: {
@@ -226,4 +234,4 @@ export const getServerSideProps: GetServerSideProps = async ({ params }: GetServ
   }
 }
 
-export default SportPage
+export default SportPage;

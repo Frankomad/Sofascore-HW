@@ -38,7 +38,6 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }
       setPage((prevPage) => prevPage + increment);
     }
   };
-
   const handleMatchSelect = (match: Event | null) => {
     setSelectedMatch(match);
   };
@@ -80,7 +79,7 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }
         <meta name="description" content={`List of ${sportName.toLowerCase()} tournaments and events`} />
       </Head>
       <Header/>
-      <Box as="main" p="16px" className="Micro" h="fit-content" minH="79vh">
+      <Box as="main" p="16px" className="Micro" h="fit-content" minH="77vh" bg="colors.surface.s0">
         <Breadcrumb items={breadcrumbItems}/>
         <Flex gap="16px" mt="12px" h="90%">
           <Container w={"calc(33% - 8px)"} height="65vh" className="hidden-scrollbar" display={isMobile ? "none" : "default"}>
@@ -108,8 +107,8 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }
                   </Flex>
                 </Flex>
                 <Flex alignItems="flex-end" h="50%">
-                  <HeaderButton lineColor="blue" label="Details" onClick={() => setView('matches')} active={view === "matches"}/>
-                  <HeaderButton lineColor="blue" label="Standings" onClick={() => setView('standings')} active={view === "standings"}/>
+                  <HeaderButton color="colors.primary.default" label="Details" onClick={() => setView('matches')} active={view === "matches"}/>
+                  <HeaderButton color="colors.primary.default" label="Standings" onClick={() => setView('standings')} active={view === "standings"}/>
                 </Flex>
               </Flex>
             </Container>
@@ -121,7 +120,7 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }
               />
             ) : (
               <>
-                <TournamentStandings standings={standings} />
+                {standings && <TournamentStandings standings={standings} />}
               </>
             )}
           </Box>

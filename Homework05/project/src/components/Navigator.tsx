@@ -44,7 +44,7 @@ const Navigator: React.FC<NavigatorProps> = ({ onDateClick, date }) => {
   const displayedDates = dates.slice(currentIndex - 3, currentIndex + 4);
 
   return (
-    <Flex alignItems="center" bg="colors.primary" borderTopLeftRadius="8px" borderTopRightRadius="8px" width="100%" height="48px">
+    <Flex alignItems="center" bg="colors.primary.variant" color="colors.surface.s1" borderTopLeftRadius="8px" borderTopRightRadius="8px" width="100%" height="48px">
       <CustomButton
         variant="icon"
         icon
@@ -53,25 +53,23 @@ const Navigator: React.FC<NavigatorProps> = ({ onDateClick, date }) => {
         ml="8px"
         h="24px"
         w="24px"
-        borderRadius="50%"
         disabled={currentIndex === 3}
+        color="colors.primary.variant" 
+        bg="colors.surface.s1"
       />
       <Flex flex="1" justify="space-between" overflow="hidden">
         {displayedDates.map((date, index) => (
-
           <Box
             key={index}
             p="8px 10px"
             textAlign="center"
-            color="white"
-
             flexShrink={0}
             width="min-content"
             onClick={() => handleDateClick(date)}
             cursor="pointer"
             position="relative"
           >
-            {format(date, 'dd.MM.yyyy') === format(currentDate, 'dd.MM.yyyy') && <Box h="4px" position={"absolute"} bg={"white"} w="80%" bottom={'0px'} left={'10%'} borderTopRightRadius={'8px'} borderTopLeftRadius={'8px'}></Box>}
+            {format(date, 'dd.MM.yyyy') === format(currentDate, 'dd.MM.yyyy') && <Box h="4px" position={"absolute"} w="80%" bottom={'0px'} bg="colors.surface.s1" left={'10%'} borderTopRightRadius={'8px'} borderTopLeftRadius={'8px'}></Box>}
             {format(date, 'dd.MM.yyyy') === format(today, 'dd.MM.yyyy') ? (
               <Text fontSize="12px">TODAY</Text>
             ) : (
@@ -88,7 +86,8 @@ const Navigator: React.FC<NavigatorProps> = ({ onDateClick, date }) => {
         h="24px"
         w="24px"
         mr="8px"
-        borderRadius="50%"
+        color="colors.primary.variant" 
+        bg="colors.surface.s1"
         disabled={currentIndex === dates.length - 4}
       />
     </Flex>

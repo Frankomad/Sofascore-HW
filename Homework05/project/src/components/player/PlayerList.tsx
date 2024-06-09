@@ -33,7 +33,6 @@ const PlayerList: React.FC<PlayerListProps> = ({ teamId }) => {
 
   return (
     <Flex flexDir="column" w="100%" className="hidden-scrollbar" maxH="400px">
-      <Text fontWeight="bold" mb="8px">Players</Text>
       {players.map((player) => (
         <PlayerCard key={player.id} {...player} />
       ))}

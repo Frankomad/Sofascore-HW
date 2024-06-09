@@ -23,4 +23,5 @@ export interface Incident {
 export interface IncidentProps {
   sport?: string;
   incident: Incident;
+  status: string;
 }

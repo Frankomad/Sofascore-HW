@@ -48,18 +48,18 @@ const Match: React.FC<MatchProps> = ({
 
   const getScoreColor = (teamId: number) => {
     if (status === 'inprogress') {
-      return 'red';
+      return 'colors.live';
     }
     if (status === 'finished') {
       if (winnerCode === 'home' && teamId === homeTeam.id) {
-        return 'black';
+        return 'colors.onSurface.lv1';
       }
       if (winnerCode === 'away' && teamId === awayTeam.id) {
-        return 'black';
+        return 'colors.onSurface.lv1';
       }
-      return 'grey';
+      return 'colors.onSurface.lv2';
     }
-    return 'black';
+    return 'colors.onSurface.lv1';
   };
 
   return (
@@ -68,10 +68,10 @@ const Match: React.FC<MatchProps> = ({
       borderBottom={!isLast ? '1px solid #ddd' : 'none'}
       cursor="pointer"
       onClick={onClick}
-      bg={selected ? 'lightblue' : 'white'}
+      bg={selected ? 'colors.primary.highlight' : 'colors.surface.s1'}
     >
       <Flex alignItems="center" justify="space-between">
-        <Flex flexDir="column" fontSize="8px" color="rgba(18, 18, 18, 0.4)" alignItems="center">
+        <Flex flexDir="column" fontSize="8px" color="colors.onSurface.lv2" alignItems="center">
           <Text>{startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
           <Text>{status === 'finished' ? 'FT' : '-'}</Text>
         </Flex>
@@ -86,7 +86,7 @@ const Match: React.FC<MatchProps> = ({
                 borderRadius="50%"
                 mr="8px"
               />
-              <Text>{homeTeam.name}</Text>
+              <Text color={getScoreColor(homeTeam.id)}>{homeTeam.name}</Text>
             </Flex>
             <Text mx="8px" width="30px" textAlign="center" color={getScoreColor(homeTeam.id)}>
               {homeScore.total}
@@ -101,7 +101,7 @@ const Match: React.FC<MatchProps> = ({
                 borderRadius="50%"
                 mr="8px"
               />
-              <Text>{awayTeam.name}</Text>
+              <Text color={getScoreColor(awayTeam.id)}>{awayTeam.name}</Text>
             </Flex>
             <Text mx="8px" width="30px" textAlign="center" color={getScoreColor(awayTeam.id)}>
               {awayScore.total}
