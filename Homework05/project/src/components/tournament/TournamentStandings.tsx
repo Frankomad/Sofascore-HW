@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Flex, Text } from '@kuma-ui/core';
-import Container from './Container';
+import Container from '../Container';
 import useWindowSize from '@/hooks/useWindowSize';
 import { useRouter } from 'next/router';
 import { StandingsRow } from '@/types/standingsRow';

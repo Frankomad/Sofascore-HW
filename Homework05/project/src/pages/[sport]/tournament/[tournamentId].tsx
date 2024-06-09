@@ -7,8 +7,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Container from '@/components/Container';
 import Breadcrumb from '@/components/Breadcrumb';
-import TournamentMatches from '@/components/TournamentMatches';
-import TournamentStandings from '@/components/TournamentStandings';
+import TournamentMatches from '@/components/tournament/TournamentMatches';
+import TournamentStandings from '@/components/tournament/TournamentStandings';
 import useWindowSize from '@/hooks/useWindowSize';
 import HeaderButton from '@/components/HeaderButton';
 import { handleLeagueClick, getCountryCode } from '@/utils';
@@ -52,6 +52,10 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }
         const responseNext = await fetch(`/api/tournament/${tournamentId}/events/next/${page}`);
         const matchesNext = await responseNext.json();
 
+        if (matchesLast.length === 0 && matchesNext.length === 0) {
+          setPage((prevPage) => prevPage - 1);
+        }
+
         setUpdatedMatches([...matchesNext.slice(0, 3), ...matchesLast.slice(0, 7)]);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -61,7 +65,7 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }
     if (tournamentId) {
       fetchNextEvents();
     }
-  }, [page, tournamentId]);
+  }, [page]);
 
   const breadcrumbItems = [
     { name: sportName, route: `/${sport}` },

@@ -1,11 +1,10 @@
-const BASE_URL = 'https://academy-backend.sofascore.dev';
+import useSWR from 'swr';
 
-export const fetchPlayerDetails = async (playerId: number) => {
-  const response = await fetch(`${BASE_URL}/player/${playerId}`);
-  return response.json();
-};
-
-export const fetchPlayerEvents = async (playerId: number, span: string = 'last', page: number = 0) => {
-  const response = await fetch(`${BASE_URL}/player/${playerId}/events/${span}/${page}`);
-  return response.json();
+export const usePlayerEvents = (playerId: string, page: number) => {
+  const { data, error } = useSWR(`/api/player/${playerId}/events/${page}`);
+  return {
+    playerEvents: data,
+    isLoading: !error && !data,
+    isError: error
+  };
 };

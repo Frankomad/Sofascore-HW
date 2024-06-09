@@ -9,7 +9,7 @@ export interface Event {
   homeTeam: Team;
   awayTeam: Team;
   status: string;
-  startDate: string;
+  startDate: Date;
   homeScore: Score;
   awayScore: Score;
   winnerCode: string;

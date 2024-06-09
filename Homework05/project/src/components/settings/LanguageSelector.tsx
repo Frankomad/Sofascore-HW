@@ -3,7 +3,7 @@
 import React from 'react';
 import { useSettingsContext } from '@/context/SettingsContext';
 import { Box, Text, Flex } from '@kuma-ui/core';
-import CustomRadio from './CustomRadio';
+import CustomRadio from '../CustomRadio';
 
 const LanguageSelector: React.FC = () => {
   const { language, setLanguage } = useSettingsContext();

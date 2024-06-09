@@ -1,20 +1,20 @@
-import React from 'react';
-import { useRouter } from 'next/router';
-import { Flex, Text } from '@kuma-ui/core';
-import ArrowRight from './basecomponents/ArrowRight';
-import { BreadcrumbItem } from '@/types/breadcrumb';
+import React from 'react'
+import { useRouter } from 'next/router'
+import { Flex, Text } from '@kuma-ui/core'
+import ArrowRight from './icons/ArrowRight'
+import { BreadcrumbItem } from '@/types/breadcrumb'
 
 interface BreadcrumbProps {
-  items: BreadcrumbItem[];
+  items: BreadcrumbItem[]
 }
 
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
-  const router = useRouter();
+  const router = useRouter()
 
   const handleBreadcrumbClick = (route: string) => {
-    const absoluteRoute = `${route}`;
-    router.push(absoluteRoute);
-  };
+    const absoluteRoute = `${route}`
+    router.push(absoluteRoute)
+  }
 
   return (
     <Flex alignItems="center">
@@ -27,13 +27,11 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
           >
             {item.name}
           </Text>
-          {index < items.length - 1 && (
-            <ArrowRight width="16px" height="16px" />
-          )}
+          {index < items.length - 1 && <ArrowRight width="16px" height="16px" />}
         </React.Fragment>
       ))}
     </Flex>
-  );
-};
+  )
+}
 
-export default Breadcrumb;
+export default Breadcrumb

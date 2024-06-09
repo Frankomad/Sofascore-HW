@@ -7,12 +7,13 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Container from '@/components/Container';
 import Breadcrumb from '@/components/Breadcrumb';
-import TournamentMatches from '@/components/TournamentMatches';
+import TournamentMatches from '@/components/tournament/TournamentMatches';
 import { handleLeagueClick, getCountryCode } from '@/utils';
 import { Player } from '@/types/player';
 import { Tournament } from '@/types/tournament';
 import { Event } from '@/types/event';
 import { BreadcrumbItem } from '@/types/breadcrumb';
+import useWindowSize from '@/hooks/useWindowSize';
 
 interface PlayerPageProps {
   tournaments: Tournament[];
@@ -23,6 +24,8 @@ interface PlayerPageProps {
 const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) => {
   const router = useRouter();
   const { sport, playerId } = router.query;
+  const { isMobile } = useWindowSize();
+  const sportName = typeof sport === 'string' ? sport.charAt(0).toUpperCase() + sport.slice(1) : '';
 
   const [imgSrc, setImgSrc] = useState(`https://academy-backend.sofascore.dev/player/${player.id}/image`);
   const [updatedMatches, setUpdatedMatches] = useState<Event[]>(events);
@@ -30,7 +33,7 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
   const [selectedMatch, setSelectedMatch] = useState<Event | null>(null);
 
   const breadcrumbItems = [
-    { name: sport as string, route: `/${sport}` },
+    { name: sportName as string, route: `/${sport}` },
     { name: player.name, route: `/${sport}/player/${player.id}` },
     selectedMatch ? { name: selectedMatch.slug, route: `/${sport}/${selectedMatch.id}` } : null,
   ].filter(Boolean) as BreadcrumbItem[];
@@ -48,8 +51,13 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
         const responseNext = await fetch(`/api/player/${playerId}/events/next/${page}`);
         const matchesNext = await responseNext.json();
 
+        if (matchesLast.length === 0 && matchesNext.length === 0) {
+          setPage((prevPage) => prevPage - 1);
+        }
+
         setUpdatedMatches([...matchesNext.slice(0, 5), ...matchesLast.slice(0, 5)]);
       } catch (error) {
+        setPage((page) => page - 1)
         console.error('Error fetching data:', error);
       }
     };
@@ -79,7 +87,7 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
       <Box as="main" p="16px" className="Micro" height="fit-content" minH="79vh">
         <Breadcrumb items={breadcrumbItems} />
         <Flex gap="16px" height="calc(100% - 50px)" mt="12px">
-          <Container w={"calc(33% - 8px)"} height="100%" className="hidden-scrollbar">
+          <Container w={"calc(33% - 8px)"} height="100%" className="hidden-scrollbar" display={isMobile ? "none" : "default"}>
             <Text mb="16px" fontWeight="bold">Leagues</Text>
             <Flex flexDir="column" gap="16px">
               {tournaments.map((tournament: any) => (
@@ -90,7 +98,7 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
               ))}
             </Flex>
           </Container>
-          <Box w={"calc(66% - 16px)"} gap="2%">
+          <Box w={isMobile ? "100%" : "calc(66% - 16px)"} gap="2%">
             <Container mb="2%" maxHeight="120px" position="relative">
               <Flex flexDir="column">
                 <Flex h="50%">

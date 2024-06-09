@@ -8,11 +8,12 @@ import Footer from '@/components/Footer';
 import Container from '@/components/Container';
 import Breadcrumb from '@/components/Breadcrumb';
 import { SettingsContextProvider } from '@/context/SettingsContext';
-import LanguageSelector from '@/components/LanguageSelector';
-import ThemeSelector from '@/components/ThemeSelector';
-import DateFormatSelector from '@/components/DateFormatSelector';
-import InitialPageSelector from '@/components/InitialPageSelector';
-import AboutSection from '@/components/AboutSection';
+import LanguageSelector from '@/components/settings/LanguageSelector';
+import ThemeSelector from '@/components/settings/ThemeSelector';
+import DateFormatSelector from '@/components/settings/DateFormatSelector';
+import InitialPageSelector from '@/components/settings/InitialPageSelector';
+import AboutSection from '@/components/settings/AboutSection';
+import useWindowSize from '@/hooks/useWindowSize'
 
 interface Country {
   id: number;
@@ -38,13 +39,15 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ tournaments }) => {
   const router = useRouter();
   const { sport } = router.query;
 
+  const { isMobile } = useWindowSize();
+
   const handleLeagueClick = (tournamentId: number) => {
     const route = `/${sport}/tournament/${tournamentId}`;
     router.push(route);
   };
 
   const breadcrumbItems: BreadcrumbItem[] = [
-    { name: 'Home', route: '/' },
+    { name: 'Home', route: '/football' },
     { name: 'Settings', route: '/settings' },
   ];
 
@@ -55,12 +58,12 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ tournaments }) => {
         <meta name="description" content="Settings page" />
       </Head>
       <Header />
-      <Box as="main" p="16px" className="Micro" h="79vh">
+      <Box as="main" p="16px" className="Micro" h={isMobile ? "fit-content" : "79vh"}>
         <Box onClick={() => router.back()}>
           <Breadcrumb items={breadcrumbItems} />
         </Box>
-        <Flex gap="16px" height="calc(100% - 50px)" mt="12px">
-          <Container w={"calc(33% - 8px)"} height="100%" className="hidden-scrollbar">
+        <Flex gap="16px" height="calc(100% - 50px)" mt="12px" flexDir={isMobile ? "column" : "row"}>
+          <Container w={"calc(33% - 8px)"} height="100%" className="hidden-scrollbar" display={isMobile ? "none" : "default"}>
             <Text mb="16px" fontWeight="bold">Leagues</Text>
             <Flex flexDir="column" gap="16px">
               {tournaments.map((tournament: any) => (
@@ -71,12 +74,14 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ tournaments }) => {
               ))}
             </Flex>
           </Container>
-          <Container w={"calc(33% - 8px)"} height="100%">
+          <Container w={isMobile ? "100%" : "calc(33% - 8px)"} height="100%">
             <Text mb="16px" fontWeight="bold" fontSize="12px">Settings</Text>
             <LanguageSelector />
             <ThemeSelector />
             <DateFormatSelector />
             <InitialPageSelector />
+          </Container>
+          <Container w={isMobile ? "100%" : "calc(33% - 8px)"} height="100%">
             <AboutSection />
           </Container>
         </Flex>

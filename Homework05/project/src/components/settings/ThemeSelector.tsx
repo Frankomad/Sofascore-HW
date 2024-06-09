@@ -3,7 +3,7 @@
 import React from 'react';
 import { Box, Text, Flex } from '@kuma-ui/core';
 import { useSettingsContext } from '@/context/SettingsContext';
-import CustomRadio from './CustomRadio';
+import CustomRadio from '../CustomRadio';
 
 const ThemeSelector: React.FC = () => {
   const { isDark, setIsDark } = useSettingsContext();

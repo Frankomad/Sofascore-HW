@@ -41,5 +41,9 @@ export const getCountryCode = (countryName: string): string | undefined => {
   } else if (countryName === 'Croatia') {
     return 'hr';
   }
-  return getCode(countryName)?.toLowerCase();
+
+  if (countryName)
+    return getCode(countryName);
+  else
+    return undefined;
 };

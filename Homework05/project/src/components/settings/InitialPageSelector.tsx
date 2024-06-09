@@ -1,24 +1,26 @@
-import React, { useState } from 'react';
-import { useSettingsContext } from '@/context/SettingsContext';
-import { Box, Text, Flex, Image } from '@kuma-ui/core';
-import ArrowIcon from './basecomponents/ArrowIcon';
+import React, { useState } from 'react'
+import { useSettingsContext } from '@/context/SettingsContext'
+import { Box, Text, Flex, Image } from '@kuma-ui/core'
+import ArrowIcon from '../icons/ArrowIcon'
 
 const InitialPageSelector: React.FC = () => {
-  const { initialPage, setInitialPage } = useSettingsContext();
-  const [isOpen, setIsOpen] = useState(false);
+  const { initialPage, setInitialPage } = useSettingsContext()
+  const [isOpen, setIsOpen] = useState(false)
 
   const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+    setIsOpen(!isOpen)
+  }
 
   const handleSelectPage = (page: string) => {
-    setInitialPage(page);
-    setIsOpen(false);
-  };
+    setInitialPage(page)
+    setIsOpen(false)
+  }
 
   return (
     <Box mb="16px">
-      <Text mb="8px" fontWeight="bold">Initial Page</Text>
+      <Text mb="8px" fontWeight="bold">
+        Initial Page
+      </Text>
       <Box
         display="flex"
         alignItems="center"
@@ -34,7 +36,7 @@ const InitialPageSelector: React.FC = () => {
       </Box>
       {isOpen && (
         <Box mt="8px" border="1px solid #ccc" borderRadius="4px" background="#fff">
-          {['Football', 'Basketball', 'Am. Football'].map((page) => (
+          {['Football', 'Basketball', 'Am. Football'].map(page => (
             <Box
               key={page}
               padding="8px"
@@ -48,7 +50,7 @@ const InitialPageSelector: React.FC = () => {
         </Box>
       )}
     </Box>
-  );
-};
+  )
+}
 
-export default InitialPageSelector;
+export default InitialPageSelector

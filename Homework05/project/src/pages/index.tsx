@@ -59,30 +59,6 @@ export default function Home() {
         </Box>
         <Box marginBottom="16px">
           <Text as="h2">Input Fields / Input Selectors</Text>
-          <Box marginBottom="16px">
-            <Text as="h3">Empty</Text>
-            <InputSelector hintLabel="Hint Label" />
-          </Box>
-          <Box marginBottom="16px">
-            <Text as="h3">Filled</Text>
-            <InputSelector hintLabel="Hint Label" itemLabel="Item Label" filled />
-          </Box>
-          <Box marginBottom="16px">
-            <Text as="h3">Empty Disabled</Text>
-            <InputSelector hintLabel="Hint Label" disabled />
-          </Box>
-          <Box marginBottom="16px">
-            <Text as="h3">Filled Disabled</Text>
-            <InputSelector hintLabel="Hint Label" itemLabel="Item Label" filled disabled />
-          </Box>
-          <Box marginBottom="16px">
-            <Text as="h3">Active</Text>
-            <InputSelector hintLabel="Hint Label" itemLabel="Item Label" filled active />
-          </Box>
-          <Box marginBottom="16px">
-            <Text as="h3">Error</Text>
-            <InputSelector hintLabel="Hint Label" itemLabel="Item Label" filled error />
-          </Box>
         </Box>
       </Box>
       <AnimatePresence>

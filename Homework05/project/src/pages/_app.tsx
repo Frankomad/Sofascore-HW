@@ -1,25 +1,27 @@
-import { SettingsContextProvider } from '@/context/SettingsContext'
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
-import { SWRConfig } from 'swr'
+import { AppProps } from 'next/app';
+import { WatchlistProvider } from '@/context/WatchlistContext';
+import { SettingsContextProvider } from '@/context/SettingsContext';
+import '@/styles/globals.css';
+import { SWRConfig } from 'swr';
 
-//@ts-ignore
-export const fetcher = (...args) =>
-  //@ts-ignore
+export const fetcher = (...args: any) =>
+  // @ts-ignore
   fetch(...args).then(res => {
     if (res.ok) {
-      return res.json()
+      return res.json();
     } else {
-      throw new Error('404')
+      throw new Error('404');
     }
-  })
+  });
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <SWRConfig value={{ fetcher }}>
       <SettingsContextProvider>
-        <Component {...pageProps} />
+        <WatchlistProvider>
+          <Component {...pageProps} />
+        </WatchlistProvider>
       </SettingsContextProvider>
     </SWRConfig>
-  )
+  );
 }

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Flex, Text } from '@kuma-ui/core';
-import Match from '@/components/Match';
+import Match from '@/components/match/Match';
 import { useRouter } from 'next/router';
 import Container from '@/components/Container';
-import MatchDetails from '@/components/MatchDetails';
+import MatchDetails from '@/components/match/MatchDetails';
 import CustomButton from '@/components/CustomButton';
 import useWindowSize from '@/hooks/useWindowSize';
 import { Event } from '@/types/event';
@@ -83,11 +83,13 @@ const TournamentMatches: React.FC<TournamentMatchesProps> = ({
             {groupedMatches[round].map((match: Event, index: number, array: Event[]) => (
               <Match
                 key={match.id}
-                startTime={new Date(match.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                id={match.id}
+                startDate={new Date(match.startDate)}
                 homeTeam={match.homeTeam}
                 awayTeam={match.awayTeam}
                 homeScore={match.homeScore}
                 awayScore={match.awayScore}
+                winnerCode={match.winnerCode}
                 status={match.status}
                 onClick={() => handleMatchClick(match)}
                 selected={selectedMatchId === match.id}
@@ -106,6 +108,8 @@ const TournamentMatches: React.FC<TournamentMatchesProps> = ({
             awayTeam={selectedMatch.awayTeam}
             homeScore={selectedMatch.homeScore}
             awayScore={selectedMatch.awayScore}
+            status={selectedMatch.status}
+            winnerCode={selectedMatch.winnerCode}
             onClose={handleCloseMatchDetails}
             hideOptions={selectedMatchId === undefined}
             selected={true}
