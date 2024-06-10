@@ -38,7 +38,7 @@ const TournamentStandings: React.FC<TournamentStandingsProps> = ({ standings, re
           key={row.id} 
           borderBottom="1px solid #ddd" 
           p="8px" 
-          bg={index % 2 === 1 ? 'colors.highlight.secondary' : 'transparent'}
+          bg={index % 2 === 1 ? 'colors.secondary.default' : 'transparent'}
           onClick={() => handleTeamClick(row.team.id, sport as string, router, resetPage)}
           cursor="pointer"
         >

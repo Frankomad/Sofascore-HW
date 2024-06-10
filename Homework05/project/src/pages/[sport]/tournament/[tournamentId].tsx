@@ -16,6 +16,7 @@ import { Event } from '@/types/event';
 import { Tournament } from '@/types/tournament';
 import { BreadcrumbItem } from '@/types/breadcrumb';
 import { StandingsRow } from '@/types/standingsRow';
+import Loader from '@/components/Loader'; // Import the Loader component
 
 interface SportPageProps {
   tournaments: Tournament[];
@@ -32,18 +33,21 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }
   const [page, setPage] = useState(3);
   const [updatedMatches, setUpdatedMatches] = useState(matches);
   const [selectedMatch, setSelectedMatch] = useState<Event | null>(null);
+  const [loading, setLoading] = useState<boolean>(false); // Loading state for fetching events
 
   const handlePageChange = (increment: number) => {
     if (page + increment > 0) {
       setPage((prevPage) => prevPage + increment);
     }
   };
+
   const handleMatchSelect = (match: Event | null) => {
     setSelectedMatch(match);
   };
 
   useEffect(() => {
     const fetchNextEvents = async () => {
+      setLoading(true); // Start loading
       try {
         const responseLast = await fetch(`/api/tournament/${tournamentId}/events/last/${page}`);
         const matchesLast = await responseLast.json();
@@ -58,6 +62,8 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }
         setUpdatedMatches([...matchesNext.slice(0, 3), ...matchesLast.slice(0, 7)]);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false); // Stop loading
       }
     };
 
@@ -78,9 +84,9 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }
         <title>{sportName} Tournaments and Events</title>
         <meta name="description" content={`List of ${sportName.toLowerCase()} tournaments and events`} />
       </Head>
-      <Header/>
+      <Header />
       <Box as="main" p="16px" className="Micro" h="fit-content" minH="77vh" bg="colors.surface.s0">
-        <Breadcrumb items={breadcrumbItems}/>
+        <Breadcrumb items={breadcrumbItems} />
         <Flex gap="16px" mt="12px" h="90%">
           <Container w={"calc(33% - 8px)"} height="65vh" className="hidden-scrollbar" display={isMobile ? "none" : "default"}>
             <Text mb="16px" fontWeight="bold">Leagues</Text>
@@ -107,21 +113,23 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, matches, standings }
                   </Flex>
                 </Flex>
                 <Flex alignItems="flex-end" h="50%">
-                  <HeaderButton color="colors.primary.default" label="Details" onClick={() => setView('matches')} active={view === "matches"}/>
-                  <HeaderButton color="colors.primary.default" label="Standings" onClick={() => setView('standings')} active={view === "standings"}/>
+                  <HeaderButton color="colors.primary.default" label="Details" onClick={() => setView('matches')} active={view === "matches"} />
+                  <HeaderButton color="colors.primary.default" label="Standings" onClick={() => setView('standings')} active={view === "standings"} />
                 </Flex>
               </Flex>
             </Container>
-            {view === 'matches' ? (
-              <TournamentMatches
-                matches={updatedMatches}
-                handlePageChange={handlePageChange}
-                handleMatchSelect={handleMatchSelect}
-              />
+            {loading ? (
+              <Loader /> // Display the Loader component when loading events
             ) : (
-              <>
-                {standings && <TournamentStandings standings={standings} />}
-              </>
+              view === 'matches' ? (
+                <TournamentMatches
+                  matches={updatedMatches}
+                  handlePageChange={handlePageChange}
+                  handleMatchSelect={handleMatchSelect}
+                />
+              ) : (
+                standings && <TournamentStandings standings={standings} />
+              )
             )}
           </Box>
         </Flex>

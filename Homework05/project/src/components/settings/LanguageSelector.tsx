@@ -1,5 +1,3 @@
-// components/LanguageSelector.tsx
-
 import React from 'react';
 import { useSettingsContext } from '@/context/SettingsContext';
 import { Box, Text, Flex } from '@kuma-ui/core';
@@ -13,13 +11,13 @@ const LanguageSelector: React.FC = () => {
       <Text mb="8px" fontWeight="bold">Language</Text>
       <Flex alignItems="center" gap="16px">
         <CustomRadio
-          isChecked={language === 'English'}
-          onChange={() => setLanguage('English')}
+          isChecked={language === 'en'}
+          onChange={() => setLanguage('en')}
           label="English"
         />
         <CustomRadio
-          isChecked={language === 'Croatian'}
-          onChange={() => setLanguage('Croatian')}
+          isChecked={language === 'cro'}
+          onChange={() => setLanguage('cro')}
           label="Croatian"
         />
       </Flex>

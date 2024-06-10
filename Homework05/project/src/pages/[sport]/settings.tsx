@@ -7,7 +7,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Container from '@/components/Container';
 import Breadcrumb from '@/components/Breadcrumb';
-import { SettingsContextProvider } from '@/context/SettingsContext';
+import { SettingsContextProvider, useSettingsContext } from '@/context/SettingsContext';
 import LanguageSelector from '@/components/settings/LanguageSelector';
 import ThemeSelector from '@/components/settings/ThemeSelector';
 import DateFormatSelector from '@/components/settings/DateFormatSelector';
@@ -38,7 +38,8 @@ interface BreadcrumbItem {
 const SettingsPage: React.FC<SettingsPageProps> = ({ tournaments }) => {
   const router = useRouter();
   const { sport } = router.query;
-
+  const { language } = useSettingsContext();
+  console.log(language)
   const { isMobile } = useWindowSize();
 
   const handleLeagueClick = (tournamentId: number) => {
@@ -52,7 +53,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ tournaments }) => {
   ];
 
   return (
-    <SettingsContextProvider>
+    <>
       <Head>
         <title>Settings</title>
         <meta name="description" content="Settings page" />
@@ -87,7 +88,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ tournaments }) => {
         </Flex>
       </Box>
       <Footer />
-    </SettingsContextProvider>
+    </>
   );
 };
 

@@ -22,6 +22,7 @@ import { Event } from '@/types/event'
 import { Player } from '@/types/player'
 import { Team } from '@/types/team'
 import { BreadcrumbItem } from '@/types/breadcrumb'
+import Loader from '@/components/Loader' // Import the Loader component
 
 type ViewType = 'details' | 'squad' | 'matches' | 'standings'
 
@@ -42,6 +43,7 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
   const [view, setView] = useState<ViewType>('details')
   const [standings, setStandings] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isSquadLoading, setIsSquadLoading] = useState<boolean>(false)
   const [page, setPage] = useState<number>(1)
   const [teamMatches, setTeamMatches] = useState<Event[]>([])
   const [selectedMatch, setSelectedMatch] = useState<Event | null>(null)
@@ -96,6 +98,17 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
           console.error('Error fetching matches:', error)
         } finally {
           setIsLoading(false)
+        }
+      } else if (view === 'squad') {
+        setIsSquadLoading(true)
+        try {
+          const teamSquadRes = await fetch(`/api/team/${teamDetails.id}/players`)
+          const teamSquadData = await teamSquadRes.json()
+          setTeamMatches(teamSquadData)
+        } catch (error) {
+          console.error('Error fetching squad:', error)
+        } finally {
+          setIsSquadLoading(false)
         }
       }
     }
@@ -314,30 +327,38 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
               </Flex>
             )}
             {view === 'squad' && (
-              <Container w="100%" p="0px">
-                <Flex justify="center" mb="12px" p="8px">
-                  <Text fontWeight="bold">Team Info</Text>
-                </Flex>
-                <Flex alignItems="center" justify="center" p="8px">
-                  <Image src="/Anonymous.png" w="36px" h="36px" borderRadius="50%" />
-                  <Text ml="8px">Coach: {teamDetails.managerName}</Text>
-                </Flex>
-                <Flex borderBottom="1px solid #ddd" >
-                  <Text m="0px 16px 12px 16px">Players:</Text>
-                </Flex>
-                <PlayerList teamId={teamDetails.id} />
-              </Container>
+              isSquadLoading ? (
+                <Loader /> // Display the Loader component when loading squad
+              ) : (
+                <Container w="100%" p="0px">
+                  <Flex justify="center" mb="12px" p="8px">
+                    <Text fontWeight="bold">Team Info</Text>
+                  </Flex>
+                  <Flex alignItems="center" justify="center" p="8px">
+                    <Image src="/Anonymous.png" w="36px" h="36px" borderRadius="50%" />
+                    <Text ml="8px">Coach: {teamDetails.managerName}</Text>
+                  </Flex>
+                  <Flex borderBottom="1px solid #ddd">
+                    <Text m="0px 16px 12px 16px">Players:</Text>
+                  </Flex>
+                  <PlayerList teamId={teamDetails.id} />
+                </Container>
+              )
             )}
             {view === 'matches' && (
-              <TournamentMatches
-                matches={teamMatches}
-                handlePageChange={handlePageChange}
-                handleMatchSelect={handleMatchSelect}
-              />
+              isLoading ? (
+                <Loader /> // Display the Loader component when loading matches
+              ) : (
+                <TournamentMatches
+                  matches={teamMatches}
+                  handlePageChange={handlePageChange}
+                  handleMatchSelect={handleMatchSelect}
+                />
+              )
             )}
             {view === 'standings' &&
               (isLoading ? (
-                <Text>Loading...</Text>
+                <Loader /> // Display the Loader component when loading standings
               ) : (
                 <TournamentStandings resetPage={() => setView('details')} standings={standings} />
               ))}

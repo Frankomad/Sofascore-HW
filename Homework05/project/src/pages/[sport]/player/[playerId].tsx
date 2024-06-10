@@ -14,6 +14,7 @@ import { Tournament } from '@/types/tournament';
 import { Event } from '@/types/event';
 import { BreadcrumbItem } from '@/types/breadcrumb';
 import useWindowSize from '@/hooks/useWindowSize';
+import Loader from '@/components/Loader'; // Import the Loader component
 
 interface PlayerPageProps {
   tournaments: Tournament[];
@@ -31,6 +32,7 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
   const [updatedMatches, setUpdatedMatches] = useState<Event[]>(events);
   const [page, setPage] = useState(1);
   const [selectedMatch, setSelectedMatch] = useState<Event | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state for API calls
 
   const breadcrumbItems = [
     { name: sportName as string, route: `/${sport}` },
@@ -44,6 +46,7 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
 
   useEffect(() => {
     const fetchNextEvents = async () => {
+      setIsLoading(true); // Start loading
       try {
         const responseLast = await fetch(`/api/player/${playerId}/events/last/${page}`);
         const matchesLast = await responseLast.json();
@@ -57,8 +60,10 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
 
         setUpdatedMatches([...matchesNext.slice(0, 5), ...matchesLast.slice(0, 5)]);
       } catch (error) {
-        setPage((page) => page - 1)
+        setPage((page) => page - 1);
         console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false); // Stop loading
       }
     };
 
@@ -129,11 +134,15 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
                 </Flex>
               </Flex>
             </Container>
-            <TournamentMatches
-              matches={updatedMatches}
-              handlePageChange={handlePageChange}
-              handleMatchSelect={handleMatchSelect}
-            />
+            {isLoading ? (
+              <Loader /> // Display the Loader component when loading
+            ) : (
+              <TournamentMatches
+                matches={updatedMatches}
+                handlePageChange={handlePageChange}
+                handleMatchSelect={handleMatchSelect}
+              />
+            )}
           </Box>
         </Flex>
       </Box>

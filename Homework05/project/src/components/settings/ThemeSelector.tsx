@@ -7,7 +7,7 @@ import CustomRadio from '../CustomRadio';
 
 const ThemeSelector: React.FC = () => {
   const { isDark, setIsDark } = useSettingsContext();
-  console.log(isDark);
+
   return (
     <Box mb="16px">
       <Text mb="8px" fontWeight="bold">Theme</Text>

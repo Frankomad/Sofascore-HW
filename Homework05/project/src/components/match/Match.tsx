@@ -6,6 +6,7 @@ import { Event } from '@/types/event';
 import { Team } from '@/types/team';
 import { Score } from '@/types/score';
 import { useRouter } from 'next/router';
+import { format } from 'date-fns';
 
 interface MatchProps {
   id: number;
@@ -72,7 +73,7 @@ const Match: React.FC<MatchProps> = ({
     >
       <Flex alignItems="center" justify="space-between">
         <Flex flexDir="column" fontSize="8px" color="colors.onSurface.lv2" alignItems="center">
-          <Text>{startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+          <Text>{format(new Date(startDate), 'HH:mm')}</Text>
           <Text>{status === 'finished' ? 'FT' : '-'}</Text>
         </Flex>
         <Box w="1px" h="36px" ml="8px" mr="8px" border="1px solid rgba(18, 18, 18, 0.1)" borderRadius="999px"></Box>

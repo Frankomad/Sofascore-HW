@@ -8,7 +8,8 @@ import CustomButton from '../CustomButton';
 import { Incident as IncidentType } from '@/types/incident';
 import { Team } from '@/types/team';
 import { Score } from '@/types/score';
-import useWindowSize from '@/hooks/useWindowSize'
+import useWindowSize from '@/hooks/useWindowSize';
+import Loader from '@/components/Loader'; // Import the Loader component
 
 interface MatchDetailsProps {
   eventId: number;
@@ -44,20 +45,28 @@ const MatchDetails: React.FC<MatchDetailsProps> = ({
 
   const [matchDetails, setMatchDetails] = useState<any>(null);
   const [incidents, setIncidents] = useState<IncidentType[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state for API calls
 
   useEffect(() => {
     if (selected) {
       const fetchMatchDetails = async () => {
-        const detailsRes = await fetch(`/api/event/${eventId}`);
-        const detailsData = await detailsRes.json();
-        setMatchDetails(detailsData);
+        setIsLoading(true); // Start loading
+        try {
+          const detailsRes = await fetch(`/api/event/${eventId}`);
+          const detailsData = await detailsRes.json();
+          setMatchDetails(detailsData);
 
-        const incidentsRes = await fetch(`/api/event/${eventId}/incidents`);
-        const incidentsData = await incidentsRes.json();
-        if (Array.isArray(incidentsData)) {
-          setIncidents(incidentsData.sort((a: IncidentType, b: IncidentType) => a.time - b.time));
-        } else {
-          setIncidents([]);
+          const incidentsRes = await fetch(`/api/event/${eventId}/incidents`);
+          const incidentsData = await incidentsRes.json();
+          if (Array.isArray(incidentsData)) {
+            setIncidents(incidentsData.sort((a: IncidentType, b: IncidentType) => a.time - b.time));
+          } else {
+            setIncidents([]);
+          }
+        } catch (error) {
+          console.error('Error fetching match details:', error);
+        } finally {
+          setIsLoading(false); // Stop loading
         }
       };
       fetchMatchDetails();
@@ -95,8 +104,6 @@ const MatchDetails: React.FC<MatchDetailsProps> = ({
     return 'colors.onSurface.lv1';
   };
 
-  console.log("incidents", incidents)
-
   return (
     <Box p="12px">
       {!hideOptions && (
@@ -112,7 +119,7 @@ const MatchDetails: React.FC<MatchDetailsProps> = ({
           </Box>
         </Flex>
       )}
-      <Flex justify="space-between" mt="spacings.sm" paddingBottom="spacings.md" borderBottom="1px solid #ddd">
+      <Flex justify="space-between" mt="spacings.sm" paddingBottom="spacings.md" borderBottom="1px solid #ddd" mb="12px">
         <Flex flexDir="column" alignItems="center" w="35%" onClick={handleTeamClick(homeTeam.id)} cursor="pointer">
           <Image
             src={`https://academy-backend.sofascore.dev/team/${homeTeam.id}/image`}
@@ -144,36 +151,40 @@ const MatchDetails: React.FC<MatchDetailsProps> = ({
           <Text textAlign="center">{awayTeam.name}</Text>
         </Flex>
       </Flex>
-      {selected && matchDetails && (
-        <>
-          <Box mt="16px">
+      {isLoading ? (
+        <Loader /> // Display the Loader component when loading
+      ) : (
+        selected && matchDetails && (
+          <>
             <Box mt="16px">
-              {incidents.length !== 0 ? (
-                incidents.map((incident) => (
-                  <Incident key={incident.id} incident={incident} sport={matchDetails.tournament.sport.slug} status={status}/>
-                ))
-              ) : (
-                <Flex m="24px 0 24px 0" justify="center" flexDir="column" alignItems="center">
-                  <Flex m="8px" p="12px" borderRadius="5px" w="80%" h="60px" bg="colors.surface.s2" justify="center" alignItems="center">
-                    <Text color="colors.onSurface.lv2" textAlign="center">No results yet.</Text>
+              <Box mt="16px">
+                {incidents.length !== 0 ? (
+                  incidents.map((incident) => (
+                    <Incident key={incident.id} incident={incident} sport={matchDetails.tournament.sport.slug} status={status}/>
+                  ))
+                ) : (
+                  <Flex m="24px 0 24px 0" justify="center" flexDir="column" alignItems="center">
+                    <Flex m="8px" p="12px" borderRadius="5px" w="80%" h="60px" bg="colors.surface.s2" justify="center" alignItems="center">
+                      <Text color="colors.onSurface.lv2" textAlign="center">No results yet.</Text>
+                    </Flex>
+                    {!tournamentId ? (
+                      <CustomButton
+                        w="fit-content"
+                        h="fit-content"
+                        variant="stroked"
+                        p="12px"
+                        fontSize="12px"
+                        onClick={() => handleTournamentClick(matchDetails.tournament.id)}
+                      >
+                        <Text>View Tournament Details</Text>
+                      </CustomButton>
+                    ) : null}
                   </Flex>
-                  {!tournamentId ? (
-                    <CustomButton
-                      w="fit-content"
-                      h="fit-content"
-                      variant="stroked"
-                      p="12px"
-                      fontSize="12px"
-                      onClick={() => handleTournamentClick(matchDetails.tournament.id)}
-                    >
-                      <Text>View Tournament Details</Text>
-                    </CustomButton>
-                  ) : null}
-                </Flex>
-              )}
+                )}
+              </Box>
             </Box>
-          </Box>
-        </>
+          </>
+        )
       )}
     </Box>
   );

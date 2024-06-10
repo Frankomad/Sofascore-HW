@@ -13,14 +13,12 @@ import ArrowRight from '@/components/icons/ArrowRight';
 import useWindowSize from '@/hooks/useWindowSize';
 import { format, isToday } from 'date-fns';
 import { groupEventsByCountryAndTournament, handleLeagueClick } from '@/utils';
-import { Team } from '@/types/team';
-import { Country } from '@/types/country';
 import { Tournament } from '@/types/tournament';
-import { Score } from '@/types/score';
 import { Event } from '@/types/event';
 import { BreadcrumbItem } from '@/types/breadcrumb';
 import Breadcrumb from '@/components/Breadcrumb';
 import useSWR from 'swr';
+import Loader from '@/components/Loader'; // Import the Loader component
 
 interface SportPageProps {
   tournaments: Tournament[];
@@ -36,8 +34,9 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, initialEvents }) => 
   const [events, setEvents] = useState<Event[]>(initialEvents);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedMatch, setSelectedMatch] = useState<Event | undefined>(undefined);
+  const [loadingEvents, setLoadingEvents] = useState<boolean>(false); // Loading state for events
 
-  const { data: matchDetails } = useSWR(matchId ? `/api/event/${matchId}` : null);
+  const { data: matchDetails, isValidating: isMatchDetailsLoading } = useSWR(matchId ? `/api/event/${matchId}` : null);
 
   useEffect(() => {
     if (matchDetails) {
@@ -53,9 +52,16 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, initialEvents }) => 
 
   const handleDateClick = async (date: Date) => {
     setSelectedDate(date);
-    const res = await fetch(`/api/sport/${sport}/events/${format(date, 'yyyy-MM-dd')}`);
-    const data = await res.json();
-    setEvents(data);
+    setLoadingEvents(true);
+    try {
+      const res = await fetch(`/api/sport/${sport}/events/${format(date, 'yyyy-MM-dd')}`);
+      const data = await res.json();
+      setEvents(data);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    } finally {
+      setLoadingEvents(false);
+    }
   };
 
   const handleCloseMatchDetails = () => {
@@ -145,77 +151,85 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, initialEvents }) => 
                   {events.length} Events
                 </Text>
               </Flex>
-              {Object.keys(groupedEvents).map(countryName => (
-                <Box key={countryName} mb="spacings.xl" borderBottom="1px solid #ddd">
-                  {Object.keys(groupedEvents[countryName]).map(tournamentName => (
-                    <Box key={tournamentName}>
-                      <Flex alignItems="center" ml="spacings.sm">
-                        <Image
-                          src={`https://academy-backend.sofascore.dev/tournament/${groupedEvents[countryName][tournamentName][0].tournament.id}/image`}
-                          width="24px"
-                          height="24px"
-                          borderRadius="50%"
-                          mr="8px"
-                        />
-                        <Text fontWeight="bold" mr="spacings.xs">
-                          {countryName}
-                        </Text>
-                        <Flex color="colors.onSurface.lv2" textAlign="center">
-                          <ArrowRight width="16px" height="16px" />
+              {loadingEvents ? (
+                <Loader /> // Display the Loader component when loading events
+              ) : (
+                Object.keys(groupedEvents).map(countryName => (
+                  <Box key={countryName} mb="spacings.xl" borderBottom="1px solid #ddd">
+                    {Object.keys(groupedEvents[countryName]).map(tournamentName => (
+                      <Box key={tournamentName}>
+                        <Flex alignItems="center" ml="spacings.sm">
+                          <Image
+                            src={`https://academy-backend.sofascore.dev/tournament/${groupedEvents[countryName][tournamentName][0].tournament.id}/image`}
+                            width="24px"
+                            height="24px"
+                            borderRadius="50%"
+                            mr="8px"
+                          />
+                          <Text fontWeight="bold" mr="spacings.xs">
+                            {countryName}
+                          </Text>
+                          <Flex color="colors.onSurface.lv2" textAlign="center">
+                            <ArrowRight width="16px" height="16px" />
+                          </Flex>
+                          <Text fontWeight="bold" ml="spacings.xs" color="colors.onSurface.lv2">
+                            {tournamentName}
+                          </Text>
                         </Flex>
-                        <Text fontWeight="bold" ml="spacings.xs" color="colors.onSurface.lv2">
-                          {tournamentName}
-                        </Text>
-                      </Flex>
-                      <Flex flexDir="column" mt="8px">
-                        {groupedEvents[countryName][tournamentName].map(
-                          (event: Event, index: number, array: Event[]) => (
-                            <Match
-                              key={event.id}
-                              id={event.id}
-                              startDate={new Date(event.startDate)}
-                              homeTeam={event.homeTeam}
-                              awayTeam={event.awayTeam}
-                              homeScore={event.homeScore}
-                              winnerCode={event.winnerCode}
-                              status={event.status}
-                              awayScore={event.awayScore}
-                              onClick={() => setSelectedMatch(event)}
-                              selected={selectedMatch?.id === event.id}
-                              isLast={index === array.length - 1}
-                            />
-                          )
-                        )}
-                      </Flex>
-                    </Box>
-                  ))}
-                </Box>
-              ))}
+                        <Flex flexDir="column" mt="8px">
+                          {groupedEvents[countryName][tournamentName].map(
+                            (event: Event, index: number, array: Event[]) => (
+                              <Match
+                                key={event.id}
+                                id={event.id}
+                                startDate={new Date(event.startDate)}
+                                homeTeam={event.homeTeam}
+                                awayTeam={event.awayTeam}
+                                homeScore={event.homeScore}
+                                winnerCode={event.winnerCode}
+                                status={event.status}
+                                awayScore={event.awayScore}
+                                onClick={() => setSelectedMatch(event)}
+                                selected={selectedMatch?.id === event.id}
+                                isLast={index === array.length - 1}
+                              />
+                            )
+                          )}
+                        </Flex>
+                      </Box>
+                    ))}
+                  </Box>
+                ))
+              )}
             </Container>
           )}
           {selectedMatch && (
             <Container w={isMobile ? '100%' : 'calc(33% - 8px)'} height="100%" className="hidden-scrollbar">
-              <MatchDetails
-                eventId={selectedMatch.id}
-                homeTeam={selectedMatch.homeTeam}
-                awayTeam={selectedMatch.awayTeam}
-                homeScore={selectedMatch.homeScore}
-                awayScore={selectedMatch.awayScore}
-                status={selectedMatch.status}
-                winnerCode={selectedMatch.winnerCode}
-                onClose={handleCloseMatchDetails}
-                hideOptions={matchId !== undefined}
-                selected={true}
-                path={`/${sport}/${selectedMatch.id}`}
-              />
+              {isMatchDetailsLoading ? (
+                <Loader /> // Display the Loader component when loading match details
+              ) : (
+                <MatchDetails
+                  eventId={selectedMatch.id}
+                  homeTeam={selectedMatch.homeTeam}
+                  awayTeam={selectedMatch.awayTeam}
+                  homeScore={selectedMatch.homeScore}
+                  awayScore={selectedMatch.awayScore}
+                  status={selectedMatch.status}
+                  winnerCode={selectedMatch.winnerCode}
+                  onClose={handleCloseMatchDetails}
+                  hideOptions={matchId !== undefined}
+                  selected={true}
+                  path={`/${sport}/${selectedMatch.id}`}
+                />
+              )}
             </Container>
           )}
         </Flex>
       </Box>
       <Footer />
     </>
-  )
-}
+  );
+};
 
 export const getServerSideProps: GetServerSideProps = async ({ params }: GetServerSidePropsContext) => {
   const today = new Date();
@@ -231,7 +245,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }: GetServ
       tournaments,
       initialEvents: events,
     },
-  }
-}
+  };
+};
 
 export default SportPage;

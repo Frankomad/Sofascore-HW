@@ -6,6 +6,7 @@ import { SearchPlayer } from '@/types/player';
 import PlayerItem from './player/PlayerItem';
 import TeamItem from './team/TeamItem';
 import SearchIcon from './icons/SearchIcon';
+import Loader from './Loader'; // Import the Loader component
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -15,10 +16,12 @@ interface SearchModalProps {
 const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
   const [query, setQuery] = useState<string>('');
   const [results, setResults] = useState<(SearchTeam | SearchPlayer)[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const handleSearch = async () => {
     if (!query) return;
+    setLoading(true);
     try {
       const basePath = process.env.NEXT_PUBLIC_API_BASE_PATH || '';
       const teamsResponse = await fetch(`${basePath}/api/search/team/${query}`);
@@ -28,6 +31,8 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
       setResults([...teams, ...players]);
     } catch (error) {
       console.error('Error fetching search results:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -87,14 +92,18 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
           </Box>
         </Box>
         <Flex flexDir="column" className="hidden-scrollbar" height="75%">
-          {results.map((result) => (
-            'position' in result ? (
-              <PlayerItem key={result.id} player={result} onClick={() => handleRedirect(result.sport.name, result.id, 'player')} />
-            ) : (
-              <TeamItem key={result.id} team={result} onClick={() => handleRedirect(result.sport.name, result.id, 'teams')} />
-            )
-          ))}
-          {results.length === 0 && (
+          {loading ? (
+            <Loader /> // Display the Loader component when loading
+          ) : (
+            results.map((result) => (
+              'position' in result ? (
+                <PlayerItem key={result.id} player={result} onClick={() => handleRedirect(result.sport.name, result.id, 'player')} />
+              ) : (
+                <TeamItem key={result.id} team={result} onClick={() => handleRedirect(result.sport.name, result.id, 'teams')} />
+              )
+            ))
+          )}
+          {!loading && results.length === 0 && (
             <Text textAlign="center" color="gray">
               No results found.
             </Text>
