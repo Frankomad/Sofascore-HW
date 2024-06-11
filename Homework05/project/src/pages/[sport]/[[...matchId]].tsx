@@ -31,7 +31,6 @@ import { BreadcrumbItem } from '@/types/breadcrumb';
 import { fetchEvents } from '@/api/events';
 import { fetchTournaments } from '@/api/tournaments';
 
-
 interface SportPageProps {
   tournaments: Tournament[];
   initialEvents: Event[];
@@ -178,76 +177,85 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, initialEvents }) => 
               <Box mb="32px" className="sticky-navigator">
                 <Navigator onDateClick={handleDateClick} date={selectedDate} />
               </Box>
-              <Flex justifyContent="space-between" alignItems="center" mb="16px" mt="spacings.md" ml="spacings.sm">
-                <Text fontWeight="bold">{displayDate}</Text>
-                <Text color="colors.onSurface.lv2" fontSize="10px" mr="15px">
-                  {events ? events.length : 0} <FormattedMessage id="Events" />
-                </Text>
-              </Flex>
+              {events && events.length > 0 && (
+                <Flex justifyContent="space-between" alignItems="center" mb="16px" mt="spacings.md" ml="spacings.sm">
+                  <Text fontWeight="bold">{displayDate}</Text>
+                  <Text color="colors.onSurface.lv2" fontSize="10px" mr="15px">
+                    {events.length} <FormattedMessage id="Events" />
+                  </Text>
+                </Flex>
+              )}
               {loadingEvents ? (
-                <Flex >
+                <Flex>
                   <Loader />
                 </Flex>
               ) : (
-                Object.keys(groupedEvents).map(countryName => (
-                  <motion.div
-                    key={countryName}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <Box mb="spacings.xl" borderBottom="1px solid #ddd">
-                      {Object.keys(groupedEvents[countryName]).map(tournamentName => (
-                        <Box key={tournamentName}>
-                          <Flex alignItems="center" ml="spacings.sm">
-                            <Image
-                              src={`https://academy-backend.sofascore.dev/tournament/${groupedEvents[countryName][tournamentName][0].tournament.id}/image`}
-                              width="24px"
-                              height="24px"
-                              borderRadius="50%"
-                              mr="8px"
-                            />
-                            <Text fontWeight="bold" mr="spacings.xs">
-                              {countryName}
-                            </Text>
-                            <Flex color="colors.onSurface.lv2" textAlign="center">
-                              <ArrowRight width="16px" height="16px" />
+                <>
+                  {Object.keys(groupedEvents).length === 0 && (
+                    <Text textAlign="center" mt="16px" fontSize="16px">
+                      <FormattedMessage id="No Matches for" /> {format(selectedDate, dateFormat === 'DD / MM / YYYY' ? 'dd.MM.yyyy' : 'MM.dd.yyyy')}
+                    </Text>
+                  )}
+                  {Object.keys(groupedEvents).map(countryName => (
+                    <motion.div
+                      key={countryName}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <Box mb="spacings.xl" borderBottom="1px solid #ddd">
+                        {Object.keys(groupedEvents[countryName]).map(tournamentName => (
+                          <Box key={tournamentName}>
+                            <Flex alignItems="center" ml="spacings.sm">
+                              <Image
+                                src={`https://academy-backend.sofascore.dev/tournament/${groupedEvents[countryName][tournamentName][0].tournament.id}/image`}
+                                width="24px"
+                                height="24px"
+                                borderRadius="50%"
+                                mr="8px"
+                              />
+                              <Text fontWeight="bold" mr="spacings.xs">
+                                {countryName}
+                              </Text>
+                              <Flex color="colors.onSurface.lv2" textAlign="center">
+                                <ArrowRight width="16px" height="16px" />
+                              </Flex>
+                              <Text fontWeight="bold" ml="spacings.xs" color="colors.onSurface.lv2">
+                                {tournamentName}
+                              </Text>
                             </Flex>
-                            <Text fontWeight="bold" ml="spacings.xs" color="colors.onSurface.lv2">
-                              {tournamentName}
-                            </Text>
-                          </Flex>
-                          <Flex flexDir="column" mt="8px">
-                            {groupedEvents[countryName][tournamentName].map(
-                              (event: Event, index: number, array: Event[]) => (
-                                <motion.div
-                                  key={event.id}
-                                  initial={{ opacity: 0, y: 10 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                                >
-                                  <Match
-                                    id={event.id}
-                                    startDate={new Date(event.startDate)}
-                                    homeTeam={event.homeTeam}
-                                    awayTeam={event.awayTeam}
-                                    homeScore={event.homeScore}
-                                    winnerCode={event.winnerCode}
-                                    status={event.status}
-                                    awayScore={event.awayScore}
-                                    onClick={() => setSelectedMatch(event)}
-                                    selected={selectedMatch?.id === event.id}
-                                    isLast={index === array.length - 1}
-                                  />
-                                </motion.div>
-                              )
-                            )}
-                          </Flex>
-                        </Box>
-                      ))}
-                    </Box>
-                  </motion.div>
-                ))
+                            <Flex flexDir="column" mt="8px">
+                              {groupedEvents[countryName][tournamentName].map(
+                                (event: Event, index: number, array: Event[]) => (
+                                  <motion.div
+                                    key={event.id}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                                  >
+                                    <Match
+                                      id={event.id}
+                                      startDate={new Date(event.startDate)}
+                                      homeTeam={event.homeTeam}
+                                      awayTeam={event.awayTeam}
+                                      homeScore={event.homeScore}
+                                      winnerCode={event.winnerCode}
+                                      status={event.status}
+                                      awayScore={event.awayScore}
+                                      onClick={() => setSelectedMatch(event)}
+                                      selected={selectedMatch?.id === event.id}
+                                      isLast={index === array.length - 1}
+                                    />
+                                  </motion.div>
+                                )
+                              )}
+                            </Flex>
+                          </Box>
+                        ))}
+                      </Box>
+                    </motion.div>
+                  ))}
+                </>
               )}
             </Container>
           )}
@@ -256,19 +264,19 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, initialEvents }) => 
               {isMatchDetailsLoading ? (
                 <Loader />
               ) : (
-                  <MatchDetails
-                    eventId={selectedMatch.id}
-                    homeTeam={selectedMatch.homeTeam}
-                    awayTeam={selectedMatch.awayTeam}
-                    homeScore={selectedMatch.homeScore}
-                    awayScore={selectedMatch.awayScore}
-                    status={selectedMatch.status}
-                    winnerCode={selectedMatch.winnerCode}
-                    onClose={handleCloseMatchDetails}
-                    hideOptions={matchId !== undefined}
-                    selected={true}
-                    path={`/${sport}/${selectedMatch.id}`}
-                  />
+                <MatchDetails
+                  eventId={selectedMatch.id}
+                  homeTeam={selectedMatch.homeTeam}
+                  awayTeam={selectedMatch.awayTeam}
+                  homeScore={selectedMatch.homeScore}
+                  awayScore={selectedMatch.awayScore}
+                  status={selectedMatch.status}
+                  winnerCode={selectedMatch.winnerCode}
+                  onClose={handleCloseMatchDetails}
+                  hideOptions={matchId !== undefined}
+                  selected={true}
+                  path={`/${sport}/${selectedMatch.id}`}
+                />
               )}
             </Container>
           )}
