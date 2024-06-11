@@ -120,7 +120,7 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
               ))}
             </Flex>
           </Container>
-          <Box w={isMobile ? "100%" : "calc(66% - 16px)"} gap="2%">
+          <Box w={isMobile ? "100%" : "calc(66% - 8px)"} gap="2%">
             <Container mb="2%" maxHeight="120px" position="relative">
               <Flex flexDir="column">
                 <Flex h="50%">

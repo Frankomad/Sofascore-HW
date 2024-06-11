@@ -91,7 +91,14 @@ const TournamentMatches: React.FC<TournamentMatchesProps> = ({
           <Box key={round} mb="16px">
             <Text ml="12px" fontWeight="bold"><FormattedMessage id="Round" /> {round}</Text>
             {groupedMatches[round].map((match: Event, index: number, array: Event[]) => (
+              <motion.div
+                key={match.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                >
                 <Match
+                  key={match.id}
                   id={match.id}
                   startDate={new Date(match.startDate)}
                   homeTeam={match.homeTeam}
@@ -104,6 +111,7 @@ const TournamentMatches: React.FC<TournamentMatchesProps> = ({
                   selected={selectedMatchId === match.id}
                   isLast={index === array.length - 1}
                 />
+              </motion.div>
             ))}
             {roundIndex !== Object.keys(groupedMatches).length - 1 && <hr />}
           </Box>

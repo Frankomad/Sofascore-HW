@@ -86,7 +86,8 @@ const TeamPage: React.FC<TeamPageProps> = ({ tournaments, teamDetails, teamTourn
         try {
           const standingsRes = await fetch(`/api/tournament/${teamTournaments[0].id}/standings`);
           const standingsData = await standingsRes.json();
-          setStandings(standingsData[2].sortedStandingsRows);
+          const standings = sport === "football" ? standingsData[2].sortedStandingsRows : standingsData[0].sortedStandingsRows
+          setStandings(standings);
         } catch (error) {
           console.error('Error fetching standings:', error);
         } finally {
@@ -175,7 +176,7 @@ const TeamPage: React.FC<TeamPageProps> = ({ tournaments, teamDetails, teamTourn
               ))}
             </Flex>
           </Container>
-          <Box w={isMobile ? '100%' : 'calc(66% - 16px)'} gap="2%">
+          <Box w={isMobile ? '100%' : 'calc(66% - 8px)'} gap="2%">
             <Container mb="2%" maxHeight="110px" position="relative" height="110px" pb="0px">
               <Flex flexDir="column" h="100%">
                 <Flex h="50%">

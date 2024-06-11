@@ -46,7 +46,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ tournaments }) => {
   };
 
   const breadcrumbItems: BreadcrumbItem[] = [
-    { name: 'Home', route: '/football' },
+    { name: <FormattedMessage id="Home" />, route: "/" },
     { name: <FormattedMessage id="Settings" />, route: '/settings' },
   ];
 

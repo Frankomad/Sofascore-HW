@@ -44,6 +44,9 @@ const TournamentStandings: React.FC<TournamentStandingsProps> = ({ standings, re
             whileHover={{ scale: 1.02, backgroundColor: '#f0f0f0' }}
             whileTap={{ scale: 0.98 }}
             style={{ originX: 0 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.05 }}
           >
             <Flex
               borderBottom="1px solid #ddd"

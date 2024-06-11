@@ -82,7 +82,7 @@ const TournamentPage: React.FC<TournamentPageProps> = ({ tournaments, matches, s
     if (tournamentId) {
       fetchNextEvents();
     }
-  }, [page]);
+  }, [page, tournamentId]);
 
   const breadcrumbItems = [
     { name: <FormattedMessage id={sportName} />, route: `/${sport}` },
@@ -117,11 +117,11 @@ const TournamentPage: React.FC<TournamentPageProps> = ({ tournaments, matches, s
               ))}
             </Flex>
           </Container>
-          <Box w={isMobile ? "100%" : "calc(66% - 16px)"}>
+          <Box w={isMobile ? "100%" : "calc(66% - 8px)"}>
             <Container mb="2%" maxHeight="110px" pb="0px">
               <Flex flexDir="column" h="100%">
                 <Flex h="50%">
-                  <Image src={`https://academy-backend.sofascore.dev/tournament/${updatedMatches[0]?.tournament.id}/image`} width="48px" height="48px" borderRadius="50%" mr="8px" />
+                  <Image src={`https://academy-backend.sofascore.dev/tournament/${tournamentId}/image`} width="48px" height="48px" borderRadius="50%" mr="8px" />
                   <Flex flexDir="column">
                     <Text fontWeight="bold" mb="spacings.sm">{updatedMatches[0]?.tournament.name}</Text>
                     <Flex alignItems="center">
@@ -170,7 +170,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       props: {
         tournaments,
         matches,
-        standings: standings[2]?.sortedStandingsRows || [],
+        standings: sport === "football" ? standings[2]?.sortedStandingsRows : standings[0]?.sortedStandingsRows || [],
       },
     };
   } catch (error) {

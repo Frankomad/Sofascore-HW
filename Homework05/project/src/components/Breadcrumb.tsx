@@ -15,6 +15,10 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
   const router = useRouter();
 
   const handleBreadcrumbClick = (route: string) => {
+    if (route === '/') {
+      router.push(window.location.pathname);
+      return;
+    }
     const absoluteRoute = `${route}`;
     router.push(absoluteRoute);
   };

@@ -10,10 +10,10 @@ const Footer: React.FC = () => {
         <Text>
           <SofaIcon />
         </Text>
-        <Text color="colors.onSurface.lv2">
+        <Text color="colors.onSurface.lv2" fontSize="10px" mt="8px">
           2024 Sofascore - All Rights Reserved
         </Text>
-      </Flex>
+      </Flex> 
     </Box>
   )
 }

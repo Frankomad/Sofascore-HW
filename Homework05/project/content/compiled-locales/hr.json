@@ -95,6 +95,12 @@
       "value": "Golovi"
     }
   ],
+  "Home": [
+    {
+      "type": 0,
+      "value": "Početna"
+    }
+  ],
   "Language": [
     {
       "type": 0,
