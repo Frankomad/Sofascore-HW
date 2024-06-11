@@ -2,10 +2,11 @@ import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { Score } from '@/types/score';
 import { Team } from '@/types/team';
 
+
 interface ShrinkedEvent {
   sport: string | string[] | undefined;
   id: number;
-  startDate: Date;
+  startDate: Date | string;
   homeTeam: Team;
   awayTeam: Team;
   homeScore: Score;

@@ -1,6 +1,9 @@
 import React from 'react';
 import { Flex, Text, Box } from '@kuma-ui/core';
 import { useRouter } from 'next/router';
+import { FormattedMessage } from 'react-intl';
+import { motion } from 'framer-motion';
+
 
 interface HeaderButtonProps {
   icon?: React.ReactNode;
@@ -21,20 +24,37 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({ icon, label, route, active,
   };
 
   return (
-    <Flex
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
       onClick={handleClick}
-      alignItems="center"
-      gap="spacings.xs"
-      cursor="pointer"
-      p="spacings.sm"
-      borderRadius="md"
-      position="relative"
-      color={active ? color : secondaryColor}
+      style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}
     >
-      {icon}
-      <Text>{label}</Text>
-      { active && <Box h="4px" position={"absolute"} bg={color ? color : "colors.surface.s1"} w="60%" bottom={'0px'} left={'20%'} borderTopRightRadius={'8px'} borderTopLeftRadius={'8px'}></Box>}
-    </Flex>
+      <Flex
+        alignItems="center"
+        gap="spacings.xs"
+        cursor="pointer"
+        p="spacings.sm"
+        borderRadius="md"
+        position="relative"
+        color={active ? color : secondaryColor}
+      >
+        {icon}
+        <Text><FormattedMessage id={label} /></Text>
+        {active && (
+          <Box
+            h="4px"
+            position={"absolute"}
+            bg={color ? color : "colors.surface.s1"}
+            w="60%"
+            bottom={'0px'}
+            left={'20%'}
+            borderTopRightRadius={'8px'}
+            borderTopLeftRadius={'8px'}
+          ></Box>
+        )}
+      </Flex>
+    </motion.div>
   );
 };
 

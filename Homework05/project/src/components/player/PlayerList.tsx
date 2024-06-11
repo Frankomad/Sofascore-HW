@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Flex, Text } from '@kuma-ui/core';
 import PlayerCard from './PlayerCard';
 import { Player } from '@/types/player';
+import { motion } from 'framer-motion';
 
 interface PlayerListProps {
   teamId: number;
@@ -9,7 +10,6 @@ interface PlayerListProps {
 
 const PlayerList: React.FC<PlayerListProps> = ({ teamId }) => {
   const [players, setPlayers] = useState<Player[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -20,21 +20,23 @@ const PlayerList: React.FC<PlayerListProps> = ({ teamId }) => {
       } catch (error) {
         console.error('Error fetching players:', error);
       } finally {
-        setIsLoading(false);
       }
     };
 
     fetchPlayers();
   }, [teamId]);
 
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
-
   return (
     <Flex flexDir="column" w="100%" className="hidden-scrollbar" maxH="400px">
-      {players.map((player) => (
+      {players.map((player, index) => (
+        <motion.div
+          key={player.id}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: index * 0.05 }}
+          >
         <PlayerCard key={player.id} {...player} />
+        </motion.div>
       ))}
     </Flex>
   );

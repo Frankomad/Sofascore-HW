@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Flex, Text } from '@kuma-ui/core';
 import { format, addDays } from 'date-fns';
+import { Box, Flex, Text } from '@kuma-ui/core';
+import { FormattedMessage } from 'react-intl';
+
 import CustomButton from './CustomButton';
+import { useSettingsContext } from '@/context/SettingsContext';
+
 
 interface NavigatorProps {
   onDateClick: (date: Date) => void;
@@ -13,6 +17,7 @@ const Navigator: React.FC<NavigatorProps> = ({ onDateClick, date }) => {
   const initialIndex = 10;
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [currentDate, setCurrentDate] = useState(date);
+  const { dateFormat } = useSettingsContext();
 
   const dates = Array.from({ length: 20 }, (_, i) => addDays(today, i - initialIndex));
 
@@ -43,6 +48,28 @@ const Navigator: React.FC<NavigatorProps> = ({ onDateClick, date }) => {
 
   const displayedDates = dates.slice(currentIndex - 3, currentIndex + 4);
 
+  const getDayLabel = (date: Date) => {
+    const day = format(date, 'EEEE').toLowerCase();
+    switch (day) {
+      case 'monday':
+        return <FormattedMessage id="monday" defaultMessage="Mon" />;
+      case 'tuesday':
+        return <FormattedMessage id="tuesday" defaultMessage="Tue" />;
+      case 'wednesday':
+        return <FormattedMessage id="wednesday" defaultMessage="Wed" />;
+      case 'thursday':
+        return <FormattedMessage id="thursday" defaultMessage="Thu" />;
+      case 'friday':
+        return <FormattedMessage id="friday" defaultMessage="Fri" />;
+      case 'saturday':
+        return <FormattedMessage id="saturday" defaultMessage="Sat" />;
+      case 'sunday':
+        return <FormattedMessage id="sunday" defaultMessage="Sun" />;
+      default:
+        return day;
+    }
+  };
+
   return (
     <Flex alignItems="center" bg="colors.primary.variant" color="colors.surface.s1" borderTopLeftRadius="8px" borderTopRightRadius="8px" width="100%" height="48px">
       <CustomButton
@@ -54,7 +81,7 @@ const Navigator: React.FC<NavigatorProps> = ({ onDateClick, date }) => {
         h="24px"
         w="24px"
         disabled={currentIndex === 3}
-        color="colors.primary.variant" 
+        color="colors.primary.variant"
         bg="colors.surface.s1"
       />
       <Flex flex="1" justify="space-between" overflow="hidden">
@@ -69,13 +96,15 @@ const Navigator: React.FC<NavigatorProps> = ({ onDateClick, date }) => {
             cursor="pointer"
             position="relative"
           >
-            {format(date, 'dd.MM.yyyy') === format(currentDate, 'dd.MM.yyyy') && <Box h="4px" position={"absolute"} w="80%" bottom={'0px'} bg="colors.surface.s1" left={'10%'} borderTopRightRadius={'8px'} borderTopLeftRadius={'8px'}></Box>}
-            {format(date, 'dd.MM.yyyy') === format(today, 'dd.MM.yyyy') ? (
-              <Text fontSize="12px">TODAY</Text>
-            ) : (
-              <Text fontSize="12px">{format(date, 'EEE')}</Text>
+            {format(date, 'dd.MM.yyyy') === format(currentDate, 'dd.MM.yyyy') && (
+              <Box h="4px" position={"absolute"} w="80%" bottom={'0px'} bg="colors.surface.s1" left={'10%'} borderTopRightRadius={'8px'} borderTopLeftRadius={'8px'}></Box>
             )}
-            <Text fontSize="12px">{format(date, 'dd.MM')}</Text>
+            {format(date, 'dd.MM.yyyy') === format(today, 'dd.MM.yyyy') ? (
+              <Text fontSize="12px"><FormattedMessage id="today" defaultMessage="Today" /></Text>
+            ) : (
+              <Text fontSize="12px">{getDayLabel(date)}</Text>
+            )}
+            <Text fontSize="12px">{format(date, dateFormat === 'DD / MM / YYYY' ? 'dd.MM' : 'MM.dd')}</Text>
           </Box>
         ))}
       </Flex>
@@ -86,7 +115,7 @@ const Navigator: React.FC<NavigatorProps> = ({ onDateClick, date }) => {
         h="24px"
         w="24px"
         mr="8px"
-        color="colors.primary.variant" 
+        color="colors.primary.variant"
         bg="colors.surface.s1"
         disabled={currentIndex === dates.length - 4}
       />

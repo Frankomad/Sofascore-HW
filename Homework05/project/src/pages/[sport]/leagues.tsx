@@ -1,32 +1,26 @@
-import React, { useState, useEffect } from 'react'
-import { GetServerSidePropsContext, GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
-import { Box, Flex, Text, Image } from '@kuma-ui/core'
-import Head from 'next/head'
-import Header from '@/components/Header'
-import Navigator from '@/components/Navigator'
-import MatchDetails from '@/components/match/MatchDetails'
-import Footer from '@/components/Footer'
-import Container from '@/components/Container'
-import Match from '@/components/match/Match'
-import ArrowRight from '@/components/icons/ArrowRight'
-import useWindowSize from '@/hooks/useWindowSize'
-import { format, isToday } from 'date-fns'
-import { groupEventsByCountryAndTournament, handleLeagueClick } from '@/utils'
-import { Team } from '@/types/team'
-import { Country } from '@/types/country'
-import { Tournament } from '@/types/tournament'
-import { Score } from '@/types/score'
-import { Event } from '@/types/event'
-import { BreadcrumbItem } from '@/types/breadcrumb'
-import Breadcrumb from '@/components/Breadcrumb'
-import useSWR from 'swr'
+import React from 'react';
+import { GetServerSidePropsContext, GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { Box, Flex, Text, Image } from '@kuma-ui/core';
+import Head from 'next/head';
 
-interface SportPageProps {
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import Container from '@/components/Container';
+import Breadcrumb from '@/components/Breadcrumb';
+
+import { handleLeagueClick } from '@/utils';
+
+import { Tournament } from '@/types/tournament';
+import { BreadcrumbItem } from '@/types/breadcrumb';
+import { FormattedMessage } from 'react-intl';
+
+
+interface LeaguePageProps {
   tournaments: Tournament[]
 }
 
-const SportPage: React.FC<SportPageProps> = ({ tournaments }) => {
+const LeaguePage: React.FC<LeaguePageProps> = ({ tournaments }) => {
   const router = useRouter()
   const { sport } = router.query
   const sportName = typeof sport === 'string' ? sport.charAt(0).toUpperCase() + sport.slice(1) : ''
@@ -43,13 +37,13 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments }) => {
         <meta name="description" content={`List of ${sportName.toLowerCase()} tournaments and events`} />
       </Head>
       <Header />
-      <Box h="78vh" bg="colors.surface.s0">
+      <Box h="78vh" bg="colors.surface.s3">
         <Box m="12px">
           <Breadcrumb items={breadcrumbItems} />
         </Box>
         <Container w="90%" height="90%" ml="5%" className="hidden-scrollbar">
           <Text mb="16px" fontWeight="bold">
-            Leagues
+            <FormattedMessage id="Leagues"/>
           </Text>
           <Flex flexDir="column" gap="16px">
             {tournaments.map((tournament: any) => (
@@ -89,4 +83,4 @@ export const getServerSideProps: GetServerSideProps = async ({ params }: GetServ
   }
 }
 
-export default SportPage
+export default LeaguePage

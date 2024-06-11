@@ -1,21 +1,7 @@
-// api/tournaments.ts
-import useSWR from 'swr';
-import { fetcher } from '@/pages/_app';
-import useWindowSize from '@/hooks/useWindowSize';
-
-export const useTournaments = (sport: string) => {
-  const { isMobile } = useWindowSize();
-  if (isMobile) {
-    return {
-      data: [],
-      isLoading: false,
-      isError: false
-    };
+export const fetchTournaments = async (sport: string) => {
+  const response = await fetch(`https://academy-backend.sofascore.dev/sport/${sport}/tournaments`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch tournaments');
   }
-  const { data, error } = useSWR(`/api/sport/${sport}/tournaments`, fetcher);
-  return {
-    data,
-    isLoading: !error && !data,
-    isError: error
-  };
+  return response.json();
 };

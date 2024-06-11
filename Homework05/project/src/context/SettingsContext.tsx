@@ -3,8 +3,6 @@ import React, { createContext, Dispatch, PropsWithChildren, SetStateAction, useC
 interface ContextValue {
   isDark: boolean;
   setIsDark: Dispatch<SetStateAction<boolean>>;
-  language: string;
-  setLanguage: Dispatch<SetStateAction<string>>;
   dateFormat: string;
   setDateFormat: Dispatch<SetStateAction<string>>;
   initialPage: string;
@@ -30,12 +28,6 @@ export const SettingsContextProvider = ({ children }: PropsWithChildren) => {
       return localStorage.getItem('theme') === 'dark';
     }
     return false;
-  });
-  const [language, setLanguage] = useState<string>(() => {
-    if (isLocalStorageAvailable()) {
-      return localStorage.getItem('language') || 'English';
-    }
-    return 'English';
   });
   const [dateFormat, setDateFormat] = useState<string>(() => {
     if (isLocalStorageAvailable()) {
@@ -66,12 +58,6 @@ export const SettingsContextProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (isLocalStorageAvailable()) {
-      localStorage.setItem('language', language);
-    }
-  }, [language]);
-
-  useEffect(() => {
-    if (isLocalStorageAvailable()) {
       localStorage.setItem('dateFormat', dateFormat);
     }
   }, [dateFormat]);
@@ -83,7 +69,7 @@ export const SettingsContextProvider = ({ children }: PropsWithChildren) => {
   }, [initialPage]);
 
   return (
-    <SettingsContext.Provider value={{ isDark, setIsDark, language, setLanguage, dateFormat, setDateFormat, initialPage, setInitialPage }}>
+    <SettingsContext.Provider value={{ isDark, setIsDark, dateFormat, setDateFormat, initialPage, setInitialPage }}>
       {children}
     </SettingsContext.Provider>
   );

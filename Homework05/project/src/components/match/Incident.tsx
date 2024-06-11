@@ -1,24 +1,26 @@
-import React from 'react'
-import { Flex, Text, Box } from '@kuma-ui/core'
-import Autogoal from '../icons/Autogoal'
-import RedCard from '../icons/RedCard'
-import YellowCard from '../icons/YellowCard'
-import FootballBall from '../icons/FootballBall'
-import ExtraPoint from '../icons/ExtraPoint'
-import FieldGoal from '../icons/FieldGoal'
-import Touchdown from '../icons/Touchdown'
-import BasketballIncident1 from '../icons/BasketballIncident1'
-import BasketballIncident2 from '../icons/BasketballIncident2'
-import BasketballIncident3 from '../icons/BasketballIncident3'
-import RugbyPoint1 from '../icons/RugbyPoint1'
-import RugbyPoint2 from '../icons/RugbyPoint2'
-import RugbyPoint3 from '../icons/RugbyPoint3'
-import FootballPenaltyMissed from '../icons/FootballPenaltyMissed'
-import FootballPenaltyScore from '../icons/FootballPenaltyScore'
-import Rogue from '../icons/Rogue'
-import CustomButton from '../CustomButton'
-import { useRouter } from 'next/router'
-import { IncidentProps } from '@/types/incident'
+import React from 'react';
+import { Flex, Text, Box } from '@kuma-ui/core';
+import { useRouter } from 'next/router';
+import { FormattedMessage } from 'react-intl';
+
+import Autogoal from '../icons/Autogoal';
+import RedCard from '../icons/RedCard';
+import YellowCard from '../icons/YellowCard';
+import FootballBall from '../icons/FootballBall';
+import ExtraPoint from '../icons/ExtraPoint';
+import FieldGoal from '../icons/FieldGoal';
+import Touchdown from '../icons/Touchdown';
+import BasketballIncident1 from '../icons/BasketballIncident1';
+import BasketballIncident2 from '../icons/BasketballIncident2';
+import BasketballIncident3 from '../icons/BasketballIncident3';
+import RugbyPoint1 from '../icons/RugbyPoint1';
+import RugbyPoint2 from '../icons/RugbyPoint2';
+import RugbyPoint3 from '../icons/RugbyPoint3';
+import FootballPenaltyScore from '../icons/FootballPenaltyScore';
+import Rogue from '../icons/Rogue';
+import CustomButton from '../CustomButton';
+import { IncidentProps } from '@/types/incident';
+
 
 const Incident: React.FC<IncidentProps> = ({ incident, sport, status }) => {
   const router = useRouter()
@@ -161,7 +163,7 @@ const Incident: React.FC<IncidentProps> = ({ incident, sport, status }) => {
         content
       ) : (
         <CustomButton varient="unshielded">
-          <Text>View Details</Text>
+          <Text><FormattedMessage id="View Details"/></Text>
         </CustomButton>
       )}
     </Flex>

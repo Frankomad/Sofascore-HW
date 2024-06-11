@@ -1,21 +1,7 @@
-// api/events.ts
-import useSWR from 'swr';
-import { fetcher } from '@/pages/_app';
-
-export const useEventDetails = (eventId: string) => {
-  const { data, error } = useSWR(eventId ? `/api/event/${eventId}` : null, fetcher);
-  return {
-    data,
-    isLoading: !error && !data,
-    isError: error
-  };
-};
-
-export const useEvents = (sport: string, date: string) => {
-  const { data, error } = useSWR(`/api/sport/${sport}/events/${date}`, fetcher);
-  return {
-    data,
-    isLoading: !error && !data,
-    isError: error
-  };
+export const fetchEvents = async (sport: string, formattedDate: string) => {
+  const response = await fetch(`https://academy-backend.sofascore.dev/sport/${sport}/events/${formattedDate}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch events: ${response.statusText}`);
+  }
+  return await response.json();
 };

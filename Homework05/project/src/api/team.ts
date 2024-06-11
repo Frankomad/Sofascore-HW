@@ -1,40 +1,31 @@
-import useSWR from 'swr';
-import { fetcher } from '@/pages/_app';
-
-export const useTeamStandings = (tournamentId: number, shouldFetch: boolean) => {
-  console.log('useTeamStandings', tournamentId, shouldFetch);
-
-  const { data, error } = useSWR(
-    shouldFetch ? `/api/tournament/${tournamentId}/standings` : null,
-    fetcher
-  );
-
-  console.log('Fetched Data:', data);
-
-  return {
-    standings: data?.[2]?.sortedStandingsRows,
-    isLoading: !error && !data,
-    isError: error,
-  };
+export const fetchTeamTournaments = async (teamId: string) => {
+  const response = await fetch(`https://academy-backend.sofascore.dev/team/${teamId}/tournaments`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch team tournaments');
+  }
+  return response.json();
 };
 
-export const useTeamMatches = (teamId: number, page: number, shouldFetch: boolean) => {
-  console.log('useTeamMatches', teamId, page, shouldFetch);
+export const fetchTeamEventsNext = async (teamId: string, page: number = 1) => {
+  const response = await fetch(`https://academy-backend.sofascore.dev/team/${teamId}/events/next/${page}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch team next event');
+  }
+  return response.json();
+};
 
-  const { data: matchesLast, error: errorLast } = useSWR(
-    shouldFetch ? `/api/team/${teamId}/events/last/${page}` : null,
-    fetcher
-  );
-  const { data: matchesNext, error: errorNext } = useSWR(
-    shouldFetch ? `/api/team/${teamId}/events/next/${page}` : null,
-    fetcher
-  );
+export const fetchTeamSquad = async (teamId: string) => {
+  const response = await fetch(`https://academy-backend.sofascore.dev/team/${teamId}/players`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch team squad');
+  }
+  return response.json();
+};
 
-  const matches = matchesNext && matchesLast ? [...matchesNext.slice(0, 5), ...matchesLast.slice(0, 5)] : [];
-
-  return {
-    matches,
-    isLoading: !matchesNext || !matchesLast,
-    isError: errorLast || errorNext,
-  };
+export const fetchTeamDetails = async (teamId: string) => {
+  const response = await fetch(`https://academy-backend.sofascore.dev/team/${teamId}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch team details');
+  }
+  return response.json();
 };

@@ -1,126 +1,139 @@
-import React, { useState, useEffect } from 'react'
-import { GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
-import { Box, Flex, Text, Image } from '@kuma-ui/core'
-import Head from 'next/head'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import Container from '@/components/Container'
-import Breadcrumb from '@/components/Breadcrumb'
-import Match from '@/components/match/Match'
-import TeamIcon from '@/components/icons/TeamIcon'
-import CircularProgress from '@/components/icons/CircularProgress'
-import TournamentMatches from '@/components/tournament/TournamentMatches'
-import TournamentStandings from '@/components/tournament/TournamentStandings'
-import PlayerList from '@/components/player/PlayerList'
-import ArrowRight from '@/components/icons/ArrowRight'
-import useWindowSize from '@/hooks/useWindowSize'
-import HeaderButton from '@/components/HeaderButton'
-import { handleLeagueClick, getCountryCode } from '@/utils'
-import { Tournament } from '@/types/tournament'
-import { Event } from '@/types/event'
-import { Player } from '@/types/player'
-import { Team } from '@/types/team'
-import { BreadcrumbItem } from '@/types/breadcrumb'
-import Loader from '@/components/Loader' // Import the Loader component
+import React, { useState, useEffect } from 'react';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { Box, Flex, Text, Image } from '@kuma-ui/core';
+import Head from 'next/head';
 
-type ViewType = 'details' | 'squad' | 'matches' | 'standings'
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import Container from '@/components/Container';
+import Breadcrumb from '@/components/Breadcrumb';
+import Match from '@/components/match/Match';
+import TeamIcon from '@/components/icons/TeamIcon';
+import CircularProgress from '@/components/icons/CircularProgress';
+import TournamentMatches from '@/components/tournament/TournamentMatches';
+import TournamentStandings from '@/components/tournament/TournamentStandings';
+import PlayerList from '@/components/player/PlayerList';
+import ArrowRight from '@/components/icons/ArrowRight';
+import HeaderButton from '@/components/HeaderButton';
+import Loader from '@/components/Loader';
 
-interface SportPageProps {
-  tournaments: Tournament[]
-  teamDetails: Team
-  teamTournaments: Tournament[]
-  teamEvent: Event
-  teamSquad: Player[]
+import useWindowSize from '@/hooks/useWindowSize';
+
+import { handleLeagueClick, getCountryCode } from '@/utils';
+
+import { Tournament } from '@/types/tournament';
+import { Event } from '@/types/event';
+import { Player } from '@/types/player';
+import { Team } from '@/types/team';
+import { BreadcrumbItem } from '@/types/breadcrumb';
+
+import { FormattedMessage } from 'react-intl';
+import { motion } from 'framer-motion';
+
+import { fetchTournaments } from '@/api/tournaments';
+import { fetchTeamDetails, fetchTeamEventsNext, fetchTeamSquad, fetchTeamTournaments } from '@/api/team';
+
+
+type ViewType = 'details' | 'squad' | 'matches' | 'standings';
+
+interface TeamPageProps {
+  tournaments: Tournament[];
+  teamDetails: Team;
+  teamTournaments: Tournament[];
+  teamEvent: Event;
+  teamSquad: Player[];
 }
 
-const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTournaments, teamEvent, teamSquad }) => {
-  const router = useRouter()
-  const { isMobile } = useWindowSize()
-  const { sport, matchId } = router.query
-  const sportName = typeof sport === 'string' ? sport.charAt(0).toUpperCase() + sport.slice(1) : ''
+const TeamPage: React.FC<TeamPageProps> = ({ tournaments, teamDetails, teamTournaments, teamEvent, teamSquad }) => {
+  const router = useRouter();
+  const { isMobile } = useWindowSize();
+  const { sport, matchId } = router.query;
+  const sportName = typeof sport === 'string' ? sport.charAt(0).toUpperCase() + sport.slice(1) : '';
 
-  const [view, setView] = useState<ViewType>('details')
-  const [standings, setStandings] = useState<any[]>([])
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [isSquadLoading, setIsSquadLoading] = useState<boolean>(false)
-  const [page, setPage] = useState<number>(1)
-  const [teamMatches, setTeamMatches] = useState<Event[]>([])
-  const [selectedMatch, setSelectedMatch] = useState<Event | null>(null)
+  const [view, setView] = useState<ViewType>('details');
+  const [standings, setStandings] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isSquadLoading, setIsSquadLoading] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [teamMatches, setTeamMatches] = useState<Event[]>([]);
+  const [selectedMatch, setSelectedMatch] = useState<Event | null>(null);
 
   const getNumberOfForeignPlayers = (teamDetails: Team, teamSquad: Player[]): number => {
-    const foreignPlayers = teamSquad.filter(player => player.country.name !== teamDetails.country.name)
-    return foreignPlayers.length
-  }
+    const foreignPlayers = teamSquad.filter(player => player.country.name !== teamDetails.country.name);
+    return foreignPlayers.length;
+  };
 
   const handleMatchClick = (matchId: number) => {
-    const route = `/${sport}/${matchId}`
-    router.push(route)
-  }
+    const route = `/${sport}/${matchId}`;
+    router.push(route);
+  };
 
   const handleMatchSelect = (match: Event | null) => {
-    setSelectedMatch(match)
-  }
+    setSelectedMatch(match);
+  };
 
   const handlePageChange = (increment: number) => {
     if (page + increment > 0) {
-      setPage(prevPage => prevPage + increment)
+      setPage(prevPage => prevPage + increment);
     }
-  }
+  };
 
   useEffect(() => {
     const fetchStandings = async () => {
-      setIsLoading(true)
+      setIsLoading(true);
       if (view === 'standings') {
         try {
-          const standingsRes = await fetch(`/api/tournament/${teamTournaments[0].id}/standings`)
-          const standingsData = await standingsRes.json()
-          setStandings(standingsData[2].sortedStandingsRows)
+          const standingsRes = await fetch(`/api/tournament/${teamTournaments[0].id}/standings`);
+          const standingsData = await standingsRes.json();
+          setStandings(standingsData[2].sortedStandingsRows);
         } catch (error) {
-          console.error('Error fetching standings:', error)
+          console.error('Error fetching standings:', error);
         } finally {
-          setIsLoading(false)
+          setIsLoading(false);
         }
       } else if (view === 'matches') {
         try {
-          const matchesLastRes = await fetch(`/api/team/${teamDetails.id}/events/last/${page}`)
-          const matchesLast = await matchesLastRes.json()
-          const matchesNextRes = await fetch(`/api/team/${teamDetails.id}/events/next/${page}`)
-          const matchesNext = await matchesNextRes.json()
+          const matchesLastRes = await fetch(`/api/team/${teamDetails.id}/events/last/${page}`);
+          const matchesLast = await matchesLastRes.json();
+          const matchesNextRes = await fetch(`/api/team/${teamDetails.id}/events/next/${page}`);
+          const matchesNext = await matchesNextRes.json();
 
           if (matchesLast.length === 0 && matchesNext.length === 0) {
             setPage((prevPage) => prevPage - 1);
           }
 
-          setTeamMatches([...matchesLast.slice(0, 5), ...matchesNext.slice(0, 5)])
+          setTeamMatches([...matchesLast.slice(0, 5), ...matchesNext.slice(0, 5)]);
         } catch (error) {
-          setPage((page) => page - 1)
-          console.error('Error fetching matches:', error)
+          setPage((page) => page - 1);
+          console.error('Error fetching matches:', error);
         } finally {
-          setIsLoading(false)
+          setIsLoading(false);
         }
       } else if (view === 'squad') {
-        setIsSquadLoading(true)
+        setIsSquadLoading(true);
         try {
-          const teamSquadRes = await fetch(`/api/team/${teamDetails.id}/players`)
-          const teamSquadData = await teamSquadRes.json()
-          setTeamMatches(teamSquadData)
+          const teamSquadRes = await fetch(`/api/team/${teamDetails.id}/players`);
+          const teamSquadData = await teamSquadRes.json();
+          setTeamMatches(teamSquadData);
         } catch (error) {
-          console.error('Error fetching squad:', error)
+          console.error('Error fetching squad:', error);
         } finally {
-          setIsSquadLoading(false)
+          setIsSquadLoading(false);
         }
       }
-    }
+    };
 
-    fetchStandings()
-  }, [view, teamDetails.id, page])
+    fetchStandings();
+  }, [view, teamDetails.id, page]);
 
   const breadcrumbItems = [
-    { name: sportName, route: `/${sport}` },
+    { name: <FormattedMessage id={sportName} />, route: `/${sport}` },
     { name: teamDetails.name || '', route: `/${sport}/teams/${teamDetails.id}` },
     selectedMatch ? { name: selectedMatch.slug, route: `/${sport}/${selectedMatch.id}` } : null,
-  ].filter(Boolean) as BreadcrumbItem[]
+  ].filter(Boolean) as BreadcrumbItem[];
+
+  console.log(teamEvent.startDate);
 
   return (
     <>
@@ -139,26 +152,26 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
             display={isMobile ? 'none' : 'default'}
           >
             <Text mb="16px" fontWeight="bold">
-              Leagues
+              <FormattedMessage id="Leagues" />
             </Text>
             <Flex flexDir="column" gap="16px">
               {tournaments.map((tournament: any) => (
-                <Flex
+                <motion.div
                   key={tournament.id}
-                  alignItems="center"
-                  p="8px"
-                  onClick={() => handleLeagueClick(tournament.id, sport as string, router)}
-                  style={{ cursor: 'pointer' }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <Image
-                    src={`https://academy-backend.sofascore.dev/tournament/${tournament.id}/image`}
-                    width="24px"
-                    height="24px"
-                    borderRadius="50%"
-                    mr="8px"
-                  />
-                  <Text>{tournament.name}</Text>
-                </Flex>
+                  <Flex alignItems="center" p="8px" onClick={() => handleLeagueClick(tournament.id, sport as string, router)} style={{ cursor: 'pointer' }}>
+                    <Image
+                      src={`https://academy-backend.sofascore.dev/tournament/${tournament.id}/image`}
+                      width="24px"
+                      height="24px"
+                      borderRadius="50%"
+                      mr="8px"
+                    />
+                    <Text>{tournament.name}</Text>
+                  </Flex>
+                </motion.div>
               ))}
             </Flex>
           </Container>
@@ -178,9 +191,7 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
                     </Text>
                     <Flex alignItems="center">
                       <Image
-                        src={`https://www.sofascore.com/static/images/flags/${getCountryCode(
-                          teamDetails.country.name
-                        )}.png`}
+                        src={`https://www.sofascore.com/static/images/flags/${getCountryCode(teamDetails.country.name)}.png`}
                         width="12px"
                         height="12px"
                         borderRadius="50%"
@@ -223,17 +234,19 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
                 <Flex flexDir="column" w={isMobile ? '100%' : '49%'} gap="8px">
                   <Container w="100%" p="0px" color="colors.onSurface.lv1">
                     <Flex justify="center" mb="4px" p="16px">
-                      <Text fontWeight="bold">Team Info</Text>
+                      <Text fontWeight="bold">
+                        <FormattedMessage id="Team Info" />
+                      </Text>
                     </Flex>
                     <Flex alignItems="center" justify="center" p="8px" borderBottom="1px solid #ddd">
                       <Image src={`/Anonymous.png`} w="24px" h="24px" borderRadius="50%" />
-                      <Text ml="8px">Coach: {teamDetails.managerName}</Text>
+                      <Text ml="8px"><FormattedMessage id="Coach" />: {teamDetails.managerName}</Text>
                     </Flex>
                     <Flex m="12px 0 16px 0">
                       <Flex flexDir="column" w={isMobile ? '100%' : '50%'} alignItems="center" gap="8px">
                         <TeamIcon />
                         <Text>{teamSquad.length}</Text>
-                        <Text textAlign="center">Total Players</Text>
+                        <Text textAlign="center"><FormattedMessage id="Total Players" /></Text>
                       </Flex>
                       <Flex flexDir="column" w={isMobile ? '100%' : '50%'} alignItems="center" gap="8px">
                         <CircularProgress
@@ -241,7 +254,9 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
                           max={teamSquad.length}
                         />
                         <Text>{getNumberOfForeignPlayers(teamDetails, teamSquad)}</Text>
-                        <Text textAlign="center">Foreign Players</Text>
+                        <Text textAlign="center">
+                          <FormattedMessage id="Foreign Players" />
+                        </Text>
                       </Flex>
                       <Flex flexDir="column" w={isMobile ? '100%' : '50%'} alignItems="center" gap="8px">
                         <CircularProgress
@@ -249,16 +264,18 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
                           max={teamSquad.length}
                         />
                         <Text>{teamSquad.length - getNumberOfForeignPlayers(teamDetails, teamSquad)}</Text>
-                        <Text textAlign="center">National Players</Text>
+                        <Text textAlign="center">
+                          <FormattedMessage id="National Players" />
+                        </Text>
                       </Flex>
                     </Flex>
                   </Container>
                   <Container w="100%">
                     <Flex justify="center" mb="12px">
-                      <Text fontWeight="bold">Venue</Text>
+                      <Text fontWeight="bold"><FormattedMessage id="Venue" /></Text>
                     </Flex>
                     <Flex justify="space-between">
-                      <Text>Stadium</Text>
+                      <Text><FormattedMessage id="Stadium" /></Text>
                       <Text>{teamDetails.venue}</Text>
                     </Flex>
                   </Container>
@@ -266,32 +283,39 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
                 <Flex flexDir="column" w={isMobile ? '100%' : '49%'} gap="8px">
                   <Container w="100%">
                     <Flex justify="center" mb="12px" fontWeight="bold">
-                      <Text>Leagues</Text>
+                      <Text>
+                        <FormattedMessage id="Leagues" />
+                      </Text>
                     </Flex>
                     <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(100px, 1fr))" gap="16px">
                       {teamTournaments.map((tournament: any) => (
-                        <Flex
+                        <motion.div
                           key={tournament.id}
-                          flexDir="column"
-                          alignItems="center"
-                          onClick={() => handleLeagueClick(tournament.id, sport as string, router)}
-                          cursor="pointer"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
                         >
-                          <Image
-                            src={`https://academy-backend.sofascore.dev/tournament/${tournament.id}/image`}
-                            width="36px"
-                            height="36px"
-                            borderRadius="50%"
-                            mb="8px"
-                          />
-                          <Text textAlign="center">{tournament.name}</Text>
-                        </Flex>
+                          <Flex
+                            flexDir="column"
+                            alignItems="center"
+                            onClick={() => handleLeagueClick(tournament.id, sport as string, router)}
+                            cursor="pointer"
+                          >
+                            <Image
+                              src={`https://academy-backend.sofascore.dev/tournament/${tournament.id}/image`}
+                              width="36px"
+                              height="36px"
+                              borderRadius="50%"
+                              mb="8px"
+                            />
+                            <Text textAlign="center">{tournament.name}</Text>
+                          </Flex>
+                        </motion.div>
                       ))}
                     </Box>
                   </Container>
                   <Container w="100%">
                     <Flex justify="center" mb="12px" w="100%">
-                      <Text fontWeight="bold">Next Match</Text>
+                      <Text fontWeight="bold"><FormattedMessage id="Next Match" /></Text>
                     </Flex>
                     <Flex alignItems="center" mb="8px">
                       <Image
@@ -302,9 +326,9 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
                         mr="8px"
                       />
                       <Flex fontWeight="bold" alignItems="center">
-                        {teamEvent.tournament.country.name} 
+                        {teamEvent.tournament.country.name}
                         <Text color="colors.onSurface.lv2">
-                          <ArrowRight width="12px" height="12px"/>
+                          <ArrowRight width="12px" height="12px" />
                           {teamEvent.tournament.name}
                         </Text>
                       </Flex>
@@ -328,18 +352,20 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
             )}
             {view === 'squad' && (
               isSquadLoading ? (
-                <Loader /> // Display the Loader component when loading squad
+                <Loader />
               ) : (
                 <Container w="100%" p="0px">
                   <Flex justify="center" mb="12px" p="8px">
-                    <Text fontWeight="bold">Team Info</Text>
+                    <Text fontWeight="bold"><FormattedMessage id="Team Info" /></Text>
                   </Flex>
                   <Flex alignItems="center" justify="center" p="8px">
                     <Image src="/Anonymous.png" w="36px" h="36px" borderRadius="50%" />
-                    <Text ml="8px">Coach: {teamDetails.managerName}</Text>
+                    <Text ml="8px"><FormattedMessage id="Coach" />: {teamDetails.managerName}</Text>
                   </Flex>
                   <Flex borderBottom="1px solid #ddd">
-                    <Text m="0px 16px 12px 16px">Players:</Text>
+                    <Text m="0px 16px 12px 16px">
+                      <FormattedMessage id="Players" />
+                    </Text>
                   </Flex>
                   <PlayerList teamId={teamDetails.id} />
                 </Container>
@@ -347,7 +373,7 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
             )}
             {view === 'matches' && (
               isLoading ? (
-                <Loader /> // Display the Loader component when loading matches
+                <Loader />
               ) : (
                 <TournamentMatches
                   matches={teamMatches}
@@ -358,7 +384,7 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
             )}
             {view === 'standings' &&
               (isLoading ? (
-                <Loader /> // Display the Loader component when loading standings
+                <Loader />
               ) : (
                 <TournamentStandings resetPage={() => setView('details')} standings={standings} />
               ))}
@@ -367,26 +393,17 @@ const SportPage: React.FC<SportPageProps> = ({ tournaments, teamDetails, teamTou
       </Box>
       <Footer />
     </>
-  )
-}
+  );
+};
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const { sport, teamId } = params!
+  const { sport, teamId } = params!;
   try {
-    const tournamentsRes = await fetch(`https://academy-backend.sofascore.dev/sport/${sport}/tournaments`)
-    const tournaments = await tournamentsRes.json()
-
-    const teamDetailsRes = await fetch(`https://academy-backend.sofascore.dev/team/${teamId}`)
-    const teamDetails = await teamDetailsRes.json()
-
-    const teamTournamentsRes = await fetch(`https://academy-backend.sofascore.dev/team/${teamId}/tournaments`)
-    const teamTournaments = await teamTournamentsRes.json()
-
-    const teamEventsNext = await fetch(`https://academy-backend.sofascore.dev/team/${teamId}/events/next/1`)
-    const teamEvent = await teamEventsNext.json()
-
-    const teamSquadRes = await fetch(`https://academy-backend.sofascore.dev/team/${teamId}/players`)
-    const teamSquad = await teamSquadRes.json()
+    const tournaments = await fetchTournaments(sport as string);
+    const teamDetails = await fetchTeamDetails(teamId as string);
+    const teamTournaments = await fetchTeamTournaments(teamId as string);
+    const teamEvent = await fetchTeamEventsNext(teamId as string);
+    const teamSquad = await fetchTeamSquad(teamId as string);
 
     return {
       props: {
@@ -396,13 +413,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         teamEvent: teamEvent[0],
         teamSquad,
       },
-    }
+    };
   } catch (error) {
-    console.error('Error fetching data:', error)
+    console.error('Error fetching data:', error);
     return {
       notFound: true,
-    }
+    };
   }
-}
+};
 
-export default SportPage
+export default TeamPage;

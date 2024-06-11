@@ -1,15 +1,18 @@
-// pages/[sport]/favourites.tsx
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Flex, Text } from '@kuma-ui/core';
+import { Box, Text } from '@kuma-ui/core';
+import { FormattedMessage } from 'react-intl';
+
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
-import { WatchlistContext } from '@/context/WatchlistContext';
 import Match from '@/components/match/Match';
 import Container from '@/components/Container';
 
-const Favourites: React.FC = () => {
+import { WatchlistContext } from '@/context/WatchlistContext';
+
+
+const Watchlist: React.FC = () => {
   const router = useRouter();
   const { sport } = router.query;
   const { watchlist } = useContext(WatchlistContext);
@@ -24,8 +27,8 @@ const Favourites: React.FC = () => {
   const futureMatches = watchlist.filter(match => new Date(match.startDate) > todayEnd && match.sport === sport);
  
   const breadcrumbItems = [
-    { name: sportName as string, route: `/${sport}` },
-    { name: 'Watchlist', route: `/${sport}/watchlist` }
+    { name: <FormattedMessage id={sportName}/>, route: `/${sport}` },
+    { name: <FormattedMessage id="Watchlist"/>, route: `/${sport}/watchlist` }
   ];
 
   const handleMatchClick = (id: number) => {
@@ -39,10 +42,12 @@ const Favourites: React.FC = () => {
         <Box m="8px 0px 12px 0px">
           <Breadcrumb items={breadcrumbItems} />
         </Box>
-        <Text fontSize="24px" fontWeight="bold" mb="16px">Your Watched Matches</Text>
+        <Text fontSize="24px" fontWeight="bold" mb="16px">
+          <FormattedMessage id="Your Watched Matches"/>
+        </Text>
         
         <Container mb="32px">
-          <Text fontSize="20px" fontWeight="bold" mb="16px">Past Matches</Text>
+          <Text fontSize="20px" fontWeight="bold" mb="16px"><FormattedMessage id="Past Matches"/></Text>
           {pastMatches.length > 0 ? (
             pastMatches.map((match, index) => (
               <Match
@@ -60,12 +65,12 @@ const Favourites: React.FC = () => {
               />
             ))
           ) : (
-            <Text>No past matches watched.</Text>
+            <Text><FormattedMessage id="No Past Matches Watched"/></Text>
           )}
         </Container>
 
         <Container mb="32px">
-          <Text fontSize="20px" fontWeight="bold" mb="16px">Today's Matches</Text>
+          <Text fontSize="20px" fontWeight="bold" mb="16px"><FormattedMessage id="Today's Matches"/></Text>
           {todayMatches.length > 0 ? (
             todayMatches.map((match, index) => (
               <Match
@@ -83,12 +88,14 @@ const Favourites: React.FC = () => {
               />
             ))
           ) : (
-            <Text>No matches watched today.</Text>
+            <Text><FormattedMessage id="No Matches Watched Today"/></Text>
           )}
         </Container>
 
         <Container mb="32px">
-          <Text fontSize="20px" fontWeight="bold" mb="16px">Future Matches</Text>
+          <Text fontSize="20px" fontWeight="bold" mb="16px">
+            <FormattedMessage id="Future Matches"/>
+            </Text>
           {futureMatches.length > 0 ? (
             futureMatches.map((match, index) => (
               <Match
@@ -106,7 +113,7 @@ const Favourites: React.FC = () => {
               />
             ))
           ) : (
-            <Text>No future matches watched.</Text>
+            <Text><FormattedMessage id="No Future Matches Watched"/></Text>
           )}
         </Container>
       </Box>
@@ -115,4 +122,4 @@ const Favourites: React.FC = () => {
   );
 };
 
-export default Favourites;
+export default Watchlist;

@@ -1,6 +1,6 @@
-// components/Loader.tsx
 import React from 'react';
 import { Box } from '@kuma-ui/core';
+
 
 const Loader: React.FC = () => {
   return (

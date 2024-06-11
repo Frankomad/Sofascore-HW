@@ -3,6 +3,7 @@ import React from 'react'
 import { Box, Text, Flex } from '@kuma-ui/core'
 import SofaIcon from './icons/SofaIcon'
 
+
 const Footer: React.FC = () => {
   return (
     <Box as="footer" height="11vh" bg="colors.surface.s1" p="16px" color="colors.onSurface.lv1">

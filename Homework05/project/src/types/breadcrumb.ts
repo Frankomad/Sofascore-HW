@@ -1,5 +1,7 @@
+import React from "react";
+
 export interface BreadcrumbItem {
-    name: string;
+    name: React.ReactNode;
     route: string;
   }
   

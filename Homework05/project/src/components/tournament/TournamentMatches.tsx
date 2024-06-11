@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Flex, Text } from '@kuma-ui/core';
-import Match from '@/components/match/Match';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
+import { FormattedMessage } from 'react-intl';
+
+import Match from '@/components/match/Match';
 import Container from '@/components/Container';
 import MatchDetails from '@/components/match/MatchDetails';
 import CustomButton from '@/components/CustomButton';
 import useWindowSize from '@/hooks/useWindowSize';
 import { Event } from '@/types/event';
 import { groupEventsByRound } from '@/utils';
+
 
 interface TournamentMatchesProps {
   matches: Event[];
@@ -68,7 +72,7 @@ const TournamentMatches: React.FC<TournamentMatchesProps> = ({
             border="2px solid"
             borderColor="colors.primary.variant"
           />
-          <Text>Matches</Text>
+          <Text><FormattedMessage id="Matches" /></Text>
           <CustomButton
             variant="icon"
             icon
@@ -85,22 +89,21 @@ const TournamentMatches: React.FC<TournamentMatchesProps> = ({
         </Flex>
         {Object.keys(groupedMatches).map((round, roundIndex) => (
           <Box key={round} mb="16px">
-            <Text ml="12px" fontWeight="bold">Round {round}</Text>
+            <Text ml="12px" fontWeight="bold"><FormattedMessage id="Round" /> {round}</Text>
             {groupedMatches[round].map((match: Event, index: number, array: Event[]) => (
-              <Match
-                key={match.id}
-                id={match.id}
-                startDate={new Date(match.startDate)}
-                homeTeam={match.homeTeam}
-                awayTeam={match.awayTeam}
-                homeScore={match.homeScore}
-                awayScore={match.awayScore}
-                winnerCode={match.winnerCode}
-                status={match.status}
-                onClick={() => handleMatchClick(match)}
-                selected={selectedMatchId === match.id}
-                isLast={index === array.length - 1}
-              />
+                <Match
+                  id={match.id}
+                  startDate={new Date(match.startDate)}
+                  homeTeam={match.homeTeam}
+                  awayTeam={match.awayTeam}
+                  homeScore={match.homeScore}
+                  awayScore={match.awayScore}
+                  winnerCode={match.winnerCode}
+                  status={match.status}
+                  onClick={() => handleMatchClick(match)}
+                  selected={selectedMatchId === match.id}
+                  isLast={index === array.length - 1}
+                />
             ))}
             {roundIndex !== Object.keys(groupedMatches).length - 1 && <hr />}
           </Box>
@@ -108,19 +111,25 @@ const TournamentMatches: React.FC<TournamentMatchesProps> = ({
       </Container>
       {selectedMatch && (
         <Container height="fit-content" w={isMobile ? "100%" : "49%"} className="hidden-scrollbar" p="0px">
-          <MatchDetails
-            eventId={selectedMatch.id}
-            homeTeam={selectedMatch.homeTeam}
-            awayTeam={selectedMatch.awayTeam}
-            homeScore={selectedMatch.homeScore}
-            awayScore={selectedMatch.awayScore}
-            status={selectedMatch.status}
-            winnerCode={selectedMatch.winnerCode}
-            onClose={handleCloseMatchDetails}
-            hideOptions={selectedMatchId === undefined}
-            selected={true}
-            path={`/${sport}/${selectedMatch.id}`}
-          />
+          <motion.div
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 100 }}
+          >
+            <MatchDetails
+              eventId={selectedMatch.id}
+              homeTeam={selectedMatch.homeTeam}
+              awayTeam={selectedMatch.awayTeam}
+              homeScore={selectedMatch.homeScore}
+              awayScore={selectedMatch.awayScore}
+              status={selectedMatch.status}
+              winnerCode={selectedMatch.winnerCode}
+              onClose={handleCloseMatchDetails}
+              hideOptions={selectedMatchId === undefined}
+              selected={true}
+              path={`/${sport}/${selectedMatch.id}`}
+            />
+          </motion.div>
         </Container>
       )}
     </Flex>

@@ -1,15 +1,24 @@
-import useSWR from 'swr';
-import { fetcher } from '@/pages/_app';
 
-export const usePlayerEvents = (playerId: string, page: number) => {
-  const { data: matchesLast } = useSWR(`/api/player/${playerId}/events/last/${page}`, fetcher);
-  const { data: matchesNext } = useSWR(`/api/player/${playerId}/events/next/${page}`, fetcher);
+export const fetchPlayerDetails = async (playerId: string) => {
+  const response = await fetch(`https://academy-backend.sofascore.dev/player/${playerId}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch player details');
+  }
+  return response.json();
+};
 
-  const events = matchesNext && matchesLast ? [...matchesNext.slice(0, 5), ...matchesLast.slice(0, 5)] : [];
+export const fetchPlayerEventsLast = async (playerId: string, count = 3) => {
+  const response = await fetch(`https://academy-backend.sofascore.dev/player/${playerId}/events/last/${count}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch player last events');
+  }
+  return response.json();
+};
 
-  return {
-    events,
-    isLoading: !matchesNext || !matchesLast,
-    isError: !matchesNext && !matchesLast
-  };
+export const fetchPlayerEventsNext = async (playerId: string, count = 3) => {
+  const response = await fetch(`https://academy-backend.sofascore.dev/player/${playerId}/events/next/${count}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch player next events');
+  }
+  return response.json();
 };
