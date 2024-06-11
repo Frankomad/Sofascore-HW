@@ -1,4 +1,3 @@
-// components/Footer.tsx
 import React from 'react'
 import { Box, Text, Flex } from '@kuma-ui/core'
 import SofaIcon from './icons/SofaIcon'

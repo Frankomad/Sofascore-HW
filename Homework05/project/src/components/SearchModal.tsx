@@ -108,7 +108,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
       </Box>
       <Flex flexDir="column" className="hidden-scrollbar" height="75%">
         {loading ? (
-          <Loader /> // Display the Loader component when loading
+          <Loader />
         ) : (
           results.map((result) => (
             'position' in result ? (

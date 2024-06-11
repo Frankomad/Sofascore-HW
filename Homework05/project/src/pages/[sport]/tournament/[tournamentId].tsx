@@ -45,7 +45,7 @@ const TournamentPage: React.FC<TournamentPageProps> = ({ tournaments, matches, s
   const [page, setPage] = useState(3);
   const [updatedMatches, setUpdatedMatches] = useState(matches);
   const [selectedMatch, setSelectedMatch] = useState<Event | null>(null);
-  const [loading, setLoading] = useState<boolean>(false); // Loading state for fetching events
+  const [loading, setLoading] = useState<boolean>(false); 
 
   const handlePageChange = (increment: number) => {
     if (page + increment > 0) {
@@ -59,7 +59,7 @@ const TournamentPage: React.FC<TournamentPageProps> = ({ tournaments, matches, s
 
   useEffect(() => {
     const fetchNextEvents = async () => {
-      setLoading(true); // Start loading
+      setLoading(true); 
       try {
         const responseLast = await fetch(`/api/tournament/${tournamentId}/events/last/${page}`);
         const matchesLast = await responseLast.json();
@@ -75,7 +75,7 @@ const TournamentPage: React.FC<TournamentPageProps> = ({ tournaments, matches, s
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
-        setLoading(false); // Stop loading
+        setLoading(false); 
       }
     };
 

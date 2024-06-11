@@ -179,7 +179,7 @@ const MatchDetails: React.FC<MatchDetailsProps> = ({
           </Flex>
         </Flex>
         {isLoading ? (
-          <Loader /> // Display the Loader component when loading
+          <Loader /> 
         ) : (
           selected && matchDetails && (
             <>

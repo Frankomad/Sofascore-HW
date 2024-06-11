@@ -1,4 +1,3 @@
-// SearchIcon.tsx
 import React from 'react';
 
 const SearchIcon: React.FC<{ cursor?: string; onClick?: () => void;}> = ({ cursor, onClick }) => (

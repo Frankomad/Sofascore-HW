@@ -57,7 +57,7 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
 
   useEffect(() => {
     const fetchNextEvents = async () => {
-      setIsLoading(true); // Start loading
+      setIsLoading(true); 
       try {
         const responseLast = await fetch(`/api/player/${playerId}/events/last/${page}`);
         const matchesLast = await responseLast.json();
@@ -74,7 +74,7 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
         setPage((page) => page - 1);
         console.error('Error fetching data:', error);
       } finally {
-        setIsLoading(false); // Stop loading
+        setIsLoading(false); 
       }
     };
 
@@ -152,7 +152,7 @@ const PlayerPage: React.FC<PlayerPageProps> = ({ tournaments, player, events }) 
               </Flex>
             </Container>
             {isLoading ? (
-              <Loader /> // Display the Loader component when loading
+              <Loader /> 
             ) : (
               <TournamentMatches
                 matches={updatedMatches}
