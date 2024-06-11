@@ -134,7 +134,6 @@ const TeamPage: React.FC<TeamPageProps> = ({ tournaments, teamDetails, teamTourn
     selectedMatch ? { name: selectedMatch.slug, route: `/${sport}/${selectedMatch.id}` } : null,
   ].filter(Boolean) as BreadcrumbItem[];
 
-  console.log(teamEvent.startDate);
 
   return (
     <>
