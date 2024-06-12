@@ -1,12 +1,13 @@
 import React from 'react';
 import { Box, Text, Flex } from '@kuma-ui/core';
 import { motion } from 'framer-motion';
+import { FormattedMessage } from 'react-intl';
 
 
 interface CustomRadioProps {
   isChecked: boolean;
   onChange: () => void;
-  label: React.ReactNode;
+  label: string;
 }
 
 const CustomRadio: React.FC<CustomRadioProps> = ({ isChecked, onChange, label }) => {
@@ -24,7 +25,7 @@ const CustomRadio: React.FC<CustomRadioProps> = ({ isChecked, onChange, label })
         onChange={onChange}
         mr="8px"
       />
-      <Text>{label}</Text>
+      <FormattedMessage id={label} defaultMessage={label} />
     </motion.div>
   );
 };

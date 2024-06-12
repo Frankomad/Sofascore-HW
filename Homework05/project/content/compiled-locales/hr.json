@@ -47,6 +47,12 @@
       "value": "Hrvatski"
     }
   ],
+  "Dark": [
+    {
+      "type": 0,
+      "value": "Tamno"
+    }
+  ],
   "Date Format": [
     {
       "type": 0,
@@ -107,6 +113,12 @@
       "value": "Početna"
     }
   ],
+  "Initial Page": [
+    {
+      "type": 0,
+      "value": "Početna Stranica"
+    }
+  ],
   "Language": [
     {
       "type": 0,
@@ -117,6 +129,12 @@
     {
       "type": 0,
       "value": "Lige"
+    }
+  ],
+  "Light": [
+    {
+      "type": 0,
+      "value": "Svijetlo"
     }
   ],
   "Matches": [
