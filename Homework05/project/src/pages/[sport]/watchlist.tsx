@@ -115,11 +115,11 @@ const Watchlist: React.FC<WatchlistPageProps> = ({ sports }) => {
             </Flex>
           </Container>
 
-          <Container w={isMobile ? '100%' : 'calc(38% - 8px)'} height="100%" display={(isMobile && selectedMatch) ? "none" : "default"} className="hidden-scrollbar">
-            <Text fontSize="24px" fontWeight="bold" mb="16px">
+          <Container w={isMobile ? '100%' : 'calc(38% - 8px)'} height="100%" display={(isMobile && selectedMatch) ? "none" : "default"} className="hidden-scrollbar" p="0px">
+            <Text fontSize="24px" fontWeight="bold" mb="16px" p="12px">
               <FormattedMessage id="Your Watched Matches" />
             </Text>
-            <Flex flexDir="column">
+            <Flex flexDir="column" p="12px">
               <Flex justify="space-between" className="Tabular" mb="16px">
               {sports.map((sportItem: Sport) => (
                 <Box w="28%" gap="8%" display={isMobile ? "default" : "none"}>
@@ -183,7 +183,7 @@ const Watchlist: React.FC<WatchlistPageProps> = ({ sports }) => {
             </Flex>
             </Flex>
             {currentView === 'today' && (
-              <Container mb="32px">
+              <Box mb="32px">
                 {todayMatches.length > 0 ? (
                   todayMatches.map((match, index) => (
                     <Match
@@ -196,6 +196,7 @@ const Watchlist: React.FC<WatchlistPageProps> = ({ sports }) => {
                       awayScore={match.awayScore}
                       status={match.status}
                       winnerCode={match.winnerCode}
+                      selected={match.id === selectedMatch?.id}
                       onClick={() => handleMatchClick(match.id)}
                       isLast={index === todayMatches.length - 1}
                     />
@@ -203,10 +204,10 @@ const Watchlist: React.FC<WatchlistPageProps> = ({ sports }) => {
                 ) : (
                   <Text><FormattedMessage id="No Matches Watched Today" /></Text>
                 )}
-              </Container>
+              </Box>
             )}
             {currentView === 'past' && (
-              <Container mb="32px">
+              <Box >
                 {pastMatches.length > 0 ? (
                   pastMatches.map((match, index) => (
                     <Match
@@ -219,6 +220,7 @@ const Watchlist: React.FC<WatchlistPageProps> = ({ sports }) => {
                       awayScore={match.awayScore}
                       status={match.status}
                       winnerCode={match.winnerCode}
+                      selected={match.id === selectedMatch?.id}
                       onClick={() => handleMatchClick(match.id)}
                       isLast={index === pastMatches.length - 1}
                     />
@@ -226,10 +228,10 @@ const Watchlist: React.FC<WatchlistPageProps> = ({ sports }) => {
                 ) : (
                   <Text><FormattedMessage id="No Past Matches Watched" /></Text>
                 )}
-              </Container>
+              </Box>
             )}
             {currentView === 'future' && (
-              <Container mb="32px">
+              <Box mb="32px">
                 {futureMatches.length > 0 ? (
                   futureMatches.map((match, index) => (
                     <Match
@@ -242,6 +244,7 @@ const Watchlist: React.FC<WatchlistPageProps> = ({ sports }) => {
                       awayScore={match.awayScore}
                       status={match.status}
                       winnerCode={match.winnerCode}
+                      selected={match.id === selectedMatch?.id}
                       onClick={() => handleMatchClick(match.id)}
                       isLast={index === futureMatches.length - 1}
                     />
@@ -249,7 +252,7 @@ const Watchlist: React.FC<WatchlistPageProps> = ({ sports }) => {
                 ) : (
                   <Text><FormattedMessage id="No Future Matches Watched" /></Text>
                 )}
-              </Container>
+              </Box>
             )}
           </Container>
 
