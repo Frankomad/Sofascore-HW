@@ -202,7 +202,7 @@ const Watchlist: React.FC<WatchlistPageProps> = ({ sports }) => {
                     />
                   ))
                 ) : (
-                  <Text><FormattedMessage id="No Matches Watched Today" /></Text>
+                  <Text p="12px" w="100%" textAlign="center"><FormattedMessage id="No Matches Watched Today" /></Text>
                 )}
               </Box>
             )}
@@ -226,7 +226,7 @@ const Watchlist: React.FC<WatchlistPageProps> = ({ sports }) => {
                     />
                   ))
                 ) : (
-                  <Text><FormattedMessage id="No Past Matches Watched" /></Text>
+                  <Text p="12px" w="100%" textAlign="center"><FormattedMessage id="No Past Matches Watched" /></Text>
                 )}
               </Box>
             )}
@@ -250,7 +250,7 @@ const Watchlist: React.FC<WatchlistPageProps> = ({ sports }) => {
                     />
                   ))
                 ) : (
-                  <Text><FormattedMessage id="No Future Matches Watched" /></Text>
+                  <Text p="12px" w="100%" textAlign="center"><FormattedMessage id="No Future Matches Watched" /></Text>
                 )}
               </Box>
             )}
