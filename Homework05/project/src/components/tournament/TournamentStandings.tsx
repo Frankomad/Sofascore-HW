@@ -41,7 +41,7 @@ const TournamentStandings: React.FC<TournamentStandingsProps> = ({ standings, re
         standings.map((row, index) => (
           <motion.div
             key={row.id}
-            whileHover={{ scale: 1.02, backgroundColor: '#f0f0f0' }}
+            whileHover={{ scale: 1.02, backgroundColor: '#8d8d8d' }}
             whileTap={{ scale: 0.98 }}
             style={{ originX: 0 }}
             initial={{ opacity: 0, y: 10 }}

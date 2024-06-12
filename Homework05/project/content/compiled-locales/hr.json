@@ -17,6 +17,12 @@
       "value": "Američki Nogomet"
     }
   ],
+  "American-football": [
+    {
+      "type": 0,
+      "value": "Američki Nogomet"
+    }
+  ],
   "App Name": [
     {
       "type": 0,
@@ -221,6 +227,12 @@
       "value": "Postavke"
     }
   ],
+  "Sports": [
+    {
+      "type": 0,
+      "value": "Sportovi"
+    }
+  ],
   "Squad": [
     {
       "type": 0,
@@ -279,6 +291,12 @@
     {
       "type": 0,
       "value": "Ukupno Igrača"
+    }
+  ],
+  "Type to search...": [
+    {
+      "type": 0,
+      "value": "Upiši za pretragu..."
     }
   ],
   "Venue": [
