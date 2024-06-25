@@ -6,6 +6,10 @@ const nextConfig = {
   rewrites: async () => {
     return [{ source: '/api/:path*', destination: 'https://academy-backend.sofascore.dev/:path*' }]
   },
+  i18n: {
+    locales: ['en', 'hr'],
+    defaultLocale: 'en',
+  },
 }
 
 export default withKumaUI(nextConfig)

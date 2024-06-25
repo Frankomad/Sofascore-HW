@@ -1,0 +1,404 @@
+{
+  "About": [
+    {
+      "type": 0,
+      "value": "Detalji"
+    }
+  ],
+  "Am. Football": [
+    {
+      "type": 0,
+      "value": "Am. Nogomet"
+    }
+  ],
+  "American Football": [
+    {
+      "type": 0,
+      "value": "Američki Nogomet"
+    }
+  ],
+  "American-football": [
+    {
+      "type": 0,
+      "value": "Američki Nogomet"
+    }
+  ],
+  "App Name": [
+    {
+      "type": 0,
+      "value": "Ime Aplikacije"
+    }
+  ],
+  "Basketball": [
+    {
+      "type": 0,
+      "value": "Košarka"
+    }
+  ],
+  "Coach": [
+    {
+      "type": 0,
+      "value": "Trener"
+    }
+  ],
+  "Croatian": [
+    {
+      "type": 0,
+      "value": "Hrvatski"
+    }
+  ],
+  "Dark": [
+    {
+      "type": 0,
+      "value": "Tamno"
+    }
+  ],
+  "Date Format": [
+    {
+      "type": 0,
+      "value": "Format Datuma"
+    }
+  ],
+  "Details": [
+    {
+      "type": 0,
+      "value": "Detalji"
+    }
+  ],
+  "English": [
+    {
+      "type": 0,
+      "value": "Engleski"
+    }
+  ],
+  "Events": [
+    {
+      "type": 0,
+      "value": "Događaja"
+    }
+  ],
+  "Football": [
+    {
+      "type": 0,
+      "value": "Nogomet"
+    }
+  ],
+  "Foreign Players": [
+    {
+      "type": 0,
+      "value": "Strani Igrači"
+    }
+  ],
+  "Full Time": [
+    {
+      "type": 0,
+      "value": "Završeno"
+    }
+  ],
+  "Future Matches": [
+    {
+      "type": 0,
+      "value": "Buduće Utakmice"
+    }
+  ],
+  "Goals": [
+    {
+      "type": 0,
+      "value": "Golovi"
+    }
+  ],
+  "Home": [
+    {
+      "type": 0,
+      "value": "Početna"
+    }
+  ],
+  "Initial Page": [
+    {
+      "type": 0,
+      "value": "Početna Stranica"
+    }
+  ],
+  "Language": [
+    {
+      "type": 0,
+      "value": "Jezik"
+    }
+  ],
+  "Leagues": [
+    {
+      "type": 0,
+      "value": "Lige"
+    }
+  ],
+  "Light": [
+    {
+      "type": 0,
+      "value": "Svijetlo"
+    }
+  ],
+  "Matches": [
+    {
+      "type": 0,
+      "value": "Utakmice"
+    }
+  ],
+  "National Players": [
+    {
+      "type": 0,
+      "value": "Domaći Igrači"
+    }
+  ],
+  "Nationality": [
+    {
+      "type": 0,
+      "value": "Nacionalnost"
+    }
+  ],
+  "Next Match": [
+    {
+      "type": 0,
+      "value": "Sljedeća Utakmica"
+    }
+  ],
+  "No Future Matches Watched": [
+    {
+      "type": 0,
+      "value": "Nema budućih praćenih utakmica"
+    }
+  ],
+  "No Matches Watched Today": [
+    {
+      "type": 0,
+      "value": "Nema praćenih utakmica danas"
+    }
+  ],
+  "No Matches for": [
+    {
+      "type": 0,
+      "value": "Nema Utakmica Za"
+    }
+  ],
+  "No Past Matches Watched": [
+    {
+      "type": 0,
+      "value": "Nema prošlih praćenih utakmica"
+    }
+  ],
+  "No Standings Available": [
+    {
+      "type": 0,
+      "value": "Nema dostupne tablice"
+    }
+  ],
+  "No results found": [
+    {
+      "type": 0,
+      "value": "Nema rezultata"
+    }
+  ],
+  "No results yet": [
+    {
+      "type": 0,
+      "value": "Još nema rezultata"
+    }
+  ],
+  "Not Started": [
+    {
+      "type": 0,
+      "value": "Nije Počelo"
+    }
+  ],
+  "Past Matches": [
+    {
+      "type": 0,
+      "value": "Prošle Utakmice"
+    }
+  ],
+  "Players": [
+    {
+      "type": 0,
+      "value": "Igrači"
+    }
+  ],
+  "Position": [
+    {
+      "type": 0,
+      "value": "Pozicija"
+    }
+  ],
+  "Round": [
+    {
+      "type": 0,
+      "value": "Kolo"
+    }
+  ],
+  "Search Players or Teams": [
+    {
+      "type": 0,
+      "value": "Pretraži Igrače ili Timove"
+    }
+  ],
+  "Settings": [
+    {
+      "type": 0,
+      "value": "Postavke"
+    }
+  ],
+  "Sports": [
+    {
+      "type": 0,
+      "value": "Sportovi"
+    }
+  ],
+  "Squad": [
+    {
+      "type": 0,
+      "value": "Sastav"
+    }
+  ],
+  "Stadium": [
+    {
+      "type": 0,
+      "value": "Stadion"
+    }
+  ],
+  "Standings": [
+    {
+      "type": 0,
+      "value": "Tablica"
+    }
+  ],
+  "Team": [
+    {
+      "type": 0,
+      "value": "Tim"
+    }
+  ],
+  "Team Info": [
+    {
+      "type": 0,
+      "value": "Informacije o Timu"
+    }
+  ],
+  "Theme": [
+    {
+      "type": 0,
+      "value": "Tema"
+    }
+  ],
+  "Time Format": [
+    {
+      "type": 0,
+      "value": "Format Vremena"
+    }
+  ],
+  "Today": [
+    {
+      "type": 0,
+      "value": "Danas"
+    }
+  ],
+  "Today's Matches": [
+    {
+      "type": 0,
+      "value": "Današnje Utakmice"
+    }
+  ],
+  "Total Players": [
+    {
+      "type": 0,
+      "value": "Ukupno Igrača"
+    }
+  ],
+  "Type to search...": [
+    {
+      "type": 0,
+      "value": "Upiši za pretragu..."
+    }
+  ],
+  "Venue": [
+    {
+      "type": 0,
+      "value": "Lokacija"
+    }
+  ],
+  "View Details": [
+    {
+      "type": 0,
+      "value": "Pogledaj detalje"
+    }
+  ],
+  "View Full Page": [
+    {
+      "type": 0,
+      "value": "Pogledaj cijelu stranicu"
+    }
+  ],
+  "View Tournament Details": [
+    {
+      "type": 0,
+      "value": "Pogledaj detalje turnira"
+    }
+  ],
+  "Watchlist": [
+    {
+      "type": 0,
+      "value": "Praćene Utakmice"
+    }
+  ],
+  "Your Watched Matches": [
+    {
+      "type": 0,
+      "value": "Vaše Praćene Utakmice"
+    }
+  ],
+  "friday": [
+    {
+      "type": 0,
+      "value": "Pet"
+    }
+  ],
+  "monday": [
+    {
+      "type": 0,
+      "value": "Pon"
+    }
+  ],
+  "saturday": [
+    {
+      "type": 0,
+      "value": "Sub"
+    }
+  ],
+  "sunday": [
+    {
+      "type": 0,
+      "value": "Ned"
+    }
+  ],
+  "thursday": [
+    {
+      "type": 0,
+      "value": "Čet"
+    }
+  ],
+  "today": [
+    {
+      "type": 0,
+      "value": "Danas"
+    }
+  ],
+  "tuesday": [
+    {
+      "type": 0,
+      "value": "Uto"
+    }
+  ],
+  "wednesday": [
+    {
+      "type": 0,
+      "value": "Sri"
+    }
+  ]
+}
